@@ -45,16 +45,16 @@ class QuestionResource extends Resource
                 ->required(),
             TagsInput::make('last_appeared'),
             TextInput::make('options.optionA')
-                    ->label('Option 1')
+                    ->label('Option A')
                     ->required(),
                 TextInput::make('options.optionB')
-                    ->label('Option 2')
+                    ->label('Option B')
                     ->required(),
                 TextInput::make('options.optionC')
-                    ->label('Option 3')
+                    ->label('Option C')
                     ->required(),
                 TextInput::make('options.optionD')
-                    ->label('Option 4')
+                    ->label('Option D')
                     ->required(),
         ]);
     }
