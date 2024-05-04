@@ -44,23 +44,15 @@ class QuestionResource extends Resource
                 ->createOptionForm([TextInput::make('name')->required()])
                 ->required(),
             TagsInput::make('last_appeared'),
-            Repeater::make('options')
-                ->required()
-                ->deletable(false)
-                ->defaultItems(4)
-                ->maxItems(4)
-                ->reorderable(false)
-                ->schema([
-                    TextInput::make('options')->label(''),
-                ])
-                ->columnSpanFull()
-                ->itemLabel(function (array $state) use ($labels): ?string {
-        static $index = 0;
-        $label = $labels[$index] ?? null;
-        $index++;
-        return $label;
-    }),
-        ]);
+            TextInput::make('option1')
+                    ->required(),
+                TextInput::make('option2')
+                    ->required(),
+                TextInput::make('option3')
+                    ->required(),
+                TextInput::make('option4')
+                    ->required()
+        ])->saving();
     }
 
     public static function table(Table $table): Table
