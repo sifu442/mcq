@@ -78,6 +78,7 @@ class ExamResource extends Resource
                         );
                     }
                 ),
+                TextColumn::make('id'),
                 TextColumn::make('name')->sortable()
             ])
             ->filters([
