@@ -54,8 +54,11 @@ class QuestionResource extends Resource
                     TextInput::make('options')->label(''),
                 ])
                 ->columnSpanFull()
-                ->itemLabel(function (array $state, int $index) use ($labels): ?string {
-                    return $labels[$index] ?? null;
+                ->itemLabel(function (array $state) use ($labels): ?string {
+                    static $index = 0;
+                    $label = $labels[$index] ?? null;
+                    $index++;
+                    return $label;
                 }),
         ]);
     }
