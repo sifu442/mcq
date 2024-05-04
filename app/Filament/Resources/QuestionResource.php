@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\QuestionResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\QuestionResource\RelationManagers;
+use Filament\Forms\Components\TagsInput;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class QuestionResource extends Resource
@@ -54,7 +55,7 @@ class QuestionResource extends Resource
                     TextInput::make('name')->required()
                 ])
                 ->required(),
-                TextInput::make('last_appeared'),
+                TagsInput::make('last_appeared'),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
