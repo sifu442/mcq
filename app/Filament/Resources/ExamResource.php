@@ -2,26 +2,28 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ExamResource\Pages;
-use App\Filament\Resources\ExamResource\RelationManagers;
-use App\Filament\Resources\ExamResource\RelationManagers\QuestionsRelationManager;
-use App\Models\Exam;
+use stdClass;
 use Filament\Forms;
+use App\Models\Exam;
+use Filament\Tables;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\TimePicker;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\TimePicker;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\ExamResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\ExamResource\RelationManagers;
+use App\Filament\Resources\ExamResource\RelationManagers\QuestionsRelationManager;
 
 class ExamResource extends Resource
 {
@@ -66,6 +68,16 @@ class ExamResource extends Resource
         return $table
 
             ->columns([
+                TextColumn::make('index')->state(
+                    static function (HasTable $livewire, stdClass $rowLoop): string {
+                        return (string) (
+                            $rowLoop->iteration +
+                            ($livewire->getTableRecordsPerPage() * (
+                                $livewire->getTablePage() - 1
+                            ))
+                        );
+                    }
+                ),
                 TextColumn::make('name')->sortable()
             ])
             ->filters([
