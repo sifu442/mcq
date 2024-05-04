@@ -62,7 +62,8 @@ class QuestionResource extends Resource
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->schema([
-                    TextInput::make('options'),
+                    TextInput::make('options')
+                    ->label(fn ($index) => "Option " . chr(65 + $index)),
                     Checkbox::make('is_correct')
                         ->fixIndistinctState()
                         ->name('Correct Answer'),
