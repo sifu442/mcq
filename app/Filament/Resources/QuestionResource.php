@@ -44,7 +44,6 @@ class QuestionResource extends Resource
     {
         return $form->schema([
             TextInput::make('title')
-                //->label('Select Subject')
                 ->required()
                 ->columnSpanFull(),
             Select::make('subject_id')
