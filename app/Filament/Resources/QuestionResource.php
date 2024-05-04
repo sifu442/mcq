@@ -60,11 +60,11 @@ class QuestionResource extends Resource
                 ->statePath('options')
                 ->columns(2)
                 ->schema([
-                    TextInput::make('option_a')->label('Option A'),
-                    TextInput::make('option_b')->label('Option B'),
-                    TextInput::make('option_c')->label('Option C'),
-                    TextInput::make('option_d')->label('Option D'),
-                    TextInput::make('correct_answer')->label('Correct Answer'),
+                    TextInput::make('options.option_a')->label('Option A'),
+                    TextInput::make('options.option_b')->label('Option B'),
+                    TextInput::make('options.option_c')->label('Option C'),
+                    TextInput::make('options.option_d')->label('Option D'),
+                    TextInput::make('options.correct_answer')->label('Correct Answer'),
                 ]),
         ]);
     }
