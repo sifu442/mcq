@@ -18,7 +18,9 @@ class ExamsRelationManager extends RelationManager
 
     public function form(Form $form): Form
     {
-        return $form->schema([Forms\Components\TextInput::make('name')->required()->maxLength(255)]);
+        return $form->schema([
+            Forms\Components\TextInput::make('name')->required()->maxLength(255)
+        ]);
     }
 
     public function table(Table $table): Table
