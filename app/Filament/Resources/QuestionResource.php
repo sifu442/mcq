@@ -45,14 +45,10 @@ class QuestionResource extends Resource
                 ->required(),
                 TagsInput::make('last_appeared'),
                 Repeater::make('options')
-                ->required()
-                ->deletable(false)
-                ->defaultItems(4)
-                ->maxItems(4)
-                ->schema([
-                    TextInput::make('options'),
-                ])
-                ->columnSpanFull(),
+    ->schema([
+        TextInput::make('Option A')->required(),
+        // ...
+    ])
             ]);
     }
 
