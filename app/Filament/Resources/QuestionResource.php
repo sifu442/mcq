@@ -49,6 +49,7 @@ class QuestionResource extends Resource
                 ->deletable(false)
                 ->defaultItems(4)
                 ->maxItems(4)
+                ->reorderable(false)
                 ->schema([
                     TextInput::make('options')->label('Option'),
                 ])
