@@ -51,6 +51,7 @@ class QuestionResource extends Resource
                 ->maxItems(4)
                 ->schema([
                     TextInput::make('options')
+                    ->label('Options ')
                 ])
                 ->columnSpanFull(),
         ]);
