@@ -11,7 +11,7 @@ class Question extends Model
 
     protected $fillable = ['title', 'options', 'subject_id', 'exam_id', 'last_appeared'];
 
-    protected $casts = ['options' => 'json'];
+    protected $casts = ['options' => 'array'];
 
     public function subject()
     {
