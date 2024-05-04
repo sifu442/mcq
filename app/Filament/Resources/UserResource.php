@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use stdClass;
 use Filament\Forms;
 use App\Models\Role;
 use App\Models\User;
@@ -30,18 +31,9 @@ class UserResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            TextInput::make('name')
-                ->required()
-                ->maxLength(255),
-            TextInput::make('email')
-                ->email()
-                ->required()
-                ->maxLength(255),
-            TextInput::make('password')
-                ->password()
-                ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
-                ->dehydrated(fn(?string $state): bool => filled($state))
-                ->required(fn(string $operation): bool => $operation === 'create')
+            TextInput::make('name')->required()->maxLength(255),
+            TextInput::make('email')->email()->required()->maxLength(255),
+            TextInput::make('password')->password()->dehydrateStateUsing(fn(string $state): string => Hash::make($state))->dehydrated(fn(?string $state): bool => filled($state))->required(fn(string $operation): bool => $operation === 'create'),
             // Select::make('roles')
             //     ->multiple()
             //     ->relationship('roles', 'name')
@@ -50,35 +42,32 @@ class UserResource extends Resource
             //     ->multiple()
             //     ->relationship('permissions', 'name')
             //     ->preload(),
-        //     Select::make('role')
-        //     ->options(Role::all()->pluck('name', 'id')->toArray())
-        //     ->placeholder('Select a role')
-        //     ->dependable()
-        //     ->required(),
-        // Select::make('permissions')
-        //     ->dependOn('role')
-        //     ->getDependingValueFrom('role', function ($roleId) {
-        //         $role = Role::find($roleId);
-        //         return $role ? $role->permissions->pluck('name')->toArray() : [];
-        //     }),
-         ]);
+            //     Select::make('role')
+            //     ->options(Role::all()->pluck('name', 'id')->toArray())
+            //     ->placeholder('Select a role')
+            //     ->dependable()
+            //     ->required(),
+            // Select::make('permissions')
+            //     ->dependOn('role')
+            //     ->getDependingValueFrom('role', function ($roleId) {
+            //         $role = Role::find($roleId);
+            //         return $role ? $role->permissions->pluck('name')->toArray() : [];
+            //     }),
+        ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                
+                TextColumn::make('index')->getStateUsing(function (stdClass $rowLoop, $livewire): string {
+                    $currentPage = method_exists($livewire, 'currentPage') ? $livewire->currentPage() : 1;
+                    return (string) ($rowLoop->iteration + $livewire->tableRecordsPerPage * ($currentPage - 1));
+                }),
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('email')->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('role')->searchable(),
             ])
             ->filters([

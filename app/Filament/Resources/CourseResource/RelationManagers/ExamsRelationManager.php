@@ -27,7 +27,6 @@ class ExamsRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 TextColumn::make('index')
-                    ->label('Index')
                     ->getStateUsing(function (stdClass $rowLoop, $livewire): string {
                         $currentPage = method_exists($livewire, 'currentPage') ? $livewire->currentPage() : 1;
                         return (string) ($rowLoop->iteration + $livewire->tableRecordsPerPage * ($currentPage - 1));
