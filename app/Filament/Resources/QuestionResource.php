@@ -28,11 +28,6 @@ class QuestionResource extends Resource
 {
     protected static ?string $model = Question::class;
 
-
-    protected static ?string $modelLabel = 'প্রশ্ন';
-
-    protected static ?string $pluralModelLabel = 'প্রশ্নসমূহ';
-
     //protected static ?string $modelLabel = 'প্রশ্ন';
 
     //protected static ?string $pluralModelLabel = 'প্রশ্নসমূহ';
@@ -54,7 +49,6 @@ class QuestionResource extends Resource
                 ->required(),
                 TagsInput::make('last_appeared'),
     Section::make('Options')
-    ->json()
     ->label('Options')
     ->statePath('options')
     ->columns(2)
