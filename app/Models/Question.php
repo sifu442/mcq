@@ -22,4 +22,15 @@ class Question extends Model
     {
         return $this->belongsToMany(Exam::class, 'exam_question')->withTimestamps();
     }
+
+    public function setOptionsAttribute($value)
+{
+    $this->attributes['options'] = json_encode([
+        'optionA' => $value['optionA'],
+        'optionB' => $value['optionB'],
+        'optionC' => $value['optionC'],
+        'optionD' => $value['optionD'],
+    ]);
+}
+
 }

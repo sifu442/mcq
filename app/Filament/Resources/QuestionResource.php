@@ -44,22 +44,19 @@ class QuestionResource extends Resource
                 ->createOptionForm([TextInput::make('name')->required()])
                 ->required(),
             TagsInput::make('last_appeared'),
-            TextInput::make('option1')
+            TextInput::make('options.optionA')
+                    ->label('Option 1')
                     ->required(),
-                TextInput::make('option2')
+                TextInput::make('options.optionB')
+                    ->label('Option 2')
                     ->required(),
-                TextInput::make('option3')
+                TextInput::make('options.optionC')
+                    ->label('Option 3')
                     ->required(),
-                TextInput::make('option4')
-                    ->required()
-        ])->saving(function (Form $form) {
-            $form->store('options', json_encode([
-                'option1' => $form->store('option1'),
-                'option2' => $form->store('option2'),
-                'option3' => $form->store('option3'),
-                'option4' => $form->store('option4'),
-            ]));
-        });
+                TextInput::make('options.optionD')
+                    ->label('Option 4')
+                    ->required(),
+        ]);
     }
 
     public static function table(Table $table): Table
