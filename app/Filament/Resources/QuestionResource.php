@@ -52,7 +52,14 @@ class QuestionResource extends Resource
                     ->required(),
                 TextInput::make('option4')
                     ->required()
-        ])->saving();
+        ])->saving(function (Form $form) {
+            $form->store('options', json_encode([
+                'option1' => $form->store('option1'),
+                'option2' => $form->store('option2'),
+                'option3' => $form->store('option3'),
+                'option4' => $form->store('option4'),
+            ]));
+        });
     }
 
     public static function table(Table $table): Table
