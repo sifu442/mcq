@@ -50,10 +50,10 @@ class QuestionResource extends Resource
                 ->defaultItems(1)
                 ->maxItems(1)
                 ->schema([
-                    TextInput::make('options')->label('Option A'),
-        TextInput::make('options')->label('Option B'),
-        TextInput::make('options')->label('Option C'),
-        TextInput::make('options')->label('Option D'),
+                    TextInput::make('option_A')->label('Option A'),
+                    TextInput::make('option_B')->label('Option B'),
+                    TextInput::make('option_C')->label('Option C'),
+                    TextInput::make('option_D')->label('Option D'),
                 ])
                 ->columnSpanFull(),
         ]);
