@@ -33,7 +33,7 @@ class QuestionResource extends Resource
 
     public static function form(Form $form): Form
     {
-
+        $labels = ['Option A', 'Option B', 'Option C', 'Option D'];
         return $form->schema([
             TextInput::make('title')
                 ->required()
@@ -50,8 +50,13 @@ class QuestionResource extends Resource
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->reorderable(false)
-                ->simple(TextInput::make('options')->label('Option'))
-                ->columnSpanFull(),
+                ->schema([
+                    TextInput::make('options')->label(''),
+                ])
+                ->columnSpanFull()
+                ->itemLabel(function (array $state, int $index) use ($labels): ?string {
+                    return $labels[$index] ?? null;
+                }),
         ]);
     }
 
