@@ -62,7 +62,7 @@ class QuestionResource extends Resource
         TextInput::make('options.option_b')->label('Option B'),
         TextInput::make('options.option_c')->label('Option C'),
         TextInput::make('options.option_d')->label('Option D'),
-        TextInput::make('correct_answer')->label('Correct Answer'),
+        TextInput::make('options.correct_answer')->label('Correct Answer'),
     ]),
         ]);
     }
