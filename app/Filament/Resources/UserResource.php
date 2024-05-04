@@ -11,9 +11,11 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
+use Filament\Tables\Actions\Contracts\HasTable;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
 
@@ -39,7 +41,7 @@ class UserResource extends Resource
                 ->password()
                 ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
                 ->dehydrated(fn(?string $state): bool => filled($state))
-                ->required(fn(string $operation): bool => $operation === 'create'),
+                ->required(fn(string $operation): bool => $operation === 'create')
             // Select::make('roles')
             //     ->multiple()
             //     ->relationship('roles', 'name')
@@ -48,24 +50,25 @@ class UserResource extends Resource
             //     ->multiple()
             //     ->relationship('permissions', 'name')
             //     ->preload(),
-            Select::make('role')
-            ->options(Role::all()->pluck('name', 'id')->toArray())
-            ->placeholder('Select a role')
-            ->dependable()
-            ->required(),
-        Select::make('permissions')
-            ->dependOn('role')
-            ->getDependingValueFrom('role', function ($roleId) {
-                $role = Role::find($roleId);
-                return $role ? $role->permissions->pluck('name')->toArray() : [];
-            }),
-        ]);
+        //     Select::make('role')
+        //     ->options(Role::all()->pluck('name', 'id')->toArray())
+        //     ->placeholder('Select a role')
+        //     ->dependable()
+        //     ->required(),
+        // Select::make('permissions')
+        //     ->dependOn('role')
+        //     ->getDependingValueFrom('role', function ($roleId) {
+        //         $role = Role::find($roleId);
+        //         return $role ? $role->permissions->pluck('name')->toArray() : [];
+        //     }),
+         ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
+                
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('email')->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
