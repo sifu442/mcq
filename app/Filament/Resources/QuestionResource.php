@@ -34,51 +34,32 @@ class QuestionResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            TextInput::make('title')
-                ->required()
-                ->columnSpanFull(),
+            TextInput::make('title')->required()->columnSpanFull(),
             Select::make('subject_id')
                 ->relationship('subject', 'name')
-                ->createOptionForm([
-                    TextInput::make('name')->required()
-                ])
+                ->createOptionForm([TextInput::make('name')->required()])
                 ->required(),
-                TagsInput::make('last_appeared'),
-                Repeater::make('options')
+            TagsInput::make('last_appeared'),
+            Repeater::make('options')
                 ->required()
                 ->deletable(false)
                 ->defaultItems(1)
                 ->maxItems(1)
-                ->schema([
-                    TextInput::make('option_A'),
-                    TextInput::make('option_B'),
-                    TextInput::make('option_C'),
-                    TextInput::make('option_D'),
-                    Checkbox::make('is_correct')
-                        ->fixIndistinctState()
-                        ->name('Correct Answer'),
-                ])
+                ->schema([TextInput::make('option_A'), TextInput::make('option_B'), TextInput::make('option_C'), TextInput::make('option_D'), Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')])
                 ->columnSpanFull(),
-            ]);
+        ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('index')->state(
-                    static function (HasTable $livewire, stdClass $rowLoop): string {
-                        return (string) (
-                            $rowLoop->iteration +
-                            ($livewire->getTableRecordsPerPage() * (
-                                $livewire->getTablePage() - 1
-                            ))
-                        );
-                    }
-                ),
+                TextColumn::make('index')->state(static function (HasTable $livewire, stdClass $rowLoop): string {
+                    return (string) ($rowLoop->iteration + $livewire->getTableRecordsPerPage() * ($livewire->getTablePage() - 1));
+                }),
                 TextColumn::make('title')->searchable(),
-                TextColumn::make('subject.name')->searchable()
-                ])
+                TextColumn::make('subject.name')->searchable(),
+            ])
             ->defaultSort('created_at', 'desc')
             ->filters([
                 //
