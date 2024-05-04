@@ -55,11 +55,11 @@ class QuestionResource extends Resource
                 ])
                 ->columnSpanFull()
                 ->itemLabel(function (array $state) use ($labels): ?string {
-                    static $index = 0;
-                    $label = $labels[$index] ?? null;
-                    $index++;
-                    return $label;
-                }),
+        static $index = 0;
+        $label = $labels[$index] ?? null;
+        $index++;
+        return $label;
+    }),
         ]);
     }
 
