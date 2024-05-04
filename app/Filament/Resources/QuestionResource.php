@@ -37,7 +37,9 @@ class QuestionResource extends Resource
             TextInput::make('title')->required()->columnSpanFull(),
             Select::make('subject_id')
                 ->relationship('subject', 'name')
-                ->createOptionForm([TextInput::make('name')->required()])
+                ->createOptionForm([
+                    TextInput::make('name')->required()
+                    ])
                 ->required(),
             TagsInput::make('last_appeared'),
             Repeater::make('options')
