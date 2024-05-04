@@ -47,13 +47,10 @@ class QuestionResource extends Resource
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
-                ->defaultItems(1)
-                ->maxItems(1)
+                ->defaultItems(4)
+                ->maxItems(4)
                 ->schema([
-                    TextInput::make('option_A')->label('Option A'),
-                    TextInput::make('option_B')->label('Option B'),
-                    TextInput::make('option_C')->label('Option C'),
-                    TextInput::make('option_D')->label('Option D'),
+                    TextInput::make('options')->label('Option'),
                 ])
                 ->columnSpanFull(),
         ]);
