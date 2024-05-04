@@ -46,7 +46,7 @@ class QuestionResource extends Resource
                 TagsInput::make('last_appeared'),
                 Repeater::make('options')
     ->schema([
-        TextInput::make('Option A')->required(),
+        TextInput::make('option_a')->required(),
         // ...
     ])
             ]);
