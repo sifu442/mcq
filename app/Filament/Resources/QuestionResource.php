@@ -50,9 +50,7 @@ class QuestionResource extends Resource
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->reorderable(false)
-                ->schema([
-                    TextInput::make('options')->label('Option'),
-                ])
+                ->simple(TextInput::make('options')->label('Option'))
                 ->columnSpanFull(),
         ]);
     }
