@@ -50,13 +50,7 @@ class QuestionResource extends Resource
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->schema([
-                    RichEditor::make('options')
-                    ->toolbarButtons([
-                        'attachFiles'])
-                    ->fileAttachmentsDirectory('questions/image'),
-                    Checkbox::make('is_correct')
-                        ->fixIndistinctState()
-                        ->name('Correct Answer'),
+                    TextInput::make('options'),
                 ])
                 ->columnSpanFull(),
             ]);
