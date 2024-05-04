@@ -54,16 +54,14 @@ class QuestionResource extends Resource
                     TextInput::make('name')->required()
                 ])
                 ->required(),
+                TextInput::make('last_appeared'),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->schema([
-                    TextInput::make('options')
-                    ->toolbarButtons([
-                        'attachFiles'])
-                    ->fileAttachmentsDirectory('questions/image'),
+                    TextInput::make('options'),
                     Checkbox::make('is_correct')
                         ->fixIndistinctState()
                         ->name('Correct Answer'),
