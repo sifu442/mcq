@@ -45,8 +45,15 @@ class QuestionResource extends Resource
                 ->deletable(false)
                 ->defaultItems(1)
                 ->maxItems(1)
-                ->schema([TextInput::make('option_A'), TextInput::make('option_B'), TextInput::make('option_C'), TextInput::make('option_D'), Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')])
-                ->columnSpanFull(),
+                ->schema([
+                    TextInput::make('option_A'),
+                    TextInput::make('option_B'),
+                    TextInput::make('option_C'),
+                    TextInput::make('option_D'),
+                    TextInput::make('Correct Answer'),
+                        ])
+                ->columnSpanFull()
+                ->columns(2),
         ]);
     }
 
