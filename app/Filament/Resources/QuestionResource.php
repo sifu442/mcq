@@ -33,6 +33,7 @@ class QuestionResource extends Resource
 
     public static function form(Form $form): Form
     {
+
         return $form->schema([
             TextInput::make('title')
                 ->required()
