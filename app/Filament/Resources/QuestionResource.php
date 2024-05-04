@@ -32,26 +32,27 @@ class QuestionResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
-{
-    return $form->schema([
-        TextInput::make('title')
-            ->required()
-            ->columnSpanFull(),
-        Select::make('subject_id')
-            ->relationship('subject', 'name')
-            ->createOptionForm([
-                TextInput::make('name')->required()
-            ])
-            ->required(),
-        TagsInput::make('last_appeared'),
-        Repeater::make('options')
-            ->schema([
-                TextInput::make('option_a')->required(),
-                // ...
-            ])
-    ]);
-}
+    {
 
+        return $form->schema([
+            TextInput::make('title')
+                ->required()
+                ->maxLength(255)
+                ->columnSpanFull(),
+            Select::make('subject_id')
+                ->relationship('subject', 'name')
+                ->createOptionForm([TextInput::make('name')->required()])
+                ->required(),
+            TagsInput::make('last_appeared'),
+            Repeater::make('options')
+                ->required()
+                ->deletable(false)
+                ->schema([
+                    TextInput::make('option_a')
+                ])
+                ->columnSpanFull(),
+        ]);
+    }
 
     public static function table(Table $table): Table
     {
