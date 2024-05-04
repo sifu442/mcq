@@ -65,8 +65,7 @@ class QuestionResource extends Resource
                     Checkbox::make('is_correct')
                         ->fixIndistinctState()
                         ->name('Correct Answer'),
-                ])
-                ->columnSpanFull(),
+                ]),
         ]);
     }
 
