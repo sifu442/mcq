@@ -44,13 +44,7 @@ class QuestionResource extends Resource
                 ->createOptionForm([TextInput::make('name')->required()])
                 ->required(),
             TagsInput::make('last_appeared'),
-            Repeater::make('options')
-                ->required()
-                ->deletable(false)
-                ->schema([
-                    TextInput::make('option_a')
-                ])
-                ->columnSpanFull(),
+            TextInput::make('options.option_A'),
         ]);
     }
 
