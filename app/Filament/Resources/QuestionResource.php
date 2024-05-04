@@ -61,6 +61,7 @@ class QuestionResource extends Resource
                 Section::make('Options')
                 ->label('Options')
                 ->statePath('options')
+                ->columns(2)
                 ->schema([
                     TextInput::make('option_a')->label('Option A'),
                     TextInput::make('option_b')->label('Option B'),
