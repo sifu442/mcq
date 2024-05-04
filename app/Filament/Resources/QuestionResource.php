@@ -28,11 +28,6 @@ class QuestionResource extends Resource
 {
     protected static ?string $model = Question::class;
 
-    //protected static ?string $modelLabel = 'প্রশ্ন';
-
-    //protected static ?string $pluralModelLabel = 'প্রশ্নসমূহ';
-
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
