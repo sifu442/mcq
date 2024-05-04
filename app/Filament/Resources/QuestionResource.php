@@ -53,7 +53,8 @@ class QuestionResource extends Resource
                 ])
                 ->required(),
                 TagsInput::make('last_appeared'),
-                Section::make('Options')
+    Section::make('Options')
+    ->json()
     ->label('Options')
     ->statePath('options')
     ->columns(2)
