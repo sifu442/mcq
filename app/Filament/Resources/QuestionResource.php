@@ -11,25 +11,25 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\QuestionResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\QuestionResource\RelationManagers;
-use Filament\Forms\Components\TagsInput;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class QuestionResource extends Resource
 {
     protected static ?string $model = Question::class;
-
 
     protected static ?string $modelLabel = 'প্রশ্ন';
 
@@ -39,44 +39,23 @@ class QuestionResource extends Resource
 
     //protected static ?string $pluralModelLabel = 'প্রশ্নসমূহ';
 
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form->schema([
-            TextInput::make('title')
-                //->label('Select Subject')
-                ->required()
-                ->columnSpanFull(),
-            Select::make('subject_id')
-                ->relationship('subject', 'name')
-                ->createOptionForm([
-                    TextInput::make('name')->required()
-                ])
-                ->required(),
-                TagsInput::make('last_appeared'),
-            Repeater::make('options')
-                ->required()
-                ->deletable(false)
-                ->defaultItems(4)
-                ->maxItems(4)
-                ->columnSpanFull()
-                ->schema(function () {
-                    $fields = [];
-        $labels = ['A', 'B', 'C', 'D'];
+            TextInput::make('title')->label('Question Title'),
+            TagsInput::make('last_appeared'),
+            Hidden::make('options')->default('[]'), // JSON field for options
 
-        for ($i = 0; $i < 4; $i++) {
-            $fields[] = TextInput::make('options_' . $i)
-                ->label('Option ' . $labels[$i]);
-        }
+            // Manually create text input fields for each option
+            TextInput::make('option_a')->label('Option A')->stacked(),
 
-        $fields[] = Checkbox::make('is_correct')
-            ->fixIndistinctState()
-            ->name('Correct Answer');
+            TextInput::make('option_b')->label('Option B')->stacked(),
 
-        return $fields;
-                }),
+            TextInput::make('option_c')->label('Option C')->stacked(),
+
+            TextInput::make('option_d')->label('Option D')->stacked(),
         ]);
     }
 
@@ -84,19 +63,12 @@ class QuestionResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('index')->state(
-                    static function (HasTable $livewire, stdClass $rowLoop): string {
-                        return (string) (
-                            $rowLoop->iteration +
-                            ($livewire->getTableRecordsPerPage() * (
-                                $livewire->getTablePage() - 1
-                            ))
-                        );
-                    }
-                ),
+                TextColumn::make('index')->state(static function (HasTable $livewire, stdClass $rowLoop): string {
+                    return (string) ($rowLoop->iteration + $livewire->getTableRecordsPerPage() * ($livewire->getTablePage() - 1));
+                }),
                 TextColumn::make('title')->searchable(),
-                TextColumn::make('subject.name')->searchable()
-                ])
+                TextColumn::make('subject.name')->searchable(),
+            ])
             ->defaultSort('created_at', 'desc')
             ->filters([
                 //
