@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->foreignId('subject_id')->constrained()->nullable();
             $table->json('options');
-            $table->string('last_appeared');
+            $table->string('last_appeared')->nullable();
             $table->timestamps();
         });
     }
