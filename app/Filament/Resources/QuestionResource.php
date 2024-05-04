@@ -61,14 +61,22 @@ class QuestionResource extends Resource
                 ->deletable(false)
                 ->defaultItems(4)
                 ->maxItems(4)
-                ->schema([
-                    TextInput::make('options')
-                    ->label(fn ($index) => "Option " . chr(65 + $index)),
-                    Checkbox::make('is_correct')
-                        ->fixIndistinctState()
-                        ->name('Correct Answer'),
-                ])
-                ->columnSpanFull(),
+                ->columnSpanFull()
+                ->schema(function () {
+                    $fields = [];
+        $labels = ['A', 'B', 'C', 'D'];
+
+        for ($i = 0; $i < 4; $i++) {
+            $fields[] = TextInput::make('options_' . $i)
+                ->label('Option ' . $labels[$i]);
+        }
+
+        $fields[] = Checkbox::make('is_correct')
+            ->fixIndistinctState()
+            ->name('Correct Answer');
+
+        return $fields;
+                }),
         ]);
     }
 
