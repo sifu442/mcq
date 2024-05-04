@@ -18,6 +18,7 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
@@ -46,16 +47,14 @@ class QuestionResource extends Resource
         return $form->schema([
             TextInput::make('title')->label('Question Title'),
             TagsInput::make('last_appeared'),
-            Hidden::make('options')->default('[]'), // JSON field for options
-
-            // Manually create text input fields for each option
-            TextInput::make('option_a')->label('Option A')->stacked(),
-
-            TextInput::make('option_b')->label('Option B')->stacked(),
-
-            TextInput::make('option_c')->label('Option C')->stacked(),
-
-            TextInput::make('option_d')->label('Option D')->stacked(),
+            Component::make()
+            ->stacked()
+            ->children([
+                TextInput::make('option_a')->label('Option A'),
+                TextInput::make('option_b')->label('Option B'),
+                TextInput::make('option_c')->label('Option C'),
+                TextInput::make('option_d')->label('Option D'),
+            ]),
         ]);
     }
 
