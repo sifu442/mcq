@@ -60,15 +60,13 @@ class QuestionResource extends Resource
                 ->deletable(false)
                 ->defaultItems(4)
                 ->maxItems(4)
-                ->schema(function () {
-                    return [
-                        TextInput::make('options')
-                            ->label(fn($index) => 'Option ' . chr(65 + $index)), // 'A' corresponds to 65 in ASCII
-                        Checkbox::make('is_correct')
-                            ->fixIndistinctState()
-                            ->name('Correct Answer'),
-                    ];
-                }),
+                ->schema([
+                    TextInput::make('options'),
+                    Checkbox::make('is_correct')
+                        ->fixIndistinctState()
+                        ->name('Correct Answer'),
+                ])
+                ->columnSpanFull(),
         ]);
     }
 
