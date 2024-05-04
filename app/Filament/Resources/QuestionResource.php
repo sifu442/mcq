@@ -14,6 +14,7 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TagsInput;
@@ -43,12 +44,22 @@ class QuestionResource extends Resource
                 ])
                 ->required(),
                 TagsInput::make('last_appeared'),
-        TextInput::make('options.option_a')->label('Option A'),
-        TextInput::make('options.option_b')->label('Option B'),
-        TextInput::make('options.option_c')->label('Option C'),
-        TextInput::make('options.option_d')->label('Option D'),
-        TextInput::make('options.correct_answer')->label('Correct Answer'),
-        ]);
+                Repeater::make('options')
+                ->required()
+                ->deletable(false)
+                ->defaultItems(1)
+                ->maxItems(1)
+                ->schema([
+                    TextInput::make('option_A'),
+                    TextInput::make('option_B'),
+                    TextInput::make('option_C'),
+                    TextInput::make('option_D'),
+                    Checkbox::make('is_correct')
+                        ->fixIndistinctState()
+                        ->name('Correct Answer'),
+                ])
+                ->columnSpanFull(),
+            ]);
     }
 
     public static function table(Table $table): Table
