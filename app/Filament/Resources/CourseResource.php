@@ -58,9 +58,6 @@ class CourseResource extends Resource
                 ->reactive()
                 ->afterStateUpdated(fn (callable $set) => $set('price', 0)),
 
-            DatePicker::make('published_at'),
-
-
 
             TextInput::make('price')
                 ->translateLabel()
