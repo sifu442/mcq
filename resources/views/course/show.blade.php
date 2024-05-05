@@ -29,7 +29,7 @@
         </div>
 
         <div class="py-3 text-gray-800 text-lg text-justify">
-            Start of Exam:
+            Start of Exam: {{}}
         </div>
 
         {{-- <div class="flex items-center space-x-4 mt-10">
