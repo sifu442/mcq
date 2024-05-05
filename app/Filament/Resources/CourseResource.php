@@ -29,9 +29,6 @@ class CourseResource extends Resource
     protected static ?string $model = Course::class;
 
 
-    protected static ?string $modelLabel = 'কোর্স';
-    protected static ?string $pluralModelLabel = 'কোর্সগুলো';
-
     //protected static ?string $modelLabel = 'কোর্স';
     //protected static ?string $pluralModelLabel = 'কোর্সগুলো';
 
