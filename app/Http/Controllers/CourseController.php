@@ -21,7 +21,7 @@ class CourseController extends Controller
         $exams = $course->exams;
 
         $currentDate = Carbon::now();
-        $futureDate = $currentDate->addDays(4)->toDateString();
+        $futureDate = $currentDate->addDays(4)->format('d/m/Y');
 
         return view('course.show', ['course' => $course, 'subjects' => $uniqueSubjects, 'exams' => $exams, 'futureDate' => $futureDate]);
     }
