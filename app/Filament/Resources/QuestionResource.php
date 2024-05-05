@@ -33,7 +33,7 @@ class QuestionResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $labels = ['Option A', 'Option B', 'Option C', 'Option D'];
+
         return $form->schema([
             TextInput::make('title')
                 ->required()
@@ -44,18 +44,16 @@ class QuestionResource extends Resource
                 ->createOptionForm([TextInput::make('name')->required()])
                 ->required(),
             TagsInput::make('last_appeared'),
-            TextInput::make('options.optionA')
-                    ->label('Option A')
-                    ->required(),
-                TextInput::make('options.optionB')
-                    ->label('Option B')
-                    ->required(),
-                TextInput::make('options.optionC')
-                    ->label('Option C')
-                    ->required(),
-                TextInput::make('options.optionD')
-                    ->label('Option D')
-                    ->required(),
+            Repeater::make('options')
+                ->required()
+                ->deletable(false)
+                ->defaultItems(4)
+                ->maxItems(4)
+                ->schema([
+                    TextInput::make('options')
+                    ->label('Options ')
+                ])
+                ->columnSpanFull(),
         ]);
     }
 
