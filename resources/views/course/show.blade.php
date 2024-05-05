@@ -29,6 +29,10 @@
         </div>
 
         <div class="py-3 text-gray-800 text-lg text-justify">
+            Fee: {{$course->price}}
+        </div>
+
+        <div class="py-3 text-gray-800 text-lg text-justify">
             Start of Exam: {{ $futureDate }}
         </div>
 
