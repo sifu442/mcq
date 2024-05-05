@@ -21,7 +21,7 @@
 
 
         <div class="py-3 text-gray-800 text-lg text-justify">
-            Gap per exam:
+            Gap per exam: {{ $exam->delay_days}}
         </div>
 
         <div class="py-3 text-gray-800 text-lg text-justify">

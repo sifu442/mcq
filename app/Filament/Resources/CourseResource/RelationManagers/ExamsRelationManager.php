@@ -25,7 +25,7 @@ class ExamsRelationManager extends RelationManager
             Select::make('course_id')->relationship('course', 'title')->required(),
             TextInput::make('syllabus')->required()->translateLabel(),
             TextInput::make('duration')->required()->numeric()->suffix('Minutes')->translateLabel(),
-            TextInput::make('delay_days')->required()->numeric()->suffix('Days')->translateLabel(),
+            TextInput::make('delay_days')->label('Gap')->required()->numeric()->suffix('Days')->translateLabel(),
             TextInput::make('available_for_hours')->required()->numeric()->suffix('Hours')->translateLabel(),
             Select::make('score')
                 ->required()
