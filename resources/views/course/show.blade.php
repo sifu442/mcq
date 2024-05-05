@@ -6,7 +6,7 @@
             </h1>
             <div class="mt-2 flex justify-between items-center">
                 <div class="flex items-center">
-                    <span class="text-gray-500 mr-2">2 days ago</span>
+                    <span> Published :</span><span class="text-gray-500 mr-2">2 days ago</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.3"
                         stroke="currentColor" class="w-5 h-5 text-gray-500">
                         <path stroke-linecap="round" stroke-linejoin="round"
