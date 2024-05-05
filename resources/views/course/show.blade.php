@@ -29,7 +29,7 @@
         </div>
 
         <div class="py-3 text-gray-800 text-lg text-justify">
-            Fee: {{$course->price}}
+            Fee: {{$course->price}} Taka
         </div>
 
         <div class="py-3 text-gray-800 text-lg text-justify">
