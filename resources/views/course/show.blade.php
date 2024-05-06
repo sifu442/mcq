@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="">
         <img class="" src="" alt="">
-        <h1 class="text-3xl">
+        <h1 class="text-3xl text-heading">
             {{ $course->title }}
         </h1>
         <div class="mt-2 flex justify-between items-center">
