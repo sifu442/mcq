@@ -48,7 +48,7 @@
             @foreach ($exams as $index => $exam)
                 <h2 id="accordion-collapse-heading-{{ $exam->id }}">
                     <button type="button"
-                        class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border {{ $index === 0 ? 'border-b-0' : 'border-b-1' }}  {{ $index === 0 ? 'rounded-t-xl' : '' }} border-primary focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
+                        class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border   {{ $index === 0 ? 'rounded-t-xl' : '' }} border-primary focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
                         data-accordion-target="#accordion-collapse-body-{{ $exam->id }}" aria-expanded="{{ $index === 0 ? 'true' : 'false' }}"
                         aria-controls="accordion-collapse-body-{{ $exam->id }}">
                         <span>{{ $exam->name }}</span>
