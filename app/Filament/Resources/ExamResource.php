@@ -39,7 +39,6 @@ class ExamResource extends Resource
     public static function form(Form $form): Form
     {
 
-
         return $form->schema([
             TextInput::make('name')->required()->translateLabel(),
             Select::make('course_id')->relationship('course', 'title')->required(),

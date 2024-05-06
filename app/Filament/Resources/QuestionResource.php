@@ -33,7 +33,7 @@ class QuestionResource extends Resource
 
     public static function form(Form $form): Form
     {
-
+        $latestSubject = Subject::latest()->first();
         return $form->schema([
             TextInput::make('title')
                 ->required()
@@ -41,6 +41,7 @@ class QuestionResource extends Resource
                 ->columnSpanFull(),
             Select::make('subject_id')
                 ->relationship('subject', 'name')
+                ->default($latestSubject->id ?? null)
                 ->createOptionForm([TextInput::make('name')->required()])
                 ->required(),
             TagsInput::make('last_appeared'),
