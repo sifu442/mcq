@@ -24,6 +24,7 @@ use App\Filament\Resources\ExamResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ExamResource\RelationManagers;
 use App\Filament\Resources\ExamResource\RelationManagers\QuestionsRelationManager;
+use App\Models\Subject;
 
 class ExamResource extends Resource
 {
@@ -37,6 +38,8 @@ class ExamResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $lastCreatedItem = Subject::latest()->first();
+
         return $form->schema([
             TextInput::make('name')->required()->translateLabel(),
             Select::make('course_id')->relationship('course', 'title')->required(),
