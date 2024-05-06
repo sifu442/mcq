@@ -19,10 +19,10 @@
     </head>
     <body class="font-sans antialiased">
 
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen bg-base">
             @include('layouts.partials.header')
             <!-- Page Content -->
-            <main class="container max-w-screen-xl mx-auto p-4 flex flex-col min-h-screen">
+            <main class="container max-w-screen-xl mx-auto p-4 flex flex-col min-h-screen mt-10">
                 {{ $slot }}
             </main>
             @include('layouts.partials.footer')
