@@ -40,25 +40,25 @@ class ExamResource extends Resource
         return $form->schema([
             TextInput::make('name')->required()->translateLabel(),
             Select::make('course_id')->relationship('course', 'title')->required(),
-            TextInput::make('syllabus')->required()->translateLabel(),
             TextInput::make('duration')->required()->numeric()->suffix('Minutes')->translateLabel(),
             TextInput::make('delay_days')->required()->numeric()->suffix('Days')->translateLabel(),
             TextInput::make('available_for_hours')->required()->numeric()->suffix('Hours')->translateLabel(),
             Select::make('score')
-                ->required()
-                ->options([
-                    '1' => '1',
-                    '2' => '2',
-                    '3' => '3',
-                ]),
+            ->required()
+            ->options([
+                '1' => '1',
+                '2' => '2',
+                '3' => '3',
+            ]),
             Select::make('penalty')
-                ->required()
-                ->options([
-                    '0.25' => '0.25',
-                    '0.50' => '0.50',
-                    '0.70' => '0.50',
-                    '1' => '1',
-                ]),
+            ->required()
+            ->options([
+                '0.25' => '0.25',
+                '0.50' => '0.50',
+                '0.70' => '0.50',
+                '1' => '1',
+            ]),
+            RichEditor::make('syllabus')->required()->translateLabel()->columnSpanFull(),
         ]);
 
     }
