@@ -101,7 +101,8 @@ class CourseResource extends Resource
                         );
                     }
                 ),
-                TextColumn::make('title')
+                TextColumn::make('title'),
+                TextColumn::make('exams_count')->label('Number of Exams')->counts('exams')
                 ])
             ->filters([
                 //
