@@ -6,7 +6,7 @@
         </h1>
         <div class="mt-2 flex justify-between items-center">
             <div class="flex items-center">
-                <span> Published :</span><span class="text-gray-500 mr-2">2 days ago</span>
+                <span class="text-text"> Published :</span><span class="text-gray-500 mr-2">2 days ago</span>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.3"
                     stroke="currentColor" class="w-5 h-5 text-gray-500">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -15,24 +15,24 @@
             </div>
         </div>
 
-        <div class="py-3 text-gray-800 text-lg text-justify">
+        <div class="py-3  text-lg text-justify text-text">
             Subjects: {{ $subjects->pluck('name')->join(', ') }}
         </div>
 
 
-        <div class="py-3 text-gray-800 text-lg text-justify">
-            Gap per exam:
+        <div class="py-3 text-text text-lg text-justify">
+            Gap per exam: 
         </div>
 
-        <div class="py-3 text-gray-800 text-lg text-justify">
+        <div class="py-3 text-text text-lg text-justify">
             Number of exams: {{ $course->total_exams }}
         </div>
 
-        <div class="py-3 text-gray-800 text-lg text-justify">
+        <div class="py-3 text-text text-lg text-justify">
             Fee: {{ $course->price }} Taka
         </div>
 
-        <div class="py-3 text-gray-800 text-lg text-justify">
+        <div class="py-3 text-textg text-lg text-justify">
             Start of Exam: {{ $futureDate }}
         </div>
 
