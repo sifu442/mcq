@@ -38,7 +38,7 @@ class ExamResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $lastCreatedItem = Subject::latest()->first();
+
 
         return $form->schema([
             TextInput::make('name')->required()->translateLabel(),
