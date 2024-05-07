@@ -86,6 +86,7 @@ class CourseResource extends Resource
                 ->onIcon('heroicon-m-bolt')
                 ->offIcon('heroicon-m-user'),
              RichEditor::make('description')
+             ->columnSpanFull()
 
         ]);
     }
