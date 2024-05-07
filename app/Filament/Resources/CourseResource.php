@@ -23,6 +23,7 @@ use App\Filament\Resources\CourseResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CourseResource\RelationManagers;
 use App\Filament\Resources\CourseResource\RelationManagers\ExamsRelationManager;
+use Filament\Forms\Components\RichEditor;
 
 class CourseResource extends Resource
 {
@@ -84,6 +85,8 @@ class CourseResource extends Resource
             Toggle::make('featured')
                 ->onIcon('heroicon-m-bolt')
                 ->offIcon('heroicon-m-user'),
+             RichEditor::make('description')
+
         ]);
     }
 
