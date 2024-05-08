@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('exam_name')->nullable();
             $table->string('post')->nullable();
             $table->timestamp('date')->nullable();
+            $table->longText('explanation')->nullable();
             $table->timestamps();
         });
     }
