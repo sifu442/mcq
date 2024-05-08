@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\QuestionResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\QuestionResource\RelationManagers;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
 
 class QuestionResource extends Resource
@@ -44,7 +45,9 @@ class QuestionResource extends Resource
                 ->default($latestSubject->id ?? null)
                 ->createOptionForm([TextInput::make('name')->required()])
                 ->required(),
-            TagsInput::make('last_appeared'),
+            TextInput::make('exam_name'),
+            TextInput::make('post'),
+            DatePicker::make('date'),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
@@ -52,7 +55,7 @@ class QuestionResource extends Resource
                 ->maxItems(4)
                 ->schema([
                     TextInput::make('options')
-                    ->label('Options ')
+                    ->label('Options')
                 ])
                 ->columnSpanFull(),
         ]);
