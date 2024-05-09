@@ -34,7 +34,7 @@ class QuestionsRelationManager extends RelationManager
             TextInput::make('exam_name'),
             TextInput::make('post'),
             DatePicker::make('date'),
-            TextInput::make('title')->required()->maxLength(255)->columnSpanFull(),
+            RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)

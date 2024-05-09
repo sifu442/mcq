@@ -41,7 +41,7 @@ class QuestionResource extends Resource
             TextInput::make('exam_name'),
             TextInput::make('post'),
             DatePicker::make('date'),
-            TextInput::make('title')
+            RichEditor::make('title')
                 ->required()
                 ->maxLength(255)
                 ->columnSpanFull(),
