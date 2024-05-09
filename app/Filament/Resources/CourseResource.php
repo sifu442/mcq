@@ -89,6 +89,7 @@ class CourseResource extends Resource
              RichEditor::make('description')
              ->columnSpanFull(),
              FileUpload::make('attachment')
+             ->multiple()
         ]);
     }
 
