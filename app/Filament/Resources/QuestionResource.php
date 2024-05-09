@@ -32,10 +32,7 @@ class QuestionResource extends Resource
     {
         $latestSubject = Subject::latest()->first();
         return $form->schema([
-            TextInput::make('title')
-                ->required()
-                ->maxLength(255)
-                ->columnSpanFull(),
+
             Select::make('subject_id')
                 ->relationship('subject', 'name')
                 ->default($latestSubject->id ?? null)
@@ -44,6 +41,10 @@ class QuestionResource extends Resource
             TextInput::make('exam_name'),
             TextInput::make('post'),
             DatePicker::make('date'),
+            TextInput::make('title')
+                ->required()
+                ->maxLength(255)
+                ->columnSpanFull(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)

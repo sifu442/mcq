@@ -27,14 +27,14 @@ class QuestionsRelationManager extends RelationManager
     public function form(Form $form): Form
     {
         return $form->schema([
-            TextInput::make('title')->required()->maxLength(255)->columnSpanFull(),
             Select::make('subject_id')
-                ->relationship('subject', 'name')
-                ->createOptionForm([TextInput::make('name')->required()])
-                ->required(),
+            ->relationship('subject', 'name')
+            ->createOptionForm([TextInput::make('name')->required()])
+            ->required(),
             TextInput::make('exam_name'),
             TextInput::make('post'),
             DatePicker::make('date'),
+            TextInput::make('title')->required()->maxLength(255)->columnSpanFull(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
