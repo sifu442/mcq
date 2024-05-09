@@ -42,7 +42,7 @@ class QuestionsRelationManager extends RelationManager
                 ->maxItems(4)
                 ->schema([TextInput::make('options'), Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')])
                 ->columnSpanFull(),
-            RichEditor::make('explanation')
+            RichEditor::make('explanation')->columnSpanFull()
         ]);
     }
 

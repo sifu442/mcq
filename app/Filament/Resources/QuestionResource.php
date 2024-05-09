@@ -55,7 +55,7 @@ class QuestionResource extends Resource
                     ->label('Options')
                 ])
                 ->columnSpanFull(),
-            RichEditor::make('explanation')
+            RichEditor::make('explanation')->columnSpanFull()
         ]);
     }
 
