@@ -68,6 +68,9 @@ class QuestionResource extends Resource
                 }),
                 TextColumn::make('title')->searchable(),
                 TextColumn::make('subject.name')->searchable(),
+                TextColumn::make('exam_name')->searchable(),
+                TextColumn::make('post')->searchable(),
+                TextColumn::make('date')->searchable(),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
