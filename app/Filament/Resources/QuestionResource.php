@@ -71,7 +71,6 @@ class QuestionResource extends RelationManager
                             ->searchable()
                             ->createOptionForm([
                                 TextInput::make('title')->required()->label('Question Title'),
-                                RichEditor::make('content')->required()->label('Content')
                             ])
                             ->required(),
                     ]),
