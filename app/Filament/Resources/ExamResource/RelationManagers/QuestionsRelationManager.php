@@ -65,17 +65,7 @@ class QuestionsRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\AttachAction::make()
-                    ->form([
-                        Select::make('question_id')
-                            ->label('Question')
-                            ->relationship('questions', 'title')
-                            ->searchable()
-                            ->createOptionForm([
-                                TextInput::make('title')->required()->label('Question Title'),
-                                RichEditor::make('content')->required()->label('Content')
-                            ])
-                            ->required(),
-                    ]),
+                ->preloadRecordSelect()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
