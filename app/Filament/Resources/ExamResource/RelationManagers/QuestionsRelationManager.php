@@ -64,6 +64,16 @@ class QuestionsRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\AttachAction::make()
+                ->form([
+                    Select::make('question_id')
+                        ->label('Question')
+                        ->relationship('questions', 'title')
+                        ->searchable()
+                        ->createOptionForm([
+                            TextInput::make('title')->required()->label('Question Title'),
+                        ])
+                        ->required(),
+                ]),
             ])
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
