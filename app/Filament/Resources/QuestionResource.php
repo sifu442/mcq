@@ -39,7 +39,7 @@ class QuestionResource extends Resource
                 ->default($latestSubject->id ?? null)
                 ->createOptionForm([TextInput::make('name')->required()])
                 ->required(),
-            TextInput::make('exam_name'),
+            TextInput::make('previous_exam'),
             TextInput::make('post'),
             DatePicker::make('date'),
             RichEditor::make('title')
@@ -72,7 +72,7 @@ class QuestionResource extends Resource
                 }),
                 TextColumn::make('title')->searchable(),
                 TextColumn::make('subject.name')->searchable(),
-                TextColumn::make('exam_name')->searchable(),
+                TextColumn::make('previous_exam')->searchable(),
                 TextColumn::make('post')->searchable(),
                 TextColumn::make('date')->searchable(),
             ])

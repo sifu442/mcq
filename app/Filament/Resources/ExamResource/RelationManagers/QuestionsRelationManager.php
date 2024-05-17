@@ -31,7 +31,7 @@ class QuestionsRelationManager extends RelationManager
             ->relationship('subject', 'name')
             ->createOptionForm([TextInput::make('name')->required()])
             ->required(),
-            TextInput::make('exam_name'),
+            TextInput::make('previous_exam'),
             TextInput::make('post'),
             DatePicker::make('date'),
             RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
