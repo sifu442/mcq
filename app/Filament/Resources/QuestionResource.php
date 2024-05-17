@@ -11,16 +11,17 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\QuestionResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\QuestionResource\RelationManagers;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Repeater;
 
 class QuestionResource extends Resource
 {
@@ -52,7 +53,10 @@ class QuestionResource extends Resource
                 ->maxItems(4)
                 ->schema([
                     TextInput::make('options')
-                    ->label('Options')
+                    ->label('Options'),
+                    Checkbox::make('is_correct')
+                        ->fixIndistinctState()
+                        ->name('Correct Answer')
                 ])
                 ->columnSpanFull(),
             RichEditor::make('explanation')->columnSpanFull()
