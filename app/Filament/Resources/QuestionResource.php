@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\ExamResource\RelationManagers;
 
 use stdClass;
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Subject;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
@@ -19,84 +17,100 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\QuestionResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\QuestionResource\RelationManagers;
+use Filament\Resources\RelationManagers\RelationManager;
 
-class QuestionResource extends Resource
+class QuestionsRelationManager extends RelationManager
 {
-    protected static ?string $model = Question::class;
+    protected static string $relationship = 'questions';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
-        $latestSubject = Subject::latest()->first();
         return $form->schema([
-
             Select::make('subject_id')
                 ->relationship('subject', 'name')
-                ->default($latestSubject->id ?? null)
                 ->createOptionForm([TextInput::make('name')->required()])
                 ->required(),
-            TextInput::make('previous_exam'),
+            TextInput::make('exam_name'),
             TextInput::make('post'),
             DatePicker::make('date'),
-            RichEditor::make('title')
-                ->required()
-                ->maxLength(255)
-                ->columnSpanFull(),
+            RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->schema([
-                    TextInput::make('options')
-                    ->label('Options'),
-                    Checkbox::make('is_correct')
-                        ->fixIndistinctState()
-                        ->name('Correct Answer')
+                    TextInput::make('options'),
+                    Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
                 ])
                 ->columnSpanFull(),
             RichEditor::make('explanation')->columnSpanFull()
         ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('title')
             ->columns([
-                TextColumn::make('index')->state(static function (HasTable $livewire, stdClass $rowLoop): string {
-                    return (string) ($rowLoop->iteration + $livewire->getTableRecordsPerPage() * ($livewire->getTablePage() - 1));
-                }),
-                TextColumn::make('title')->searchable(),
-                TextColumn::make('subject.name')->searchable(),
-                TextColumn::make('previous_exam')->searchable(),
-                TextColumn::make('post')->searchable(),
-                TextColumn::make('date')->searchable(),
+                TextColumn::make('index')
+                    ->label('Index')
+                    ->getStateUsing(function (stdClass $rowLoop, $livewire): string {
+                        $currentPage = method_exists($livewire, 'currentPage') ? $livewire->currentPage() : 1;
+                        return (string) ($rowLoop->iteration + $livewire->tableRecordsPerPage * ($currentPage - 1));
+                    }),
+                TextColumn::make('title'),
             ])
-            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
-            ->actions([Tables\Actions\EditAction::make()])
-            ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-                //
-            ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListQuestions::route('/'),
-            'create' => Pages\CreateQuestion::route('/create'),
-            'edit' => Pages\EditQuestion::route('/{record}/edit'),
-        ];
+            ->headerActions([
+                Tables\Actions\AttachAction::make()
+                    ->preloadRecordSelect()
+                    ->form(function ($record) {
+                        return [
+                            Select::make('question_id')
+                                ->label('Question')
+                                ->relationship('questions', 'title')
+                                ->searchable()
+                                ->getSearchResultsUsing(function ($search) {
+                                    return Question::where('title', 'like', "%{$search}%")->limit(50)->pluck('title', 'id');
+                                })
+                                ->reactive()
+                                ->afterStateUpdated(function ($state, $set) {
+                                    if (!$state) {
+                                        $set('new_question', true);
+                                    }
+                                })
+                                ->required(),
+                            TextInput::make('new_question_title')
+                                ->label('New Question Title')
+                                ->visible(fn ($get) => $get('new_question'))
+                                ->required(fn ($get) => $get('new_question')),
+                            // Add more fields here for the new question creation
+                        ];
+                    })
+                    ->action(function ($data) {
+                        if ($data['new_question']) {
+                            $question = Question::create([
+                                'title' => $data['new_question_title'],
+                                // Populate other fields for new question
+                            ]);
+                            $this->ownerRecord->questions()->attach($question);
+                        } else {
+                            $this->ownerRecord->questions()->attach($data['question_id']);
+                        }
+                    }),
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make()
+                ])
+            ]);
     }
 }
