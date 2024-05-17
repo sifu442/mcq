@@ -62,7 +62,7 @@ class QuestionsRelationManager extends RelationManager
             ->filters([
                 //
             ])
-            ->headerActions([Tables\Actions\CreateAction::make(), Tables\Actions\AttachAction::make()])
+            ->headerActions([Tables\Actions\AttachAction::make()])
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
