@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
 
-class QuestionsRelationManager extends RelationManager
+class NewQuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
 
