@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources\ExamResource\RelationManagers;
 
 use stdClass;
@@ -12,15 +11,13 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
 
-class NewQuestionsRelationManager extends RelationManager
+class QuestionResource extends RelationManager
 {
     protected static string $relationship = 'questions';
 
@@ -41,7 +38,7 @@ class NewQuestionsRelationManager extends RelationManager
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->schema([
-                    TextInput::make('options'),
+                    TextInput::make('option'),
                     Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
                 ])
                 ->columnSpanFull(),
@@ -63,54 +60,30 @@ class NewQuestionsRelationManager extends RelationManager
                 TextColumn::make('title'),
             ])
             ->filters([
-                //
+                // Add any necessary filters here
             ])
             ->headerActions([
                 Tables\Actions\AttachAction::make()
-                    ->preloadRecordSelect()
-                    ->form(function ($record) {
-                        return [
-                            Select::make('question_id')
-                                ->label('Question')
-                                ->relationship('questions', 'title')
-                                ->searchable()
-                                ->getSearchResultsUsing(function ($search) {
-                                    return Question::where('title', 'like', "%{$search}%")->limit(50)->pluck('title', 'id');
-                                })
-                                ->reactive()
-                                ->afterStateUpdated(function ($state, $set) {
-                                    if (!$state) {
-                                        $set('new_question', true);
-                                    }
-                                })
-                                ->required(),
-                            TextInput::make('new_question_title')
-                                ->label('New Question Title')
-                                ->visible(fn ($get) => $get('new_question'))
-                                ->required(fn ($get) => $get('new_question')),
-                            // Add more fields here for the new question creation
-                        ];
-                    })
-                    ->action(function ($data) {
-                        if ($data['new_question']) {
-                            $question = Question::create([
-                                'title' => $data['new_question_title'],
-                                // Populate other fields for new question
-                            ]);
-                            $this->ownerRecord->questions()->attach($question);
-                        } else {
-                            $this->ownerRecord->questions()->attach($data['question_id']);
-                        }
-                    }),
+                    ->form([
+                        Select::make('question_id')
+                            ->label('Question')
+                            ->relationship('questions', 'title')
+                            ->searchable()
+                            ->createOptionForm([
+                                TextInput::make('title')->required()->label('Question Title'),
+                                RichEditor::make('content')->required()->label('Content')
+                            ])
+                            ->required(),
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                ])
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 }
