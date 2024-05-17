@@ -12,12 +12,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class QuestionsRelationManager extends RelationManager
@@ -31,7 +29,7 @@ class QuestionsRelationManager extends RelationManager
                 ->relationship('subject', 'name')
                 ->createOptionForm([TextInput::make('name')->required()])
                 ->required(),
-            TextInput::make('previous_exam'),
+            TextInput::make('exam_name'),
             TextInput::make('post'),
             DatePicker::make('date'),
             RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
@@ -40,9 +38,12 @@ class QuestionsRelationManager extends RelationManager
                 ->deletable(false)
                 ->defaultItems(4)
                 ->maxItems(4)
-                ->schema([TextInput::make('options'), Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')])
+                ->schema([
+                    TextInput::make('option'),
+                    Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
+                ])
                 ->columnSpanFull(),
-            RichEditor::make('explanation')->columnSpanFull(),
+            RichEditor::make('explanation')->columnSpanFull()
         ]);
     }
 
@@ -60,36 +61,31 @@ class QuestionsRelationManager extends RelationManager
                 TextColumn::make('title'),
             ])
             ->filters([
-                //
+                // Add any necessary filters here
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make()->form([
-                    Select::make('question_id')
-                        ->label('Question')
-                        ->relationship('questions', 'title')
-                        ->searchable()
-                        ->createOptionForm([
-                            Select::make('subject_id')
-                                ->relationship('subject', 'name')
-                                ->createOptionForm([TextInput::make('name')->required()])
-                                ->required(),
-                            TextInput::make('previous_exam'),
-                            TextInput::make('post'),
-                            DatePicker::make('date'),
-                            RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
-                            Repeater::make('options')
-                                ->required()
-                                ->deletable(false)
-                                ->defaultItems(4)
-                                ->maxItems(4)
-                                ->schema([TextInput::make('options'), Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')])
-                                ->columnSpanFull(),
-                            RichEditor::make('explanation')->columnSpanFull(),
-                        ])
-                        ->required(),
-                ]),
+                Tables\Actions\AttachAction::make()
+                    ->form([
+                        Select::make('question_id')
+                            ->label('Question')
+                            ->relationship('questions', 'title')
+                            ->searchable()
+                            ->createOptionForm([
+                                TextInput::make('title')->required()->label('Question Title'),
+                                RichEditor::make('content')->required()->label('Content')
+                            ])
+                            ->required(),
+                    ]),
             ])
-            ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
-            ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
     }
 }
+
