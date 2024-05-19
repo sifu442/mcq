@@ -13,6 +13,7 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Columns\TextColumn;
 use Livewire\Livewire;
 
 class QuestionsRelationManager extends RelationManager
@@ -62,8 +63,8 @@ class QuestionsRelationManager extends RelationManager
             ->filters([])
             ->headerActions([
                 Action::make('Question Attach & Creation')
-                ->form([
-                    TextInput::make('question')
+                ->columns([
+                    TextColumn::make('questions')
                 ])
             ])
             ->actions([
