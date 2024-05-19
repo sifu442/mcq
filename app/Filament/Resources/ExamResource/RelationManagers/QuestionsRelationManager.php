@@ -16,6 +16,8 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
 use Livewire\Livewire;
 
+use function Laravel\Prompts\select;
+
 class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
@@ -62,10 +64,11 @@ class QuestionsRelationManager extends RelationManager
             ])
             ->filters([])
             ->headerActions([
-                Action::make('Question Attach & Creation')
-                ->columns([
-                    TextColumn::make('questions')->searchable()
-                ])
+                Tables\Actions\AttachAction::make()
+                ->forms(
+                    Select::make('')
+                )
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
