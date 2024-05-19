@@ -69,7 +69,9 @@ class QuestionsRelationManager extends RelationManager
                 ->recordSelect(
                     fn (Select $select) => $select->createOptionForm([
                             Select::make('subject_id')
-                                ->options(Subject::all()->pluck('name', 'id'))
+                            ->createOptionUsing(function ($record) {
+                                return $record->subject->pluck('name', 'id');
+                            })
                                 ->required(),
                             TextInput::make('exam_name'),
                             TextInput::make('post'),
