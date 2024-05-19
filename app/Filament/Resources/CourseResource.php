@@ -30,10 +30,8 @@ class CourseResource extends Resource
 {
     protected static ?string $model = Course::class;
 
-
     //protected static ?string $modelLabel = 'কোর্স';
     //protected static ?string $pluralModelLabel = 'কোর্সগুলো';
-
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -41,61 +39,28 @@ class CourseResource extends Resource
     {
         return $form->schema([
             TextInput::make('title')
-            ->live()
-            ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
-                if (($get('slug') ?? '') !== Str::slug($old)) {
-                    return;
-                }
+                ->required()
+                ->maxLength(255)
+                ->live(onBlur: true)
+                ->afterStateUpdated(function (Set $set, $state) {
+                    $set('slug', Str::slug($state));
+                }),
+            TextInput::make('slug')->required()->maxLength(255),
+            TextInput::make('time_span')->required()->numeric()->suffix('days'),
 
-                $set('slug', Str::slug($state));
-            })
-                ->required(),
+            DatePicker::make('published_at')->native(false)->minDate(now()->subYears(2))->maxDate(now()),
 
-            TextInput::make('slug')->required(),
-            TextInput::make('time_span')->required()
-            ->numeric()->suffix('days'),
+            Toggle::make('is_free')->label('Free')->reactive()->afterStateUpdated(fn(callable $set) => $set('price', 0)),
 
+            TextInput::make('price')->translateLabel()->numeric()->prefix('৳')->maxValue(42949672.95)->hidden(fn(callable $get) => $get('is_free'))->required(),
 
-            DatePicker::make('published_at')
-                ->native(false)
-                ->minDate(now()->subYears(2))
-                ->maxDate(now()),
+            TextInput::make('total_exams')->translateLabel()->numeric()->required(),
 
-            Toggle::make('is_free')
-                ->label('Free')
-                ->reactive()
-                ->afterStateUpdated(fn (callable $set) => $set('price', 0)),
+            TextInput::make('deducted_price')->translateLabel()->numeric()->prefix('৳')->maxValue(42949672.95),
 
-
-            TextInput::make('price')
-                ->translateLabel()
-                ->numeric()
-                ->prefix('৳')
-                ->maxValue(42949672.95)
-                ->hidden(fn (callable $get) => $get('is_free'))
-                ->required(),
-
-
-
-            TextInput::make('total_exams')
-                ->translateLabel()
-                ->numeric()
-                ->required(),
-
-
-            TextInput::make('deducted_price')
-                ->translateLabel()
-                ->numeric()
-                ->prefix('৳')
-                ->maxValue(42949672.95),
-
-            Toggle::make('featured')
-                ->onIcon('heroicon-m-bolt')
-                ->offIcon('heroicon-m-user'),
-             RichEditor::make('description')
-             ->columnSpanFull(),
-             FileUpload::make('attachment')
-             ->multiple()
+            Toggle::make('featured')->onIcon('heroicon-m-bolt')->offIcon('heroicon-m-user'),
+            RichEditor::make('description')->columnSpanFull(),
+            FileUpload::make('attachment')->multiple(),
         ]);
     }
 
@@ -103,19 +68,12 @@ class CourseResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('index')->state(
-                    static function (HasTable $livewire, stdClass $rowLoop): string {
-                        return (string) (
-                            $rowLoop->iteration +
-                            ($livewire->getTableRecordsPerPage() * (
-                                $livewire->getTablePage() - 1
-                            ))
-                        );
-                    }
-                ),
+                TextColumn::make('index')->state(static function (HasTable $livewire, stdClass $rowLoop): string {
+                    return (string) ($rowLoop->iteration + $livewire->getTableRecordsPerPage() * ($livewire->getTablePage() - 1));
+                }),
                 TextColumn::make('title'),
-                TextColumn::make('exams_count')->label('Number of Exams')->counts('exams')
-                ])
+                TextColumn::make('exams_count')->label('Number of Exams')->counts('exams'),
+            ])
             ->filters([
                 //
             ])
@@ -125,9 +83,7 @@ class CourseResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-                ExamsRelationManager::class
-            ];
+        return [ExamsRelationManager::class];
     }
 
     public static function getPages(): array
