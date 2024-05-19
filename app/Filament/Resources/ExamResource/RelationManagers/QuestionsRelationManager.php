@@ -64,8 +64,8 @@ class QuestionsRelationManager extends RelationManager
                 // Add any necessary filters here
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make()
-                
+
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
