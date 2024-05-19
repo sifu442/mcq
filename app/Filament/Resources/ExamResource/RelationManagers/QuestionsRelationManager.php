@@ -64,7 +64,7 @@ class QuestionsRelationManager extends RelationManager
             ->headerActions([
                 Action::make('Question Attach & Creation')
                 ->columns([
-                    TextColumn::make('questions')
+                    TextColumn::make('questions')->searchable()
                 ])
             ])
             ->actions([
