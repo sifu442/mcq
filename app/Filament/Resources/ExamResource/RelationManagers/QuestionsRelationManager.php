@@ -2,34 +2,31 @@
 
 namespace App\Filament\Resources\ExamResource\RelationManagers;
 
-use stdClass;
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\Action;
 use App\Models\Question;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\DatePicker;
 use Livewire\Livewire;
 
 class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
 
-    public function form(Form $form): Form
+    public function form(Forms\Form $form): Forms\Form
     {
         return $form->schema([
             Select::make('subject_id')
                 ->relationship('subject', 'name')
-                ->createOptionForm([TextInput::make('name')->required()])
+                ->createOptionForm([
+                    TextInput::make('name')->required()
+                ])
                 ->required(),
             TextInput::make('exam_name'),
             TextInput::make('post'),
@@ -41,7 +38,7 @@ class QuestionsRelationManager extends RelationManager
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->schema([
-                    TextInput::make('option'),
+                    TextInput::make('options'),
                     Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
                 ])
                 ->columnSpanFull(),
@@ -49,25 +46,23 @@ class QuestionsRelationManager extends RelationManager
         ]);
     }
 
-    public function table(Table $table): Table
+    public function table(Tables\Table $table): Tables\Table
     {
         return $table
             ->recordTitleAttribute('title')
             ->columns([
-                TextColumn::make('index')
+                Tables\Columns\TextColumn::make('index')
                     ->label('Index')
-                    ->getStateUsing(function (stdClass $rowLoop, $livewire): string {
+                    ->getStateUsing(function ($rowLoop, $livewire) {
                         $currentPage = method_exists($livewire, 'currentPage') ? $livewire->currentPage() : 1;
                         return (string) ($rowLoop->iteration + $livewire->tableRecordsPerPage * ($currentPage - 1));
                     }),
-                TextColumn::make('title'),
+                Tables\Columns\TextColumn::make('title'),
             ])
-            ->filters([
-                // Add any necessary filters here
-            ])
+            ->filters([])
             ->headerActions([
-                $this->createQuestionAttachAction(),
-
+                Tables\Actions\AttachAction::make(),
+                $this->createQuestionAttachAction(), // Register the custom action
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -105,7 +100,7 @@ class QuestionsRelationManager extends RelationManager
                             $set('question_id', null);
                         }
                     }),
-                Livewire::mount('question-search'),
+                Livewire::mount('question-search'), // Mount the Livewire component
                 TextInput::make('question_id')->hidden(),
                 Select::make('subject_id')
                     ->relationship('subject', 'name')
@@ -149,4 +144,3 @@ class QuestionsRelationManager extends RelationManager
             });
     }
 }
-
