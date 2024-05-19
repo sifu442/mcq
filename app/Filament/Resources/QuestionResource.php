@@ -60,7 +60,10 @@ class QuestionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([TextColumn::make('title')->searchable(), TextColumn::make('subject.name')->searchable()])
+            ->columns([
+                TextColumn::make('title')->searchable(),
+                TextColumn::make('subject.name')->searchable()
+                ])
             ->defaultSort('created_at', 'desc')
             ->filters([
                 //
