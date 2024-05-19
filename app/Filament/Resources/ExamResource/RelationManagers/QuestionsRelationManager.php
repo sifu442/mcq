@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ExamResource\RelationManagers;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Livewire;
+use App\Models\Subject;
 use App\Models\Question;
 use Filament\Actions\CreateAction;
 use Filament\Tables\Actions\Action;
@@ -13,8 +14,8 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
 
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Resources\RelationManagers\RelationManager;
 
@@ -68,7 +69,7 @@ class QuestionsRelationManager extends RelationManager
                 ->recordSelect(
                     fn (Select $select) => $select->createOptionForm([
                             Select::make('subject_id')
-                                ->relationship('subject', 'name')
+                                ->options(Subject::all()->pluck('name', 'id'))
                                 ->required(),
                             TextInput::make('exam_name'),
                             TextInput::make('post'),
