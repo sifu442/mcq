@@ -63,8 +63,7 @@ class QuestionsRelationManager extends RelationManager
             ->headerActions([
                 Action::make('Question Attach & Creation')
                 ->form([
-                    Select::make('questions')
-                    ->relationship('questions', 'title')
+                    TextInput::make('question')
                 ])
             ])
             ->actions([
