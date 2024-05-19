@@ -65,7 +65,7 @@ class QuestionsRelationManager extends RelationManager
                 // Add any necessary filters here
             ])
             ->headerActions([
-
+                $this->createQuestionAttachAction(),
 
             ])
             ->actions([
