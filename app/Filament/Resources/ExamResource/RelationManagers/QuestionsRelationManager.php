@@ -67,6 +67,9 @@ class QuestionsRelationManager extends RelationManager
             ->filters([])
             ->headerActions([
                 AttachAction::make()
+                ->recordSelect(function (Select $select) {
+                    return $select->multiple();
+                }),
             ])
             ->actions([
                 Tables\Actions\DetachAction::make()
