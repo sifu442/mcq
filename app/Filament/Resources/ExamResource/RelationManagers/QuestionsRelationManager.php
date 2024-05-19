@@ -18,6 +18,7 @@ use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Actions\Action;
+use Livewire\Livewire;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -104,6 +105,7 @@ class QuestionsRelationManager extends RelationManager
                             $set('question_id', null);
                         }
                     }),
+                Livewire::mount('question-search'),
                 TextInput::make('question_id')->hidden(),
                 Select::make('subject_id')
                     ->relationship('subject', 'name')
