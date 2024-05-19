@@ -20,6 +20,8 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Tables\Actions\AttachAction;
 use Filament\Resources\RelationManagers\RelationManager;
 
+use function Laravel\Prompts\select;
+
 class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
@@ -67,10 +69,10 @@ class QuestionsRelationManager extends RelationManager
             ->filters([])
             ->headerActions([
                 AttachAction::make()
-                ->recordSelect(function (Select $select) {
-                    return $select->createOptionForm([
+                ->recordSelect(
+                    fn (Select $select) => $select->createOptionForm([
                         Select::make('subject_id')
-                ->relationship('subject', 'name')
+                ->options(Subject::all()->pluck('name', 'id'))
                 ->createOptionForm([
                     TextInput::make('name')->required()
                 ])
@@ -90,9 +92,10 @@ class QuestionsRelationManager extends RelationManager
                 ])
                 ->columnSpanFull(),
             RichEditor::make('explanation')->columnSpanFull()
-                    ]);
-                }),
+                    ])
+                )
             ])
+
             ->actions([
                 Tables\Actions\DetachAction::make()
             ])
