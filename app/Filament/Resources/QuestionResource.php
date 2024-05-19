@@ -2,25 +2,26 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\QuestionResource\Pages;
-use App\Filament\Resources\QuestionResource\RelationManagers;
-use App\Models\Question;
-use App\Models\Subject;
 use Filament\Forms;
+use Filament\Tables;
+use App\Models\Subject;
+use App\Models\Question;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
-use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\QuestionResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\QuestionResource\RelationManagers;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class QuestionResource extends Resource
@@ -32,16 +33,16 @@ class QuestionResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            TextInput::make('title')
-                //->label('Select Subject')
-                ->required()
-                ->columnSpanFull(),
             Select::make('subject_id')
                 ->relationship('subject', 'name')
                 ->createOptionForm([
                     TextInput::make('name')->required()
                 ])
                 ->required(),
+                TextInput::make('previous_exam')->label('Exam Name'),
+                TextInput::make('post'),
+                DatePicker::make('date'),
+                RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
@@ -62,7 +63,10 @@ class QuestionResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('title')->searchable(),
-                TextColumn::make('subject.name')->searchable()
+                TextColumn::make('subject.name')->searchable(),
+                TextColumn::make('previous_exam')->searchable(),
+                TextColumn::make('post')->searchable(),
+                TextColumn::make('date')->searchable()
                 ])
             ->defaultSort('created_at', 'desc')
             ->filters([
