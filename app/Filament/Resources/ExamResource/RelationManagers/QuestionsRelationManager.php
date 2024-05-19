@@ -73,9 +73,6 @@ class QuestionsRelationManager extends RelationManager
                     fn (Select $select) => $select->createOptionForm([
                         Select::make('subject_id')
                 ->options(Subject::all()->pluck('name', 'id'))
-                ->createOptionForm([
-                    TextInput::make('name')->required()
-                ])
                 ->required(),
             TextInput::make('exam_name'),
             TextInput::make('post'),
