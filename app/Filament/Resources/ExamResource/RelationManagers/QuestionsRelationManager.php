@@ -65,7 +65,9 @@ class QuestionsRelationManager extends RelationManager
             ->filters([])
             ->headerActions([
                 Tables\Actions\AttachAction::make()
-                
+                ->recordSelect(
+                    fn (Select $select) => $select->placeholder('Select a post'),
+                )
             ])
             ->actions([
                 Tables\Actions\DetachAction::make()
