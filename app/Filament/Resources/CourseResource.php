@@ -42,7 +42,13 @@ class CourseResource extends Resource
         return $form->schema([
             TextInput::make('title')
             ->live()
-            ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state)))
+            ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
+                if (($get('slug') ?? '') !== Str::slug($old)) {
+                    return;
+                }
+
+                $set('slug', Str::slug($state));
+            })
                 ->required(),
 
             TextInput::make('slug')->required(),
