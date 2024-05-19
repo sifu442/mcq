@@ -68,7 +68,9 @@ class QuestionsRelationManager extends RelationManager
             ->headerActions([
                 AttachAction::make()
                 ->recordSelect(function (Select $select) {
-                    return $select->multiple();
+                    return $select->createOptionForm([
+                        
+                    ]);
                 }),
             ])
             ->actions([
