@@ -59,7 +59,7 @@ class CourseResource extends Resource
             TextInput::make('deducted_price')->translateLabel()->numeric()->prefix('৳')->maxValue(42949672.95),
 
             Toggle::make('featured')->onIcon('heroicon-m-bolt')->offIcon('heroicon-m-user'),
-            RichEditor::make('description')->columnSpanFull(),
+            RichEditor::make('description')->columnSpanFull()->toolbarButtons(['bold']),
             FileUpload::make('attachment')->multiple(),
         ]);
     }
