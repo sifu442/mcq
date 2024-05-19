@@ -69,7 +69,7 @@ class QuestionsRelationManager extends RelationManager
                 AttachAction::make()
                 ->recordSelect(function (Select $select) {
                     return $select->createOptionForm([
-                        
+
                     ]);
                 }),
             ])
