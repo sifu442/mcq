@@ -17,6 +17,7 @@ use Filament\Forms\Components\TextInput;
 
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
+use Filament\Tables\Actions\AttachAction;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class QuestionsRelationManager extends RelationManager
@@ -65,7 +66,7 @@ class QuestionsRelationManager extends RelationManager
             ])
             ->filters([])
             ->headerActions([
-                Tables\Actions\AttachAction::make()
+                AttachAction::make()
             ])
             ->actions([
                 Tables\Actions\DetachAction::make()
