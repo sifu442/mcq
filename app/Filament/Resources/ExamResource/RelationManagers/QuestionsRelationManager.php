@@ -62,7 +62,6 @@ class QuestionsRelationManager extends RelationManager
             ->filters([])
             ->headerActions([
                 Tables\Actions\AttachAction::make(),
-                $this->createQuestionAttachAction(), // Register the custom action
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -75,72 +74,4 @@ class QuestionsRelationManager extends RelationManager
             ]);
     }
 
-    protected function createQuestionAttachAction(): Action
-    {
-        return Action::make('attachQuestion')
-            ->label('Attach Question')
-            ->form([
-                TextInput::make('question_title')
-                    ->label('Search or Create Question')
-                    ->placeholder('Enter question title')
-                    ->reactive()
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        // Check if a question exists with the entered title
-                        $question = Question::where('title', $state)->first();
-                        if ($question) {
-                            $set('question_id', $question->id);
-                            $set('subject_id', $question->subject_id);
-                            $set('exam_name', $question->exam_name);
-                            $set('post', $question->post);
-                            $set('date', $question->date);
-                            $set('title', $question->title);
-                            $set('options', $question->options);
-                            $set('explanation', $question->explanation);
-                        } else {
-                            $set('question_id', null);
-                        }
-                    }),
-                Livewire::mount('question-search'), // Mount the Livewire component
-                TextInput::make('question_id')->hidden(),
-                Select::make('subject_id')
-                    ->relationship('subject', 'name')
-                    ->required()
-                    ->visible(fn (callable $get) => !$get('question_id')),
-                TextInput::make('exam_name')
-                    ->visible(fn (callable $get) => !$get('question_id')),
-                TextInput::make('post')
-                    ->visible(fn (callable $get) => !$get('question_id')),
-                DatePicker::make('date')
-                    ->visible(fn (callable $get) => !$get('question_id')),
-                RichEditor::make('title')
-                    ->required()
-                    ->maxLength(255)
-                    ->columnSpanFull()
-                    ->visible(fn (callable $get) => !$get('question_id')),
-                Repeater::make('options')
-                    ->required()
-                    ->deletable(false)
-                    ->defaultItems(4)
-                    ->maxItems(4)
-                    ->schema([
-                        TextInput::make('options'),
-                        Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
-                    ])
-                    ->columnSpanFull()
-                    ->visible(fn (callable $get) => !$get('question_id')),
-                RichEditor::make('explanation')
-                    ->columnSpanFull()
-                    ->visible(fn (callable $get) => !$get('question_id'))
-            ])
-            ->action(function (array $data) {
-                if ($data['question_id']) {
-                    $question = Question::find($data['question_id']);
-                } else {
-                    $question = Question::create($data);
-                }
-
-                // Attach the question to the exam
-                $this->ownerRecord->questions()->attach($question);
-            });
-    }
 }
