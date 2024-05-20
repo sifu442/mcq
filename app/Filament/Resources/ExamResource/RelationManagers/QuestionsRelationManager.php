@@ -4,18 +4,9 @@ namespace App\Filament\Resources\ExamResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
-use Livewire\Livewire;
-use App\Models\Subject;
-use App\Models\Question;
-use Filament\Forms\Form;
-use Filament\Actions\CreateAction;
-use Filament\Tables\Actions\Action;
-use function Laravel\Prompts\select;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
-
-use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
