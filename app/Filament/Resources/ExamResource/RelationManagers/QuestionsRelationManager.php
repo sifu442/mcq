@@ -93,6 +93,7 @@ class QuestionsRelationManager extends RelationManager
                     ->live(onBlur: true)
                     ->afterStateUpdated(function (Set $set, $state) {
                     $set('title', Str::title($state));
+                    
                 })
                     ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
                     ->live()
