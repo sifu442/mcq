@@ -70,35 +70,6 @@ class QuestionsRelationManager extends RelationManager
             ->filters([])
             ->headerActions([
                 AttachAction::make()
-    ->recordSelect(fn (Select $select) => $select->options(Subject::all()->pluck('name', 'id')))
-    ->form(fn (Form $form) => $form
-        ->schema([
-            Select::make('subject_id')
-                ->options(Subject::all()->pluck('name', 'id'))
-                ->required(),
-            TextInput::make('exam_name'),
-            TextInput::make('post'),
-            DatePicker::make('date'),
-            RichEditor::make('title')
-                ->required()
-                ->maxLength(255)
-                ->columnSpanFull(),
-            Repeater::make('options')
-                ->required()
-                ->deletable(false)
-                ->defaultItems(4)
-                ->maxItems(4)
-                ->schema([
-                    TextInput::make('options'),
-                    Checkbox::make('is_correct')
-                        ->fixIndistinctState()
-                        ->name('Correct Answer'),
-                ])
-                ->columnSpanFull(),
-            RichEditor::make('explanation')
-                ->columnSpanFull(),
-        ])
-    )
             ])
 
             ->actions([
