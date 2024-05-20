@@ -108,7 +108,7 @@ class QuestionsRelationManager extends RelationManager
                             Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
                         ]),
                     RichEditor::make('explanation')
-                ])->hidden(fn (callable $get) => !$get('showAdditionalFields'))
+                ])->hidden(fn (callable $get) => $get('showAdditionalFields'))
             ])
             ->action(function (array $data) {
                 $this->handleFormSubmit($data);
