@@ -94,6 +94,9 @@ class QuestionsRelationManager extends RelationManager
                 Forms\Components\Group::make([
                     Select::make('subject_id')
                         ->relationship('subject', 'name')
+                        ->createOptionForm([
+                            TextInput::make('name')->required()
+                        ])
                         ->required(),
                     RichEditor::make('title')
                         ->required()
