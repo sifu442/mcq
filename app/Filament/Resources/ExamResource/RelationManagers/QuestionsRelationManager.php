@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources\ExamResource\RelationManagers;
 
 use Filament\Forms;
@@ -16,7 +15,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Tables\Actions\Action;
-use Illuminate\Support\Collection;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -91,15 +89,7 @@ class QuestionsRelationManager extends RelationManager
                     ->searchable()
                     ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
                     ->reactive()
-                    ->afterStateUpdated(function ($state, callable $set, callable $get) {
-                        if ($state) {
-                            $question = Question::find($state);
-                            if ($question) {
-                                $set('title', $question->title);
-                            }
-                        }
-                        $set('showAdditionalFields', !$state);
-                    }),
+                    ->afterStateUpdated(fn ($state, callable $set, callable $get) => $this->handleQuestionSelection($state, $set, $get)),
                 Forms\Components\Group::make([
                     Select::make('subject_id')
                         ->relationship('subject', 'name')
@@ -124,10 +114,16 @@ class QuestionsRelationManager extends RelationManager
             });
     }
 
-    protected function handleQuestionSelection($state, callable $set)
+    protected function handleQuestionSelection($state, callable $set, callable $get)
     {
-        // Additional fields visibility controlled by 'showAdditionalFields'
+        // Set visibility for additional fields
         $set('showAdditionalFields', !$state);
+
+        // Populate the title field with the search query if no question is selected
+        if (!$state) {
+            $searchQuery = $get('question_id');
+            $set('title', $searchQuery);
+        }
     }
 
     protected function handleFormSubmit(array $data)
@@ -147,5 +143,6 @@ class QuestionsRelationManager extends RelationManager
             $this->ownerRecord->questions()->attach($question->id);
         }
 
+        $this->notify('success', 'Question attached successfully.');
     }
 }
