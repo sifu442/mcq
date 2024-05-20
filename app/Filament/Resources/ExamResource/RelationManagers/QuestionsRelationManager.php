@@ -90,7 +90,7 @@ class QuestionsRelationManager extends RelationManager
                     ->searchable()
                     ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
                     ->reactive()
-                    ->afterStateUpdated(fn ($state, callable $set) => $this->handleQuestionSelection($state, $set)),
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('showAdditionalFields', !$state)),
                 Forms\Components\Group::make([
                     Select::make('subject_id')
                         ->relationship('subject', 'name')
@@ -108,7 +108,7 @@ class QuestionsRelationManager extends RelationManager
                             Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
                         ]),
                     RichEditor::make('explanation')
-                ])->hidden(fn (callable $get) => $get('question_id') !== null)
+                ])->hidden(fn (callable $get) => !$get('showAdditionalFields'))
             ])
             ->action(function (array $data) {
                 $this->handleFormSubmit($data);
@@ -117,13 +117,8 @@ class QuestionsRelationManager extends RelationManager
 
     protected function handleQuestionSelection($state, callable $set)
     {
-        // Additional fields visibility controlled by 'question_id'
-        if ($state) {
-            $set('subject_id', null);
-            $set('title', null);
-            $set('options', new Collection());
-            $set('explanation', null);
-        }
+        // Additional fields visibility controlled by 'showAdditionalFields'
+        $set('showAdditionalFields', !$state);
     }
 
     protected function handleFormSubmit(array $data)
