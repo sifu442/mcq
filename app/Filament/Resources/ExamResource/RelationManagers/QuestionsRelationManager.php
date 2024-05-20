@@ -76,14 +76,10 @@ class QuestionsRelationManager extends RelationManager
                     ->createOptionForm([
                         TextInput::make('name')->required()
                     ])
-                    ->createOptionAction(function (Action $action) {
-                        $action->mutateFormDataUsing(function (array $data) {
-                            $data['slug'] = Str::slug($data['title']);
-
-                            return $data;
-                        });
+                    ->createOptionUsing(function (array $data): int {
+                    return auth()->user()->team->members()->create($data)->getKey();
                     })
-                    ->required(),
+                   ->required(),
                     TextInput::make('exam_name'),
                     TextInput::make('post'),
                     DatePicker::make('date'),
