@@ -70,7 +70,7 @@ class QuestionsRelationManager extends RelationManager
             ->recordSelect(
                 fn (Select $select) => $select->createOptionForm([
                     Select::make('subject_id')
-                    ->options(Subject::all()->pluck('name', 'id'))
+                    ->relationship(name: 'subject', titleAttribute: 'name')
                 ]),
             )
             ])
