@@ -4,22 +4,19 @@ namespace App\Filament\Resources\ExamResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Subject;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
-use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Model;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
-use Filament\Tables\Actions\AttachAction;
-use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\Action;
+use Illuminate\Support\Collection;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -44,8 +41,8 @@ class QuestionsRelationManager extends RelationManager
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->schema([
-                    TextInput::make('option'),
-                    Checkbox::make('is_correct')->fixIndistinctState()->label('Correct Answer')
+                    TextInput::make('options'),
+                    Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
                 ])
                 ->columnSpanFull(),
             RichEditor::make('explanation')->columnSpanFull()
@@ -66,34 +63,11 @@ class QuestionsRelationManager extends RelationManager
                 TextColumn::make('title'),
             ])
             ->filters([
-                // Add your filters here
+                //
             ])
-            ->headerActions([AttachAction::make()
-            ->recordSelect(
-                fn (Select $select) => $select->createOptionForm([
-                    Select::make('subject_id')
-                    ->relationship('subject', 'name')
-                    ->createOptionForm([
-                        TextInput::make('name')->required()
-                    ])
-                   ->required(),
-                    TextInput::make('exam_name'),
-                    TextInput::make('post'),
-                    DatePicker::make('date'),
-                    RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
-                    Repeater::make('options')
-                        ->required()
-                        ->deletable(false)
-                        ->defaultItems(4)
-                        ->maxItems(4)
-                        ->schema([
-                            TextInput::make('option'),
-                            Checkbox::make('is_correct')->fixIndistinctState()->label('Correct Answer')
-                        ])
-                        ->columnSpanFull(),
-                    RichEditor::make('explanation')->columnSpanFull()
-                ]),
-            )
+            ->headerActions([
+                Tables\Actions\AttachAction::make(),
+                $this->getQuestionAttachAction(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -102,7 +76,74 @@ class QuestionsRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                ])
+                ]),
             ]);
+    }
+
+    protected function getQuestionAttachAction(): Action
+    {
+        return Action::make('questionAttach')
+            ->label('Attach Question')
+            ->form([
+                Select::make('question_id')
+                    ->label('Search Question')
+                    ->relationship('questions', 'title')
+                    ->searchable()
+                    ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
+                    ->live()
+                    ->afterStateUpdated(fn ($state, callable $set) => $this->handleQuestionSelection($state, $set)),
+                Forms\Components\Group::make([
+                    Select::make('subject_id')
+                        ->relationship('subject', 'name')
+                        ->required(),
+                    RichEditor::make('title')
+                        ->required()
+                        ->maxLength(255),
+                    Repeater::make('options')
+                        ->required()
+                        ->deletable(false)
+                        ->defaultItems(4)
+                        ->maxItems(4)
+                        ->schema([
+                            TextInput::make('options'),
+                            Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
+                        ]),
+                    RichEditor::make('explanation')
+                ])->hidden(fn (callable $get) => $get('question_id') !== null)
+            ])
+            ->action(function (array $data) {
+                $this->handleFormSubmit($data);
+            });
+    }
+
+    protected function handleQuestionSelection($state, callable $set)
+    {
+        // Additional fields visibility controlled by 'question_id'
+        if ($state) {
+            $set('subject_id', null);
+            $set('title', null);
+            $set('options', new Collection());
+            $set('explanation', null);
+        }
+    }
+
+    protected function handleFormSubmit(array $data)
+    {
+        if (isset($data['question_id'])) {
+            // Attach existing question to exam
+            $this->ownerRecord->questions()->attach($data['question_id']);
+        } else {
+            // Create new question and attach to exam
+            $question = Question::create([
+                'title' => $data['title'],
+                'subject_id' => $data['subject_id'],
+                'options' => $data['options'],
+                'explanation' => $data['explanation'],
+            ]);
+
+            $this->ownerRecord->questions()->attach($question->id);
+        }
+
+        $this->notify('success', 'Question attached successfully.');
     }
 }
