@@ -87,6 +87,7 @@ class QuestionsRelationManager extends RelationManager
                     ->label('Search Question')
                     ->relationship('questions', 'title')
                     ->searchable()
+                    ->native(false)
                     ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
                     ->live()
                     ->afterStateUpdated(fn ($state, callable $set, callable $get) => $this->handleQuestionSelection($state, $set, $get)),
