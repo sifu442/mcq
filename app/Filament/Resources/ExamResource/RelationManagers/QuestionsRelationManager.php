@@ -7,19 +7,15 @@ use Filament\Tables;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
-use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
-use Filament\Tables\Actions\DetachAction;
-use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Forms\Set;
+use Filament\Tables\Actions\Action;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -69,10 +65,12 @@ class QuestionsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
+                Tables\Actions\AttachAction::make(),
                 $this->getQuestionAttachAction(),
             ])
             ->actions([
-                DetachAction::make()
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -84,30 +82,18 @@ class QuestionsRelationManager extends RelationManager
     protected function getQuestionAttachAction(): Action
     {
         return Action::make('questionAttach')
-            ->label('Attach & Create Question')
+            ->label('Attach Question')
             ->form([
                 Select::make('question_id')
                     ->label('Search Question')
                     ->relationship('questions', 'title')
                     ->searchable()
-                    ->live(onBlur: true)
                     ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
-                    ->live()
-                    ->afterStateUpdated(function ( $state, callable $set, callable $get) {
-                        if (!$state) {
-                            $searchText = $get('searchQuery');
-                            $set('title', $searchText);
-                            $set('showAdditionalFields', true);
-                        } else {
-                            $set('showAdditionalFields', false);
-                        }
-                    }),
+                    ->reactive()
+                    ->afterStateUpdated(fn ($state, callable $set, callable $get) => $this->handleQuestionSelection($state, $set, $get)),
                 Forms\Components\Group::make([
                     Select::make('subject_id')
                         ->relationship('subject', 'name')
-                        ->createOptionForm([
-                            TextInput::make('name')->required()
-                        ])
                         ->required(),
                     RichEditor::make('title')
                         ->required()
@@ -122,21 +108,23 @@ class QuestionsRelationManager extends RelationManager
                             Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
                         ]),
                     RichEditor::make('explanation')
-                ])->hidden(fn (callable $get) => $get('question_id') !== null)
+                ])->hidden(fn (callable $get) => !$get('showAdditionalFields'))
             ])
             ->action(function (array $data) {
                 $this->handleFormSubmit($data);
             });
     }
 
-    protected function handleQuestionSelection($state, callable $set)
+    protected function handleQuestionSelection($state, callable $set, callable $get)
     {
-        // Additional fields visibility controlled by 'question_id'
-        if ($state) {
-            $set('subject_id', null);
-            $set('title', null);
-            $set('options', new Collection());
-            $set('explanation', null);
+        // Set visibility for additional fields
+        $set('showAdditionalFields', !$state);
+        // If no existing question is selected, set the search text to the title field
+        if (!$state) {
+            $searchText = $get('question_id.search');
+            if ($searchText) {
+                $set('title', $searchText);
+            }
         }
     }
 
