@@ -90,7 +90,6 @@ class QuestionsRelationManager extends RelationManager
                     ->searchable()
                     ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
                     ->reactive()
-                    ->live()
                     ->afterStateUpdated(fn ($state, callable $set) => $this->handleQuestionSelection($state, $set)),
                 Forms\Components\Group::make([
                     Select::make('subject_id')
@@ -109,7 +108,7 @@ class QuestionsRelationManager extends RelationManager
                             Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
                         ]),
                     RichEditor::make('explanation')
-                ])->hidden(fn (callable $get) => $get('question_id'))
+                ])->hidden(fn (callable $get) => $get('question_id') !== null)
             ])
             ->action(function (array $data) {
                 $this->handleFormSubmit($data);
