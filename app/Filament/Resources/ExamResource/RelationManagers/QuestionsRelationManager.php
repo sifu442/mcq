@@ -70,7 +70,26 @@ class QuestionsRelationManager extends RelationManager
             ->recordSelect(
                 fn (Select $select) => $select->createOptionForm([
                     Select::make('subject_id')
-                    ->relationship(name: 'subject', titleAttribute: 'name')
+                    ->relationship('subject', 'name')
+                    ->createOptionForm([
+                        TextInput::make('name')->required()
+                    ])
+                    ->required(),
+                    TextInput::make('exam_name'),
+                    TextInput::make('post'),
+                    DatePicker::make('date'),
+                    RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
+                    Repeater::make('options')
+                        ->required()
+                        ->deletable(false)
+                        ->defaultItems(4)
+                        ->maxItems(4)
+                        ->schema([
+                            TextInput::make('option'),
+                            Checkbox::make('is_correct')->fixIndistinctState()->label('Correct Answer')
+                        ])
+                        ->columnSpanFull(),
+                    RichEditor::make('explanation')->columnSpanFull()
                 ]),
             )
             ])
