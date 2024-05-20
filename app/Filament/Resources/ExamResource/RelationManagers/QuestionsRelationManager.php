@@ -7,20 +7,21 @@ use Filament\Tables;
 use Livewire\Livewire;
 use App\Models\Subject;
 use App\Models\Question;
+use Filament\Forms\Form;
 use Filament\Actions\CreateAction;
 use Filament\Tables\Actions\Action;
+use function Laravel\Prompts\select;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
+
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
+
 use Filament\Tables\Actions\AttachAction;
 use Filament\Resources\RelationManagers\RelationManager;
-
-use function Laravel\Prompts\select;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -69,15 +70,19 @@ class QuestionsRelationManager extends RelationManager
             ->filters([])
             ->headerActions([
                 AttachAction::make()
-                ->recordSelect(
-                    fn (Select $select) => $select->createOptionForm([
-                        Select::make('subject_id')
+    ->recordSelect(fn (Select $select) => $select->options(Subject::all()->pluck('name', 'id')))
+    ->form(fn (Form $form) => $form
+        ->schema([
+            Select::make('subject_id')
                 ->options(Subject::all()->pluck('name', 'id'))
                 ->required(),
             TextInput::make('exam_name'),
             TextInput::make('post'),
             DatePicker::make('date'),
-            RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
+            RichEditor::make('title')
+                ->required()
+                ->maxLength(255)
+                ->columnSpanFull(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
@@ -85,12 +90,15 @@ class QuestionsRelationManager extends RelationManager
                 ->maxItems(4)
                 ->schema([
                     TextInput::make('options'),
-                    Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
+                    Checkbox::make('is_correct')
+                        ->fixIndistinctState()
+                        ->name('Correct Answer'),
                 ])
                 ->columnSpanFull(),
-            RichEditor::make('explanation')->columnSpanFull()
-                    ])
-                )
+            RichEditor::make('explanation')
+                ->columnSpanFull(),
+        ])
+    )
             ])
 
             ->actions([
