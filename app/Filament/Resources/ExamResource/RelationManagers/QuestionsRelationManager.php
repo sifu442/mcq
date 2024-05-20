@@ -1,26 +1,27 @@
 <?php
-
 namespace App\Filament\Resources\ExamResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Question;
-use Filament\Tables\Actions\Action;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Forms\Components\TextInput;
-
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
-use Filament\Tables\Actions\AttachAction;
-use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\Action;
+use Illuminate\Support\Collection;
 
 class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
 
-    public function form(Forms\Form $form): Forms\Form
+    public function form(Form $form): Form
     {
         return $form->schema([
             Select::make('subject_id')
@@ -47,26 +48,29 @@ class QuestionsRelationManager extends RelationManager
         ]);
     }
 
-    public function table(Tables\Table $table): Tables\Table
+    public function table(Table $table): Table
     {
         return $table
             ->recordTitleAttribute('title')
             ->columns([
-                Tables\Columns\TextColumn::make('index')
+                TextColumn::make('index')
                     ->label('Index')
-                    ->getStateUsing(function ($rowLoop, $livewire) {
+                    ->getStateUsing(function ($rowLoop, $livewire): string {
                         $currentPage = method_exists($livewire, 'currentPage') ? $livewire->currentPage() : 1;
                         return (string) ($rowLoop->iteration + $livewire->tableRecordsPerPage * ($currentPage - 1));
                     }),
-                Tables\Columns\TextColumn::make('title'),
+                TextColumn::make('title'),
             ])
-            ->filters([])
+            ->filters([
+                //
+            ])
             ->headerActions([
+                Tables\Actions\AttachAction::make(),
                 $this->getQuestionAttachAction(),
             ])
-
             ->actions([
-                Tables\Actions\DetachAction::make()
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -86,8 +90,25 @@ class QuestionsRelationManager extends RelationManager
                     ->searchable()
                     ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
                     ->reactive()
-                    ->live()
                     ->afterStateUpdated(fn ($state, callable $set) => $this->handleQuestionSelection($state, $set)),
+                Forms\Components\Group::make([
+                    Select::make('subject_id')
+                        ->relationship('subject', 'name')
+                        ->required(),
+                    RichEditor::make('title')
+                        ->required()
+                        ->maxLength(255),
+                    Repeater::make('options')
+                        ->required()
+                        ->deletable(false)
+                        ->defaultItems(4)
+                        ->maxItems(4)
+                        ->schema([
+                            TextInput::make('options'),
+                            Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
+                        ]),
+                    RichEditor::make('explanation')
+                ])->hidden(fn (callable $get) => $get('question_id'))
             ])
             ->action(function (array $data) {
                 $this->handleFormSubmit($data);
@@ -96,12 +117,12 @@ class QuestionsRelationManager extends RelationManager
 
     protected function handleQuestionSelection($state, callable $set)
     {
+        // Additional fields visibility controlled by 'question_id'
         if ($state) {
-            // Existing question selected, hide additional fields
-            $set('show_additional_fields', false);
-        } else {
-            // No question selected, show additional fields
-            $set('show_additional_fields', true);
+            $set('subject_id', null);
+            $set('title', null);
+            $set('options', new Collection());
+            $set('explanation', null);
         }
     }
 
@@ -124,5 +145,4 @@ class QuestionsRelationManager extends RelationManager
 
         $this->notify('success', 'Question attached successfully.');
     }
-
 }
