@@ -11,15 +11,11 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Card;
+use Filament\Tables\Actions\Action;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -30,7 +26,9 @@ class QuestionsRelationManager extends RelationManager
         return $form->schema([
             Select::make('subject_id')
                 ->relationship('subject', 'name')
-                ->createOptionForm([TextInput::make('name')->required()])
+                ->createOptionForm([
+                    TextInput::make('name')->required()
+                ])
                 ->required(),
             TextInput::make('exam_name'),
             TextInput::make('post'),
@@ -42,8 +40,8 @@ class QuestionsRelationManager extends RelationManager
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->schema([
-                    TextInput::make('options'),
-                    Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
+                    TextInput::make('option'),
+                    Checkbox::make('is_correct')->fixIndistinctState()->label('Correct Answer')
                 ])
                 ->columnSpanFull(),
             RichEditor::make('explanation')->columnSpanFull()
@@ -68,7 +66,7 @@ class QuestionsRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\AttachAction::make(),
-                Tables\Actions\Action::make('attachQuestion')
+                Action::make('attachQuestion')
                     ->label('Attach Question')
                     ->form([
                         Select::make('question_id')
