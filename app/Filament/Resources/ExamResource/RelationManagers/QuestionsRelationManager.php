@@ -62,7 +62,7 @@ class QuestionsRelationManager extends RelationManager
             ])
             ->filters([])
             ->headerActions([
-
+                $this->getQuestionAttachAction(),
             ])
 
             ->actions([
