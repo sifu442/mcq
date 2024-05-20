@@ -144,5 +144,6 @@ class QuestionsRelationManager extends RelationManager
 
             $this->ownerRecord->questions()->attach($question->id);
         }
+
     }
 }
