@@ -67,10 +67,12 @@ class QuestionsRelationManager extends RelationManager
                 // Add your filters here
             ])
             ->headerActions([AttachAction::make()
-            ->form(fn (AttachAction $action): array => [
-                $action->getRecordSelect(),
-                Forms\Components\TextInput::make('role')->required(),
-            ])])
+            ->recordSelect(
+                fn (Select $select) => $select->createOptionForm([
+                    
+                ]),
+            )
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
