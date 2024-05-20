@@ -8,6 +8,7 @@ use App\Models\Subject;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
@@ -75,8 +76,12 @@ class QuestionsRelationManager extends RelationManager
                     ->createOptionForm([
                         TextInput::make('name')->required()
                     ])
-                    ->using(function (array $data, string $model): Model {
-                        return $model::create($data);
+                    ->createOptionAction(function (Action $action) {
+                        $action->mutateFormDataUsing(function (array $data) {
+                            $data['slug'] = Str::slug($data['title']);
+
+                            return $data;
+                        });
                     })
                     ->required(),
                     TextInput::make('exam_name'),
