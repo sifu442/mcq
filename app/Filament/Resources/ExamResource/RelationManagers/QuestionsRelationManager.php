@@ -19,6 +19,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Tables\Actions\DetachAction;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Forms\Set;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -95,7 +96,7 @@ class QuestionsRelationManager extends RelationManager
                 })
                     ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
                     ->live()
-                    ->afterStateUpdated(fn ($state, callable $set) => $this->handleQuestionSelection($state, $set)),
+                    ->afterStateUpdated(fn (Set $state, callable $set) => $this->handleQuestionSelection($state, $set)),
                 Forms\Components\Group::make([
                     Select::make('subject_id')
                         ->relationship('subject', 'name')
