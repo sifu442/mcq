@@ -7,17 +7,18 @@ use Filament\Tables;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DetachAction;
-use Illuminate\Support\Collection;
+use Filament\Resources\RelationManagers\RelationManager;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -82,12 +83,16 @@ class QuestionsRelationManager extends RelationManager
     protected function getQuestionAttachAction(): Action
     {
         return Action::make('questionAttach')
-            ->label('Attach Question')
+            ->label('Attach & Create Question')
             ->form([
                 Select::make('question_id')
                     ->label('Search Question')
                     ->relationship('questions', 'title')
                     ->searchable()
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (Set $set, $state) {
+                    $set('title', Str::title($state));
+                })
                     ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
                     ->live()
                     ->afterStateUpdated(fn ($state, callable $set) => $this->handleQuestionSelection($state, $set)),
