@@ -95,7 +95,7 @@ class QuestionsRelationManager extends RelationManager
                     ->live()
                     ->afterStateUpdated(function (Set $state, callable $set) {
                         $set('showAdditionalFields', !$state);
-                        $set('slug', Str::slug($state));
+                        $set('title', Str::title($state));
                     }),
                 Forms\Components\Group::make([
                     Select::make('subject_id')
