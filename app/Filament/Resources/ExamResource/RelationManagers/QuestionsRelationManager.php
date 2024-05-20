@@ -93,7 +93,10 @@ class QuestionsRelationManager extends RelationManager
                     ->live(onBlur: true)
                     ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
                     ->live()
-                    ->afterStateUpdated(fn ( $state, callable $set) => $this->handleQuestionSelection($state, $set)),
+                    ->afterStateUpdated(function (Set $state, callable $set) {
+                        $set('showAdditionalFields', !$state);
+                        $set('title', Str::title($state));
+                    }),
                 Forms\Components\Group::make([
                     Select::make('subject_id')
                         ->relationship('subject', 'name')
