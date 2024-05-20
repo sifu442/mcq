@@ -13,6 +13,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
@@ -74,6 +75,9 @@ class QuestionsRelationManager extends RelationManager
                     ->createOptionForm([
                         TextInput::make('name')->required()
                     ])
+                    ->using(function (array $data, string $model): Model {
+                        return $model::create($data);
+                    })
                     ->required(),
                     TextInput::make('exam_name'),
                     TextInput::make('post'),
