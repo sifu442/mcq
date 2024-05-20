@@ -90,6 +90,7 @@ class QuestionsRelationManager extends RelationManager
                     ->searchable()
                     ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
                     ->reactive()
+                    ->live()
                     ->afterStateUpdated(fn ($state, callable $set) => $this->handleQuestionSelection($state, $set)),
                 Forms\Components\Group::make([
                     Select::make('subject_id')
