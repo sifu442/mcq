@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources\ExamResource\RelationManagers;
 
 use Filament\Forms;
@@ -10,12 +11,15 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
-use Filament\Tables\Actions\Action;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Resources\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Card;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -26,9 +30,7 @@ class QuestionsRelationManager extends RelationManager
         return $form->schema([
             Select::make('subject_id')
                 ->relationship('subject', 'name')
-                ->createOptionForm([
-                    TextInput::make('name')->required()
-                ])
+                ->createOptionForm([TextInput::make('name')->required()])
                 ->required(),
             TextInput::make('exam_name'),
             TextInput::make('post'),
@@ -62,10 +64,49 @@ class QuestionsRelationManager extends RelationManager
                 TextColumn::make('title'),
             ])
             ->filters([
-                //
+                // Add your filters here
             ])
             ->headerActions([
-                $this->getQuestionAttachAction(),
+                Tables\Actions\AttachAction::make(),
+                Tables\Actions\Action::make('attachQuestion')
+                    ->label('Attach Question')
+                    ->form([
+                        Select::make('question_id')
+                            ->label('Select Question')
+                            ->relationship('questions', 'title')
+                            ->searchable()
+                            ->createOptionForm([
+                                TextInput::make('title')->required(),
+                                Select::make('subject_id')->relationship('subject', 'name')->required(),
+                                RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
+                                Repeater::make('options')
+                                    ->required()
+                                    ->deletable(false)
+                                    ->defaultItems(4)
+                                    ->maxItems(4)
+                                    ->schema([
+                                        TextInput::make('option'),
+                                        Checkbox::make('is_correct')->fixIndistinctState()->label('Correct Answer')
+                                    ])
+                                    ->columnSpanFull(),
+                                RichEditor::make('explanation')->columnSpanFull()
+                            ])
+                            ->required(),
+                    ])
+                    ->action(function (array $data) {
+                        $question = Question::find($data['question_id']);
+
+                        if (!$question) {
+                            $question = Question::create([
+                                'title' => $data['title'],
+                                'subject_id' => $data['subject_id'],
+                                'options' => $data['options'],
+                                'explanation' => $data['explanation'],
+                            ]);
+                        }
+
+                        $this->ownerRecord->questions()->attach($question);
+                    })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -74,78 +115,7 @@ class QuestionsRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                ])
             ]);
-    }
-    protected function getQuestionAttachAction(): Action
-    {
-        return Action::make('Question Attach')
-            ->form(function () {
-                return [
-                    Select::make('question_id')
-                        ->label('Select Question')
-                        ->options(Question::all()->pluck('title', 'id')->toArray())
-                        ->searchable()
-                        ->reactive()
-                        ->afterStateUpdated(function ($state, $set) {
-                            if (!$state) {
-                                $set('showCreateForm', true);
-                            } else {
-                                $set('showCreateForm', false);
-                            }
-                        })
-                        ->required(),
-                    Forms\Components\Hidden::make('showCreateForm')
-                        ->default(false)
-                        ->reactive(),
-                    Forms\Components\Fieldset::make('Create New Question')
-                        ->label('')
-                        ->schema([
-                            Select::make('subject_id')
-                                ->relationship('subject', 'name')
-                                ->createOptionForm([TextInput::make('name')->required()])
-                                ->required(),
-                            TextInput::make('exam_name'),
-                            TextInput::make('post'),
-                            DatePicker::make('date'),
-                            RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
-                            Repeater::make('options')
-                                ->required()
-                                ->deletable(false)
-                                ->defaultItems(4)
-                                ->maxItems(4)
-                                ->schema([TextInput::make('options'), Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')])
-                                ->columnSpanFull(),
-                            RichEditor::make('explanation')->columnSpanFull(),
-                        ])
-                        ->visible(fn ($get) => $get('showCreateForm')),
-                ];
-            })
-            ->action(function ($data) {
-                $questionId = $data['question_id'] ?? null;
-
-                if (!$questionId) {
-                    $question = Question::create([
-                        'subject_id' => $data['subject_id'],
-                        'title' => $data['title'],
-                        'exam_name' => $data['exam_name'],
-                        'post' => $data['post'],
-                        'date' => $data['date'],
-                        'explanation' => $data['explanation'],
-                    ]);
-
-                    foreach ($data['options'] as $option) {
-                        $question->options()->create([
-                            'option' => $option['option'],
-                            'is_correct' => $option['is_correct'],
-                        ]);
-                    }
-
-                    $questionId = $question->id;
-                }
-
-                $this->ownerRecord->questions()->attach($questionId);
-            })
-            ->label('Attach Question');
     }
 }
