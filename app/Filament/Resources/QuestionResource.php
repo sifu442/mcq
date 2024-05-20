@@ -38,6 +38,7 @@ class QuestionResource extends Resource
                 ->createOptionForm([
                     TextInput::make('name')->required()
                 ])
+                ->preload()
                 ->required(),
                 TextInput::make('previous_exam')->label('Exam Name'),
                 TextInput::make('post'),
