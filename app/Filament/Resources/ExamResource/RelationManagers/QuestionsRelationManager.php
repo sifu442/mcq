@@ -69,7 +69,8 @@ class QuestionsRelationManager extends RelationManager
             ->headerActions([AttachAction::make()
             ->recordSelect(
                 fn (Select $select) => $select->createOptionForm([
-                    
+                    Select::make('subject_id')
+                    ->relationship('subject', 'name')
                 ]),
             )
             ])
