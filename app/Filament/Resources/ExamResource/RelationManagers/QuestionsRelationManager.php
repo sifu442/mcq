@@ -16,6 +16,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Tables\Actions\Action;
+use Illuminate\Support\Collection;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -90,7 +91,15 @@ class QuestionsRelationManager extends RelationManager
                     ->searchable()
                     ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
                     ->reactive()
-                    ->afterStateUpdated(fn ($state, callable $set, callable $get) => $this->handleQuestionSelection($state, $set, $get)),
+                    ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                        if ($state) {
+                            $question = Question::find($state);
+                            if ($question) {
+                                $set('title', $question->title);
+                            }
+                        }
+                        $set('showAdditionalFields', !$state);
+                    }),
                 Forms\Components\Group::make([
                     Select::make('subject_id')
                         ->relationship('subject', 'name')
@@ -115,17 +124,10 @@ class QuestionsRelationManager extends RelationManager
             });
     }
 
-    protected function handleQuestionSelection($state, callable $set, callable $get)
+    protected function handleQuestionSelection($state, callable $set)
     {
-        // Set visibility for additional fields
+        // Additional fields visibility controlled by 'showAdditionalFields'
         $set('showAdditionalFields', !$state);
-        // If no existing question is selected, set the search text to the title field
-        if (!$state) {
-            $searchText = $get('question_id.search');
-            if ($searchText) {
-                $set('title', $searchText);
-            }
-        }
     }
 
     protected function handleFormSubmit(array $data)
