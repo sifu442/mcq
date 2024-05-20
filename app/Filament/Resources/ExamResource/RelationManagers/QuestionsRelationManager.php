@@ -4,13 +4,15 @@ namespace App\Filament\Resources\ExamResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Question;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
+
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
-
 use Filament\Tables\Actions\AttachAction;
 use Filament\Resources\RelationManagers\RelationManager;
 
@@ -60,7 +62,7 @@ class QuestionsRelationManager extends RelationManager
             ])
             ->filters([])
             ->headerActions([
-                AttachAction::make()
+
             ])
 
             ->actions([
@@ -71,6 +73,55 @@ class QuestionsRelationManager extends RelationManager
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    protected function getQuestionAttachAction(): Action
+    {
+        return Action::make('questionAttach')
+            ->label('Attach Question')
+            ->form([
+                Select::make('question_id')
+                    ->label('Search Question')
+                    ->relationship('questions', 'title')
+                    ->searchable()
+                    ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
+                    ->reactive()
+                    ->afterStateUpdated(fn ($state, callable $set) => $this->handleQuestionSelection($state, $set)),
+            ])
+            ->action(function (array $data) {
+                $this->handleFormSubmit($data);
+            });
+    }
+
+    protected function handleQuestionSelection($state, callable $set)
+    {
+        if ($state) {
+            // Existing question selected, hide additional fields
+            $set('show_additional_fields', false);
+        } else {
+            // No question selected, show additional fields
+            $set('show_additional_fields', true);
+        }
+    }
+
+    protected function handleFormSubmit(array $data)
+    {
+        if (isset($data['question_id'])) {
+            // Attach existing question to exam
+            $this->ownerRecord->questions()->attach($data['question_id']);
+        } else {
+            // Create new question and attach to exam
+            $question = Question::create([
+                'title' => $data['title'],
+                'subject_id' => $data['subject_id'],
+                'options' => $data['options'],
+                'explanation' => $data['explanation'],
+            ]);
+
+            $this->ownerRecord->questions()->attach($question->id);
+        }
+
+        $this->notify('success', 'Question attached successfully.');
     }
 
 }
