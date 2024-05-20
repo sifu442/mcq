@@ -82,7 +82,7 @@ class ExamResource extends Resource
                 ),
                 TextColumn::make('id'),
                 TextColumn::make('name')->sortable(),
-                TextColumn::make('exams_count')->label('Number of Questions')->counts('questions')
+                TextColumn::make('questions_count')->label('Number of Questions')->counts('questions')
             ])
             ->filters([
                 //
