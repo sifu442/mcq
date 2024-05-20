@@ -65,7 +65,6 @@ class QuestionsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make(),
                 $this->getQuestionAttachAction(),
             ])
             ->actions([
@@ -78,71 +77,75 @@ class QuestionsRelationManager extends RelationManager
                 ]),
             ]);
     }
-
     protected function getQuestionAttachAction(): Action
     {
-        return Action::make('questionAttach')
-            ->label('Attach Question')
-            ->form([
-                Select::make('question_id')
-                    ->label('Search Question')
-                    ->relationship('questions', 'title')
-                    ->searchable()
-                    ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
-                    ->reactive()
-                    ->afterStateUpdated(fn ($state, callable $set) => $this->handleQuestionSelection($state, $set)),
-                Forms\Components\Group::make([
-                    Select::make('subject_id')
-                        ->relationship('subject', 'name')
+        return Action::make('Question Attach')
+            ->form(function () {
+                return [
+                    Select::make('question_id')
+                        ->label('Select Question')
+                        ->options(Question::all()->pluck('title', 'id')->toArray())
+                        ->searchable()
+                        ->reactive()
+                        ->afterStateUpdated(function ($state, $set) {
+                            if (!$state) {
+                                $set('showCreateForm', true);
+                            } else {
+                                $set('showCreateForm', false);
+                            }
+                        })
                         ->required(),
-                    RichEditor::make('title')
-                        ->required()
-                        ->maxLength(255),
-                    Repeater::make('options')
-                        ->required()
-                        ->deletable(false)
-                        ->defaultItems(4)
-                        ->maxItems(4)
+                    Forms\Components\Hidden::make('showCreateForm')
+                        ->default(false)
+                        ->reactive(),
+                    Forms\Components\Fieldset::make('Create New Question')
+                        ->label('')
                         ->schema([
-                            TextInput::make('options'),
-                            Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
-                        ]),
-                    RichEditor::make('explanation')
-                ])->hidden(fn (callable $get) => $get('question_id') !== null)
-            ])
-            ->action(function (array $data) {
-                $this->handleFormSubmit($data);
-            });
-    }
+                            Select::make('subject_id')
+                                ->relationship('subject', 'name')
+                                ->createOptionForm([TextInput::make('name')->required()])
+                                ->required(),
+                            TextInput::make('exam_name'),
+                            TextInput::make('post'),
+                            DatePicker::make('date'),
+                            RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
+                            Repeater::make('options')
+                                ->required()
+                                ->deletable(false)
+                                ->defaultItems(4)
+                                ->maxItems(4)
+                                ->schema([TextInput::make('options'), Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')])
+                                ->columnSpanFull(),
+                            RichEditor::make('explanation')->columnSpanFull(),
+                        ])
+                        ->visible(fn ($get) => $get('showCreateForm')),
+                ];
+            })
+            ->action(function ($data) {
+                $questionId = $data['question_id'] ?? null;
 
-    protected function handleQuestionSelection($state, callable $set)
-    {
-        // If a question is selected, clear the additional fields
-        if ($state) {
-            $set('subject_id', null);
-            $set('title', null);
-            $set('options', new Collection());
-            $set('explanation', null);
-        }
-    }
+                if (!$questionId) {
+                    $question = Question::create([
+                        'subject_id' => $data['subject_id'],
+                        'title' => $data['title'],
+                        'exam_name' => $data['exam_name'],
+                        'post' => $data['post'],
+                        'date' => $data['date'],
+                        'explanation' => $data['explanation'],
+                    ]);
 
-    protected function handleFormSubmit(array $data)
-    {
-        if (isset($data['question_id'])) {
-            // Attach existing question to exam
-            $this->ownerRecord->questions()->attach($data['question_id']);
-        } else {
-            // Create new question and attach to exam
-            $question = Question::create([
-                'title' => $data['title'],
-                'subject_id' => $data['subject_id'],
-                'options' => $data['options'],
-                'explanation' => $data['explanation'],
-            ]);
+                    foreach ($data['options'] as $option) {
+                        $question->options()->create([
+                            'option' => $option['option'],
+                            'is_correct' => $option['is_correct'],
+                        ]);
+                    }
 
-            $this->ownerRecord->questions()->attach($question->id);
-        }
+                    $questionId = $question->id;
+                }
 
-        $this->notify('success', 'Question attached successfully.');
+                $this->ownerRecord->questions()->attach($questionId);
+            })
+            ->label('Attach Question');
     }
 }
