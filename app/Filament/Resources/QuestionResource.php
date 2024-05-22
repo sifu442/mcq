@@ -48,9 +48,7 @@ class QuestionResource extends Resource
                 RichEditor::make('title')
                 ->required()
                 ->maxLength(255)
-                ->toolbarButtons([
-                    'bold'
-                ])
+                ->disableAllToolbarButtons()
                 ->columnSpanFull(),
             Repeater::make('options')
                 ->required()
