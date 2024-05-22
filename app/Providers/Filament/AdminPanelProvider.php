@@ -24,6 +24,7 @@ class adminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->font('Poppins')
             ->id('admin')
             ->path('admin')
             ->login()
