@@ -45,7 +45,13 @@ class QuestionResource extends Resource
                 TextInput::make('previous_exam')->label('Exam Name'),
                 TextInput::make('post'),
                 DatePicker::make('date'),
-                RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
+                RichEditor::make('title')
+                ->required()
+                ->maxLength(255)
+                ->toolbarButtons([
+                    'bold'
+                ])
+                ->columnSpanFull(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
