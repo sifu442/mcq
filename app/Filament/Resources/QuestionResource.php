@@ -19,6 +19,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\QuestionResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\QuestionResource\RelationManagers;
@@ -29,6 +30,7 @@ class QuestionResource extends Resource
     protected static ?string $model = Question::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
 
     public static function form(Form $form): Form
     {
@@ -91,5 +93,39 @@ class QuestionResource extends Resource
             'create' => Pages\CreateQuestion::route('/create'),
             'edit' => Pages\EditQuestion::route('/{record}/edit'),
         ];
+    }
+}
+
+class CreateQuestion extends CreateRecord
+{
+    protected static string $resource = QuestionResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
+    public function mount(): void
+    {
+        parent::mount();
+
+        // Fetch the latest records
+        $latestSubject = Subject::latest()->first();
+        $latestQuestion = Question::latest()->first();
+
+        // Set default values if available
+        if ($latestSubject) {
+            $this->form->fill([
+                'subject_id' => $latestSubject->id,
+            ]);
+        }
+
+        if ($latestQuestion) {
+            $this->form->fill([
+                'previous_exam' => $latestQuestion->previous_exam,
+                'post' => $latestQuestion->post,
+                'date' => $latestQuestion->date,
+            ]);
+        }
     }
 }
