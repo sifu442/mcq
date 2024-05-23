@@ -26,8 +26,8 @@ class adminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->font(
-                'Ador',
-                url: asset('css/Li Alinur Tatsama Unicode.ttf'),
+                'Bangla',
+                url: asset('css/bangla.css'),
                 provider: LocalFontProvider::class,
             )
             ->id('admin')
