@@ -25,7 +25,7 @@ class adminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->font('Noto Sans Ba')
+            ->font('Tiro Bangla')
             ->id('admin')
             ->path('admin')
             ->login()
