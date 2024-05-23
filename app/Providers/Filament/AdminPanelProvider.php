@@ -25,11 +25,7 @@ class adminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->font(
-                'Bangla',
-                url: asset('css/bangla.css'),
-                provider: LocalFontProvider::class,
-            )
+            ->font('Noto Sans Ba')
             ->id('admin')
             ->path('admin')
             ->login()
