@@ -6,15 +6,15 @@ use Filament\Tables;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\RichEditor;
-use Filament\Tables\Actions\Action;
+use AmidEsfahani\FilamentTinyEditor\TinyEditor;
+use Filament\Resources\RelationManagers\RelationManager;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -32,7 +32,7 @@ class QuestionsRelationManager extends RelationManager
             TextInput::make('exam_name'),
             TextInput::make('post'),
             DatePicker::make('date'),
-            RichEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
+            TinyEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
@@ -43,7 +43,7 @@ class QuestionsRelationManager extends RelationManager
                     Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
                 ])
                 ->columnSpanFull(),
-            RichEditor::make('explanation')->columnSpanFull()
+            TinyEditor::make('explanation')->columnSpanFull()
         ]);
     }
 
@@ -95,7 +95,7 @@ class QuestionsRelationManager extends RelationManager
                     Select::make('subject_id')
                         ->relationship('subject', 'name')
                         ->required(),
-                    RichEditor::make('title')
+                    TinyEditor::make('title')
                         ->required()
                         ->maxLength(255),
                     Repeater::make('options')
@@ -107,7 +107,7 @@ class QuestionsRelationManager extends RelationManager
                             TextInput::make('options'),
                             Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
                         ]),
-                    RichEditor::make('explanation')
+                    TinyEditor::make('explanation')
                 ])->hidden(fn (callable $get) => $get('showAdditionalFields'))
             ])
             ->action(function (array $data) {
