@@ -23,7 +23,7 @@ use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\QuestionResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\QuestionResource\RelationManagers;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 
 class QuestionResource extends Resource
 {
@@ -45,7 +45,7 @@ class QuestionResource extends Resource
                 TextInput::make('previous_exam')->label('Exam Name'),
                 TextInput::make('post'),
                 DatePicker::make('date'),
-                RichEditor::make('title')
+                TinyEditor::make('title')
                 ->required()
                 ->maxLength(255)
                 ->disableAllToolbarButtons()
