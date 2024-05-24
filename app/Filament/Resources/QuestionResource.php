@@ -48,7 +48,6 @@ class QuestionResource extends Resource
                 TinyEditor::make('title')
                 ->required()
                 ->maxLength(255)
-                ->disableAllToolbarButtons()
                 ->columnSpanFull(),
             Repeater::make('options')
                 ->required()
