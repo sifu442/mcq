@@ -32,7 +32,11 @@ class QuestionsRelationManager extends RelationManager
             TextInput::make('exam_name'),
             TextInput::make('post'),
             DatePicker::make('date'),
-            TinyEditor::make('title')->required()->maxLength(255)->columnSpanFull(),
+            TinyEditor::make('title')
+                ->required()
+                ->profile('minimal')
+                ->maxLength(255)
+                ->columnSpanFull(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
@@ -43,7 +47,9 @@ class QuestionsRelationManager extends RelationManager
                     Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
                 ])
                 ->columnSpanFull(),
-            TinyEditor::make('explanation')->columnSpanFull()
+            TinyEditor::make('explanation')
+                ->profile('minimal')
+                ->columnSpanFull()
         ]);
     }
 
