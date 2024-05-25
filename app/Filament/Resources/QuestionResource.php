@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use stdClass;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Subject;
@@ -15,15 +16,16 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Resources\Pages\CreateRecord;
+use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Resources\QuestionResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\QuestionResource\RelationManagers;
-use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 
 class QuestionResource extends Resource
 {
@@ -71,6 +73,16 @@ class QuestionResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('index')->state(
+                    static function (HasTable $livewire, stdClass $rowLoop): string {
+                        return (string) (
+                            $rowLoop->iteration +
+                            ($livewire->getTableRecordsPerPage() * (
+                                $livewire->getTablePage() - 1
+                            ))
+                        );
+                    }
+                ),
                 TextColumn::make('title')->searchable(),
                 TextColumn::make('subject.name')->searchable(),
                 TextColumn::make('previous_exam')->searchable(),
