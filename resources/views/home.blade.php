@@ -102,7 +102,7 @@
         <div id="default-styled-tab-content">
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="styled-profile" role="tabpanel"
                 aria-labelledby="profile-tab">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     <!-- First component -->
                     @foreach ($courses as $course)
                         <div
