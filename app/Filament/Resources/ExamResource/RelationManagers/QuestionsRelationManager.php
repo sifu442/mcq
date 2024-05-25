@@ -101,9 +101,13 @@ class QuestionsRelationManager extends RelationManager
                     Select::make('subject_id')
                         ->relationship('subject', 'name')
                         ->required(),
-                    TinyEditor::make('title')
+                        TextInput::make('exam_name'),
+                        TextInput::make('post'),
+                        DatePicker::make('date'),
+                        TinyEditor::make('title')
                         ->required()
                         ->maxLength(255),
+
                     Repeater::make('options')
                         ->required()
                         ->deletable(false)
