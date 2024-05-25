@@ -10,7 +10,7 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'slug', 'time_span', 'price', 'deducted_price', 'published_at', 'featured', 'total_exams', 'resources', 'description'];
+    protected $fillable = ['title', 'slug', 'time_span', 'price', 'deducted_price', 'featured', 'total_exams', 'resources', 'description'];
 
     protected $casts = [
         'featured' => 'boolean',

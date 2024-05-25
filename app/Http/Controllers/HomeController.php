@@ -12,8 +12,8 @@ class HomeController extends Controller
      */
     public function __invoke(Request $request)
     {
-        
-        $courses = Course::published()->get();
+
+        $courses = Course::all();
 
         return view('home', compact('courses'));
     }
