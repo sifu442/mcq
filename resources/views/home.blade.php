@@ -112,7 +112,7 @@
                                 <a href="{{ route('course.show', $course->slug) }}">
                                     <img class="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" />
                                 </a>
-                                <div class="p-5 flex-row">
+                                <div class="p-5">
                                     <a href="#">
                                         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                                             {{ $course->title }}</h5>
