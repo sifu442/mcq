@@ -1,5 +1,5 @@
-
 /vendor
+/public/vendor
 /node_modules
 .env
 .phpunit.result.cache
