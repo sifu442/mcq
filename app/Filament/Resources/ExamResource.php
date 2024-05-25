@@ -93,8 +93,8 @@ class ExamResource extends Resource
                         );
                     }
                 ),
-                TextColumn::make('id'),
-                TextColumn::make('name')->sortable(),
+                TextColumn::make('id')->searchable(),
+                TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('questions_count')->label('Number of Questions')->counts('questions')
             ])
             ->filters([

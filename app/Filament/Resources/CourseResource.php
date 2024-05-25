@@ -71,7 +71,7 @@ class CourseResource extends Resource
                 TextColumn::make('index')->state(static function (HasTable $livewire, stdClass $rowLoop): string {
                     return (string) ($rowLoop->iteration + $livewire->getTableRecordsPerPage() * ($livewire->getTablePage() - 1));
                 }),
-                TextColumn::make('title'),
+                TextColumn::make('title')->searchable(),
                 TextColumn::make('exams_count')->label('Number of Exams')->counts('exams'),
             ])
             ->filters([
