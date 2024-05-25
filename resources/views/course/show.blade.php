@@ -21,7 +21,7 @@
 
 
         <div class="py-3 text-text text-lg text-justify">
-            Gap per exam: 
+            Gap per exam:
         </div>
 
         <div class="py-3 text-text text-lg text-justify">
