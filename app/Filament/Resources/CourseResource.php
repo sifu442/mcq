@@ -19,8 +19,8 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
+use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Resources\CourseResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CourseResource\RelationManagers;
@@ -59,7 +59,7 @@ class CourseResource extends Resource
             TextInput::make('deducted_price')->translateLabel()->numeric()->prefix('৳')->maxValue(42949672.95),
 
             Toggle::make('featured')->onIcon('heroicon-m-bolt')->offIcon('heroicon-m-user'),
-            RichEditor::make('description')->columnSpanFull()->toolbarButtons(['bold']),
+            TinyEditor::make('description')->columnSpanFull()->toolbarButtons(['bold']),
             FileUpload::make('attachment')->multiple(),
         ]);
     }
