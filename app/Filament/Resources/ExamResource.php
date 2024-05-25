@@ -6,6 +6,7 @@ use stdClass;
 use Filament\Forms;
 use App\Models\Exam;
 use Filament\Tables;
+use App\Models\Subject;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
@@ -17,14 +18,13 @@ use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TimePicker;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ExamResource\Pages;
+use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ExamResource\RelationManagers;
 use App\Filament\Resources\ExamResource\RelationManagers\QuestionsRelationManager;
-use App\Models\Subject;
 
 class ExamResource extends Resource
 {
@@ -60,7 +60,7 @@ class ExamResource extends Resource
                 '0.70' => '0.50',
                 '1' => '1',
             ]),
-            RichEditor::make('syllabus')->required()->translateLabel()->columnSpanFull(),
+            TinyEditor::make('syllabus')->required()->translateLabel()->columnSpanFull(),
         ]);
 
     }
