@@ -51,6 +51,15 @@ class ExamResource extends Resource
                 '1' => '1',
                 '2' => '2',
                 '3' => '3',
+                '2' => '2' ,
+                '3' => '3' ,
+                '4' => '4' ,
+                '5' => '5' ,
+                '6' => '6' ,
+                '7' => '7' ,
+                '8' => '8' ,
+                '9' => '9' ,
+                '10' =>'10',
             ]),
             Select::make('penalty')
             ->required()
@@ -58,7 +67,11 @@ class ExamResource extends Resource
                 '0.25' => '0.25',
                 '0.50' => '0.50',
                 '0.70' => '0.50',
-                '1' => '1',
+                '1.00' => '1.00' ,
+                '1.25' => '1.25',
+                '1.50' => '1.50',
+                '2.00' => '2.00',
+
             ]),
             TinyEditor::make('syllabus')->required()->translateLabel()->columnSpanFull(),
         ]);
