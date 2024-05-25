@@ -19,7 +19,6 @@ return new class extends Migration
             $table->integer('time_span');
             $table->decimal('price', 8, 2);
             $table->decimal('deducted_price', 8, 2)->nullable();
-            $table->timestamp('published_at')->nullable();
             $table->boolean('featured')->default(false);
             $table->decimal('total_exams');
             $table->string('resources')->nullable();

@@ -25,11 +25,6 @@ class Course extends Model
         });
     }
 
-    public function scopePublished($query)
-    {
-        $query->where('published_at', '<=', Carbon::now());
-    }
-
     public function scopeFeatured($query)
     {
         $query->where('featured', true);
@@ -45,8 +40,4 @@ class Course extends Model
         return $this->hasMany(Payment::class);
     }
 
-    // public function subjects()
-    // {
-    //     return $this->hasManyDeep(Subject::class, [Exam::class, Question::class]);
-    // }
 }
