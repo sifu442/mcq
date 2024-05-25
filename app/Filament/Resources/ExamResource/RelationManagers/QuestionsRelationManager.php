@@ -6,6 +6,7 @@ use Filament\Tables;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
@@ -64,7 +65,8 @@ class QuestionsRelationManager extends RelationManager
                         $currentPage = method_exists($livewire, 'currentPage') ? $livewire->currentPage() : 1;
                         return (string) ($rowLoop->iteration + $livewire->tableRecordsPerPage * ($currentPage - 1));
                     }),
-                TextColumn::make('title'),
+                TextColumn::make('title')
+                ->formatStateUsing(fn (string $state): HtmlString => new HtmlString($state)),
             ])
             ->filters([
                 //

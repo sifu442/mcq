@@ -10,6 +10,7 @@ use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
@@ -83,7 +84,9 @@ class QuestionResource extends Resource
                         );
                     }
                 ),
-                TextColumn::make('title')->searchable(),
+                TextColumn::make('title')
+                ->searchable()
+                ->formatStateUsing(fn (string $state): HtmlString => new HtmlString($state)),
                 TextColumn::make('subject.name')->searchable(),
                 TextColumn::make('previous_exam')->searchable(),
                 TextColumn::make('post')->searchable(),
