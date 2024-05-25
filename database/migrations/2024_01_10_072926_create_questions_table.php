@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('questions', function (Blueprint $table) {
-            $table->id();
+            $table->id()->from(5000);
             $table->string('title');
             $table->foreignId('subject_id')->constrained()->nullable();
             $table->json('options');
