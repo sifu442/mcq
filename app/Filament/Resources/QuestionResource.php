@@ -61,6 +61,9 @@ class QuestionResource extends Resource
                         ->name('Correct Answer'),
                 ])
                 ->columnSpanFull(),
+                TinyEditor::make('explanation')
+                ->profile('minimal')
+                ->columnSpanFull()
         ]);
     }
 
