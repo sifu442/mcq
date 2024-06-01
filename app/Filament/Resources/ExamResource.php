@@ -150,6 +150,9 @@ class ExamResource extends Resource
                         ->translateLabel()
                         ->columnSpanFull(),
                         ])
+                        ->action(function (array $data): ?Exam {
+                            return static::mergingExams($data);
+                        })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -174,18 +177,18 @@ class ExamResource extends Resource
             'penalty' => $data['penalty'],
             'syllabus' => $data['syllabus'],
         ]);
-    
+
         // Get the selected exam IDs
         $examIds = $data['exam_ids'];
-    
+
         // Fetch questions from the selected exams
         $questions = Question::whereHas('exams', function ($query) use ($examIds) {
             $query->whereIn('exams.id', $examIds);
         })->get();
-    
+
         // Attach the questions to the new exam
         $exam->questions()->attach($questions->pluck('id'));
-    
+
         return $exam;
     }
 
