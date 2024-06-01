@@ -9,14 +9,15 @@ use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
+use Illuminate\Database\Eloquent\Collection;
 use App\Filament\Resources\ExamResource\Pages;
 use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Resources\ExamResource\RelationManagers\QuestionsRelationManager;
-use Illuminate\Database\Eloquent\Collection;
 
 
 class ExamResource extends Resource
@@ -168,15 +169,13 @@ class ExamResource extends Resource
                                 'syllabus' => $data['syllabus'],
                             ]);
 
-                            // Fetch all questions from the selected exams
-                            $questions = Question::whereIn('id', function ($query) use ($examIds) {
-                                $query->select('question_id')
-                                    ->from('exam_question')
-                                    ->whereIn('exam_id', $examIds);
-                            })->get();
+                            $questionIds = DB::table('exam_question')
+            ->whereIn('exam_id', $examIds)
+            ->pluck('question_id')
+            ->toArray();
 
-                            // Attach the fetched questions to the new exam
-                            $newExam->questions()->attach($questions->pluck('id'));
+        // Attach the fetched questions to the new exam
+        $newExam->questions()->attach($questionIds);
 
                         })
             ])
