@@ -25,6 +25,7 @@ use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ExamResource\RelationManagers;
 use App\Filament\Resources\ExamResource\RelationManagers\QuestionsRelationManager;
+use Filament\Actions\Action;
 
 class ExamResource extends Resource
 {
@@ -99,6 +100,9 @@ class ExamResource extends Resource
             ])
             ->filters([
                 //
+            ])
+            ->headerActions([
+                Tables\Actions\Action::make('marger-exam')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
