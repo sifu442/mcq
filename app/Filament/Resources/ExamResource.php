@@ -16,6 +16,8 @@ use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\ExamResource\Pages;
 use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Resources\ExamResource\RelationManagers\QuestionsRelationManager;
+use Illuminate\Database\Eloquent\Collection;
+
 
 class ExamResource extends Resource
 {
@@ -150,8 +152,11 @@ class ExamResource extends Resource
                         ->translateLabel()
                         ->columnSpanFull(),
                         ])
-                        ->action(function (array $data) {
-                            // Create a new exam
+                        ->action(function (array $data, array $selectedKeys) {
+                            // Get the selected exam IDs
+                            $examIds = $data['exam_ids'];
+
+                            // Create a new exam with the provided data
                             $newExam = Exam::create([
                                 'name' => $data['name'],
                                 'course_id' => $data['course_id'],
@@ -163,22 +168,15 @@ class ExamResource extends Resource
                                 'syllabus' => $data['syllabus'],
                             ]);
 
-                            // Retrieve and merge questions from selected exams
-                            $examIds = $data['exam_ids'];
-                            $questionIds = collect();
+                            // Fetch all questions from the selected exams
+                            $questions = Question::whereHas('exam', function ($query) use ($examIds) {
+                                $query->whereIn('id', $examIds);
+                            })->get();
 
-                            foreach ($examIds as $examId) {
-                                $exam = Exam::find($examId);
-                                if ($exam) {
-                                    $questionIds = $questionIds->merge($exam->questions->pluck('id'));
-                                }
-                            }
+                            // Attach the fetched questions to the new exam
+                            $newExam->questions()->attach($questions->pluck('id'));
 
-                            // Ensure unique question IDs
-                            $uniqueQuestionIds = $questionIds->unique();
-
-                            // Attach questions to new exam
-                            $newExam->questions()->sync($uniqueQuestionIds);
+                            $this->notify('success', 'Exams merged successfully.');
                         })
             ])
             ->actions([
