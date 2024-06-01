@@ -92,7 +92,7 @@ class ExamResource extends Resource
                 //
             ])
             ->headerActions([
-                Tables\Actions\Action::make('marger-exam')
+                Tables\Actions\Action::make('marge-exam')
                 ->form([
                     Select::make('exam_ids')
                         ->options(Exam::all()->pluck('id'))
