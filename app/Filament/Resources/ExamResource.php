@@ -150,34 +150,6 @@ class ExamResource extends Resource
                         ->translateLabel()
                         ->columnSpanFull(),
                         ])
-                        ->action(function (array $data) {
-                            // Create a new exam
-                            $newExam = Exam::create([
-                                'name' => $data['name'],
-                                'course_id' => $data['course_id'],
-                                'duration' => $data['duration'],
-                                'delay_days' => $data['delay_days'],
-                                'available_for_hours' => $data['available_for_hours'],
-                                'score' => $data['score'],
-                                'penalty' => $data['penalty'],
-                                'syllabus' => $data['syllabus'],
-                            ]);
-
-                            // Ensure no duplicate questions are added
-                            $questionIds = [];
-                            $examIds = $data['exam_ids'];
-
-                            foreach ($examIds as $examId) {
-                                $exam = Exam::find($examId);
-                                if ($exam) {
-                                    $questionIds = array_merge($questionIds, $exam->questions->pluck('id')->toArray());
-                                }
-                            }
-                            $questionIds = array_unique($questionIds);
-
-                            // Attach questions to the new exam
-                            $newExam->questions()->sync($questionIds);
-                        })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -188,6 +160,33 @@ class ExamResource extends Resource
                 ]),
             ]);
 
+    }
+
+        public static function mergingExams(array $data): Exam
+    {
+        $exam = Exam::create([
+            'name' => $data['name'],
+            'course_id' => $data['course_id'],
+            'duration' => $data['duration'],
+            'delay_days' => $data['delay_days'],
+            'available_for_hours' => $data['available_for_hours'],
+            'score' => $data['score'],
+            'penalty' => $data['penalty'],
+            'syllabus' => $data['syllabus'],
+        ]);
+    
+        // Get the selected exam IDs
+        $examIds = $data['exam_ids'];
+    
+        // Fetch questions from the selected exams
+        $questions = Question::whereHas('exams', function ($query) use ($examIds) {
+            $query->whereIn('exams.id', $examIds);
+        })->get();
+    
+        // Attach the questions to the new exam
+        $exam->questions()->attach($questions->pluck('id'));
+    
+        return $exam;
     }
 
     public static function getRelations(): array
