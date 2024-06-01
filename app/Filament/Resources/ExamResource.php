@@ -152,7 +152,7 @@ class ExamResource extends Resource
                         ->translateLabel()
                         ->columnSpanFull(),
                         ])
-                        ->action(function (array $data, array $selectedKeys) {
+                        ->action(function (array $data) {
                             // Get the selected exam IDs
                             $examIds = $data['exam_ids'];
 
