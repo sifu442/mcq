@@ -169,13 +169,22 @@ class ExamResource extends Resource
                                 'syllabus' => $data['syllabus'],
                             ]);
 
-                            $questionIds = DB::table('exam_question')
-            ->whereIn('exam_id', $examIds)
-            ->pluck('question_id')
-            ->toArray();
+                           // Retrieve and merge questions from selected exams
+$questionIds = collect();
 
-        // Attach the fetched questions to the new exam
-        $newExam->questions()->attach($questionIds);
+foreach ($examIds as $examId) {
+    $exam = Exam::find($examId);
+    if ($exam) {
+        $questionIds = $questionIds->merge($exam->questions->pluck('id'));
+    }
+}
+
+// Ensure unique question IDs
+$uniqueQuestionIds = $questionIds->unique();
+
+// Attach questions to new exam
+$newExam->questions()->sync($uniqueQuestionIds);
+
 
                         })
             ])
