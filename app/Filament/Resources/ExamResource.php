@@ -169,9 +169,14 @@ class ExamResource extends Resource
                             ]);
 
                             // Fetch all questions from the selected exams
-                            $questions = Question::whereHas('exam', function ($query) use ($examIds) {
-                                $query->whereIn('id', $examIds);
+                            $questions = Question::whereIn('id', function ($query) use ($examIds) {
+                                $query->select('question_id')
+                                    ->from('exam_question')
+                                    ->whereIn('exam_id', $examIds);
                             })->get();
+
+                            // Attach the fetched questions to the new exam
+                            $newExam->questions()->attach($questions->pluck('id'));
 
                             // Attach the fetched questions to the new exam
                             $newExam->questions()->attach($questions->pluck('id'));
