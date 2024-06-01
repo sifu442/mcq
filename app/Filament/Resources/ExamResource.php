@@ -178,8 +178,6 @@ class ExamResource extends Resource
                             // Attach the fetched questions to the new exam
                             $newExam->questions()->attach($questions->pluck('id'));
 
-                            // Attach the fetched questions to the new exam
-                            $newExam->questions()->attach($questions->pluck('id'));
                         })
             ])
             ->actions([
