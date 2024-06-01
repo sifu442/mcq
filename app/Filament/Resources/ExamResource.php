@@ -175,8 +175,6 @@ class ExamResource extends Resource
 
                             // Attach the fetched questions to the new exam
                             $newExam->questions()->attach($questions->pluck('id'));
-
-                            $this->notify('success', 'Exams merged successfully.');
                         })
             ])
             ->actions([
