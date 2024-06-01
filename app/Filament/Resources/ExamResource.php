@@ -164,17 +164,28 @@ class ExamResource extends Resource
                             ]);
 
                             $questionIds = [];
-                        $examIds = $data['exam_ids'];
 
+                        // Fetch exams and their questions
+                        $examIds = $data['exam_ids'];
                         foreach ($examIds as $examId) {
                             $exam = Exam::find($examId);
                             if ($exam) {
+                                // Merge the questions into the new exam
                                 $questionIds = array_merge($questionIds, $exam->questions->pluck('id')->toArray());
+                            } else {
+                                logger("Exam with ID {$examId} not found.");
                             }
                         }
+
+                        // Ensure no duplicate questions are added
                         $questionIds = array_unique($questionIds);
 
+                        // Sync the questions with the new exam
                         $newExam->questions()->sync($questionIds);
+
+                        // Log the new exam and the merged questions for debugging
+                        logger("New Exam created with ID {$newExam->id}");
+                        logger("Merged Question IDs: ", $questionIds);
 
                         })
 
