@@ -166,8 +166,10 @@ class ExamResource extends Resource
                             // Merge questions from selected exams
                             $examIds = $data['exam_ids'];
                             $questions = Question::whereIn('exam_id', $examIds)->get();
+
                             foreach ($questions as $question) {
-                                $question->update(['exam_id' => $newExam->id]);
+                                $question->exam_id = $newExam->id;
+                                $question->save();
                             }
 
                             // Optionally: Remove the old exams if no longer needed
