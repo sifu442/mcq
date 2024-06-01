@@ -3,29 +3,18 @@
 namespace App\Filament\Resources;
 
 use stdClass;
-use Filament\Forms;
 use App\Models\Exam;
 use Filament\Tables;
-use App\Models\Subject;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\TimePicker;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ExamResource\Pages;
 use AmidEsfahani\FilamentTinyEditor\TinyEditor;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\ExamResource\RelationManagers;
 use App\Filament\Resources\ExamResource\RelationManagers\QuestionsRelationManager;
-use Filament\Actions\Action;
 
 class ExamResource extends Resource
 {
@@ -103,6 +92,64 @@ class ExamResource extends Resource
             ])
             ->headerActions([
                 Tables\Actions\Action::make('marger-exam')
+                ->form([
+                    Select::make('exam_ids')
+                        ->options(Exam::all()->pluck('id'))
+                        ->multiple(),
+                    TextInput::make('name')
+                        ->required()
+                        ->translateLabel(),
+                    Select::make('course_id')
+                        ->relationship('course', 'title')
+                        ->required(),
+                    TextInput::make('duration')
+                        ->required()
+                        ->numeric()
+                        ->suffix('Minutes')
+                        ->translateLabel(),
+                    TextInput::make('delay_days')
+                        ->required()
+                        ->numeric()
+                        ->suffix('Days')
+                        ->translateLabel(),
+                    TextInput::make('available_for_hours')
+                        ->required()
+                        ->numeric()
+                        ->suffix('Hours')
+                        ->translateLabel(),
+                    Select::make('score')
+                        ->required()
+                        ->options([
+                            '1' => '1',
+                            '2' => '2',
+                            '3' => '3',
+                            '2' => '2' ,
+                            '3' => '3' ,
+                            '4' => '4' ,
+                            '5' => '5' ,
+                            '6' => '6' ,
+                            '7' => '7' ,
+                            '8' => '8' ,
+                            '9' => '9' ,
+                            '10' =>'10',
+                        ]),
+                    Select::make('penalty')
+                        ->required()
+                        ->options([
+                            '0.25' => '0.25',
+                            '0.50' => '0.50',
+                            '0.70' => '0.50',
+                            '1.00' => '1.00' ,
+                            '1.25' => '1.25',
+                            '1.50' => '1.50',
+                            '2.00' => '2.00',
+                            ]),
+                    TinyEditor::make('syllabus')
+                        ->required()
+                        ->translateLabel()
+                        ->columnSpanFull(),
+                        ])
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
