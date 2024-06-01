@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use stdClass;
 use App\Models\Exam;
 use Filament\Tables;
+use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
@@ -149,6 +150,29 @@ class ExamResource extends Resource
                         ->translateLabel()
                         ->columnSpanFull(),
                         ])
+                        ->action(function (array $data) {
+                            // Create a new exam
+                            $newExam = Exam::create([
+                                'name' => $data['name'],
+                                'course_id' => $data['course_id'],
+                                'duration' => $data['duration'],
+                                'delay_days' => $data['delay_days'],
+                                'available_for_hours' => $data['available_for_hours'],
+                                'score' => $data['score'],
+                                'penalty' => $data['penalty'],
+                                'syllabus' => $data['syllabus'],
+                            ]);
+
+                            // Merge questions from selected exams
+                            $examIds = $data['exam_ids'];
+                            $questions = Question::whereIn('exam_id', $examIds)->get();
+                            foreach ($questions as $question) {
+                                $question->update(['exam_id' => $newExam->id]);
+                            }
+
+                            // Optionally: Remove the old exams if no longer needed
+                            // Exam::whereIn('id', $examIds)->delete();
+                        })
 
             ])
             ->actions([
