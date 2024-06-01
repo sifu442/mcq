@@ -165,32 +165,36 @@ class ExamResource extends Resource
 
     }
 
-        public static function mergingExams(array $data): Exam
-    {
-        $exam = Exam::create([
-            'name' => $data['name'],
-            'course_id' => $data['course_id'],
-            'duration' => $data['duration'],
-            'delay_days' => $data['delay_days'],
-            'available_for_hours' => $data['available_for_hours'],
-            'score' => $data['score'],
-            'penalty' => $data['penalty'],
-            'syllabus' => $data['syllabus'],
-        ]);
+    public static function mergingExams(array $data): Exam
+{
+    $exam = Exam::create([
+        'name' => $data['name'],
+        'course_id' => $data['course_id'],
+        'duration' => $data['duration'],
+        'delay_days' => $data['delay_days'],
+        'available_for_hours' => $data['available_for_hours'],
+        'score' => $data['score'],
+        'penalty' => $data['penalty'],
+        'syllabus' => $data['syllabus'],
+    ]);
 
-        // Get the selected exam IDs
-        $examIds = $data['exam_ids'];
+    // Get the selected exam IDs
+    $examIds = $data['exam_ids'];
 
-        // Fetch questions from the selected exams
-        $questions = Question::whereHas('exams', function ($query) use ($examIds) {
+    // Fetch all questions from the selected exams
+    $questions = Question::whereHasMorph(
+        'questionable',
+        Exam::class,
+        function ($query) use ($examIds) {
             $query->whereIn('exams.id', $examIds);
-        })->get();
+        }
+    )->get();
 
-        // Attach the questions to the new exam
-        $exam->questions()->attach($questions->pluck('id'));
+    // Attach the questions to the new exam
+    $exam->questions()->attach($questions->pluck('id'));
 
-        return $exam;
-    }
+    return $exam;
+}
 
     public static function getRelations(): array
     {
