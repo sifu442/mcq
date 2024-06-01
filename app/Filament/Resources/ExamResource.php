@@ -182,13 +182,9 @@ class ExamResource extends Resource
     $examIds = $data['exam_ids'];
 
     // Fetch all questions from the selected exams
-    $questions = Question::whereHasMorph(
-        'questionable',
-        Exam::class,
-        function ($query) use ($examIds) {
-            $query->whereIn('exams.id', $examIds);
-        }
-    )->get();
+    $questions = Question::whereHas('exams', function ($query) use ($examIds) {
+        $query->whereIn('exams.id', $examIds);
+    })->get();
 
     // Attach the questions to the new exam
     $exam->questions()->attach($questions->pluck('id'));
