@@ -163,24 +163,18 @@ class ExamResource extends Resource
                                 'syllabus' => $data['syllabus'],
                             ]);
 
-                            $examIds = $data['exam_ids'];
-                            $questions = Question::whereHas('exams', function ($query) use ($examIds) {
-                                $query->whereIn('exam_id', $examIds);
-                            })->get();
-                        
-                            foreach ($questions as $question) {
-                                $newExam->questions()->attach($question->id);
-                            }
-                        
-                            // Ensure no duplicate questions are added
                             $questionIds = [];
-                            foreach ($examIds as $examId) {
-                                $exam = Exam::find($examId);
+                        $examIds = $data['exam_ids'];
+
+                        foreach ($examIds as $examId) {
+                            $exam = Exam::find($examId);
+                            if ($exam) {
                                 $questionIds = array_merge($questionIds, $exam->questions->pluck('id')->toArray());
                             }
-                            $questionIds = array_unique($questionIds);
-                        
-                            $newExam->questions()->sync($questionIds);
+                        }
+                        $questionIds = array_unique($questionIds);
+
+                        $newExam->questions()->sync($questionIds);
 
                         })
 
