@@ -10,6 +10,7 @@ use Spatie\Permission\Models\Role;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\RoleResource\Pages;
 use App\Filament\Resources\RoleResource\RelationManagers;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 
 class RoleResource extends Resource
@@ -26,7 +27,11 @@ class RoleResource extends Resource
                     ->minLength(2)
                     ->maxLength(255)
                     ->unique()
-                    ->required()
+                    ->required(),
+                Select::make('permissions')
+                    ->multiple()
+                    ->relationship('permissions', 'name')
+                    ->preload(),
             ]);
     }
 
