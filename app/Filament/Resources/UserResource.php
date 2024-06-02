@@ -33,15 +33,19 @@ class UserResource extends Resource
         return $form->schema([
             TextInput::make('name')->required()->maxLength(255),
             TextInput::make('email')->email()->required()->maxLength(255),
-            TextInput::make('password')->password()->dehydrateStateUsing(fn(string $state): string => Hash::make($state))->dehydrated(fn(?string $state): bool => filled($state))->required(fn(string $operation): bool => $operation === 'create'),
-            // Select::make('roles')
-            //     ->multiple()
-            //     ->relationship('roles', 'name')
-            //     ->preload(),
-            // Select::make('permissions')
-            //     ->multiple()
-            //     ->relationship('permissions', 'name')
-            //     ->preload(),
+            TextInput::make('password')
+                ->password()
+                ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
+                ->dehydrated(fn(?string $state): bool => filled($state))
+                ->required(fn(string $operation): bool => $operation === 'create'),
+            Select::make('roles')
+                ->multiple()
+                ->relationship('roles', 'name')
+                ->preload(),
+            Select::make('permissions')
+                ->multiple()
+                ->relationship('permissions', 'name')
+                ->preload(),
             //     Select::make('role')
             //     ->options(Role::all()->pluck('name', 'id')->toArray())
             //     ->placeholder('Select a role')
