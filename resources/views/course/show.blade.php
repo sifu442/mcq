@@ -33,7 +33,7 @@
         </div>
 
         <div class="py-3 text-textg text-lg text-justify">
-            Start of Exam: {{ $futureDate }}
+            Start of Exam: {{ $examDate }}
         </div>
 
         {{-- <div class="flex items-center space-x-4 mt-10">
@@ -62,7 +62,7 @@
                 <div id="accordion-collapse-body-{{ $exam->id }}" class="hidden" aria-labelledby="accordion-collapse-heading-{{ $exam->id }}">
                     <div class="p-5 border {{ $index === 0 ? 'border-b-0' : 'border-b-1' }}  border-gray-500 dark:border-gray-700 dark:bg-gray-900">
                         <p class="mb-2 text-gray-500 dark:text-gray-400">Full Marks: 100 Time: {{ $exam->duration }} Minutes</p>
-                        <p class="mb-2 text-gray-500 dark:text-gray-400">Date: {{ $futureDate }}</p>
+                        <p class="mb-2 text-gray-500 dark:text-gray-400">Date: {{ $examDate }}</p>
                         <pc class="text-bold">Syllabus:</p>
                         <p class="mb-2 text-gray-500 dark:text-gray-400"> <?php echo $exam->syllabus; ?></p>
                     </div>
