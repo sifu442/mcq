@@ -12,7 +12,7 @@ class DashboardController extends Controller
 public function index()
 {
     $user = Auth::user();
-    $courses = Course::published()->get();
+    $courses = Course::all();
 
     return view('dashboard', compact('user', 'courses'));
 }
