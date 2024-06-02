@@ -20,6 +20,7 @@ class ListExams extends ListRecords
         return [
             Actions\CreateAction::make(),
             Actions\Action::make('marge-exam')
+                ->color('')
                 ->form([
                     Select::make('exam_ids')
                         ->options(Exam::all()->pluck('id', 'id'))
