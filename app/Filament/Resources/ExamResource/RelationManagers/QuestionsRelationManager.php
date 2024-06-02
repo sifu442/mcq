@@ -74,6 +74,7 @@ class QuestionsRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\AttachAction::make(),
                 $this->getQuestionAttachAction(),
+                
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
