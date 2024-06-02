@@ -21,8 +21,16 @@ class CourseController extends Controller
         $exams = $course->exams;
 
         $currentDate = Carbon::now();
-        $examDate = $currentDate->addDays(4)->format('d/m/Y');
+        $examDate = $currentDate->addDays(4);
+        $formattedExamDate = $examDate->format('d/m/Y');
+        $dayOfWeek = $examDate->format('l');
 
-        return view('course.show', ['course' => $course, 'subjects' => $uniqueSubjects, 'exams' => $exams, 'examDate' => $examDate]);
+        return view('course.show', [
+            'course' => $course,
+            'subjects' => $uniqueSubjects,
+            'exams' => $exams,
+            'examDate' => $formattedExamDate,
+            'dayOfWeek' => $dayOfWeek,
+        ]);
     }
 }
