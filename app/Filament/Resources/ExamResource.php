@@ -98,7 +98,7 @@ class ExamResource extends Resource
                 Tables\Actions\Action::make('marge-exam')
                 ->form([
                     Select::make('exam_ids')
-                        ->options(Exam::all()->pluck('id'))
+                        ->options(Exam::all()->pluck('id', 'id'))
                         ->multiple(),
                     TextInput::make('name')
                         ->required()
@@ -166,9 +166,13 @@ class ExamResource extends Resource
                                 'syllabus' => $data['syllabus'],
                             ]);
 
-                            // Merge questions from selected exams
+                            // Get questions from selected exams
                             $examIds = $data['exam_ids'];
-                            $questions = Question::whereIn('exam_id', $examIds)->get();
+                            $questions = Question::whereHas('exams', function ($query) use ($examIds) {
+                                $query->whereIn('exam_id', $examIds);
+                            })->get();
+
+                            // Attach questions to the new exam
                             $newExam->questions()->attach($questions->pluck('id'));
 
                             return $newExam;
