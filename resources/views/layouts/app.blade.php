@@ -10,6 +10,9 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css">
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.js"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/contrib/auto-render.min.js"></script>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -31,5 +34,17 @@
         @stack('modals')
 
         @livewireScripts
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                renderMathInElement(document.body, {
+                    // Customize options here
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "\\(", right: "\\)", display: false},
+                        {left: "\\[", right: "\\]", display: true}
+                    ]
+                });
+            });
+        </script>
     </body>
 </html>
