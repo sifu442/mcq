@@ -10,7 +10,7 @@ use Spatie\Permission\Models\Role;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\RoleResource\Pages;
 use App\Filament\Resources\RoleResource\RelationManagers;
-
+use Filament\Tables\Columns\TextColumn;
 
 class RoleResource extends Resource
 {
@@ -32,7 +32,7 @@ class RoleResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name')
             ])
             ->filters([
                 //
