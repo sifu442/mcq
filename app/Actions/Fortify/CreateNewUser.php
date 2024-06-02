@@ -41,6 +41,6 @@ class CreateNewUser implements CreatesNewUsers
 
     protected function createRole(User $user)
     {
-        $user->assignRole('student');
+        $user->assignRole('Student');
     }
 }
