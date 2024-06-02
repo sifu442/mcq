@@ -63,7 +63,8 @@
                     <div class="p-5 border {{ $index === 0 ? 'border-b-0' : 'border-b-1' }}  border-gray-500 dark:border-gray-700 dark:bg-gray-900">
                         <p class="mb-2 text-gray-500 dark:text-gray-400">Full Marks: 100 Time: {{ $exam->duration }} Minutes</p>
                         <p class="mb-2 text-gray-500 dark:text-gray-400">Date: {{ $futureDate }}</p>
-                        <p class="mb-2 text-gray-500 dark:text-gray-400">Syllabus: <?php echo $exam->syllabus; ?></p>
+                        <pc class="text-bold">Syllabus:</p>
+                        <p class="mb-2 text-gray-500 dark:text-gray-400"> <?php echo $exam->syllabus; ?></p>
                     </div>
                 </div>
             @endforeach
