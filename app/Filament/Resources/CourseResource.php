@@ -37,6 +37,7 @@ class CourseResource extends Resource
             TextInput::make('title')
                 ->required()
                 ->maxLength(255)
+                ->unique()
                 ->live(onBlur: true)
                 ->afterStateUpdated(function (Set $set, $state) {
                     $set('slug', Str::slug($state));

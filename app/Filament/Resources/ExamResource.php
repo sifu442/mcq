@@ -33,7 +33,10 @@ class ExamResource extends Resource
     {
 
         return $form->schema([
-            TextInput::make('name')->required()->translateLabel(),
+            TextInput::make('name')
+                ->required()
+                ->unique()
+                ->translateLabel(),
             Select::make('course_id')->relationship('course', 'title')->required(),
             TextInput::make('duration')->required()->numeric()->suffix('Minutes')->translateLabel(),
             TextInput::make('delay_days')->required()->numeric()->suffix('Days')->translateLabel(),
