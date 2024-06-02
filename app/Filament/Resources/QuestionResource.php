@@ -44,9 +44,9 @@ class QuestionResource extends Resource
                 ->label('Exam Name')
                 ->default($latestExam->previous_exam),
             TextInput::make('post')
-                ->default($latestExam->previous_exam),
+                ->default($latestExam->post),
             DatePicker::make('date')
-                ->default($latestExam->previous_exam)
+                ->default($latestExam->date)
                 ->native(false),
             TinyEditor::make('title')
                 ->required()
