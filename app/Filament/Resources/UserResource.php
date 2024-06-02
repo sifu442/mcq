@@ -42,10 +42,6 @@ class UserResource extends Resource
                 ->multiple()
                 ->relationship('roles', 'name')
                 ->preload(),
-            Select::make('permissions')
-                ->multiple()
-                ->relationship('permissions', 'name')
-                ->preload(),
             //     Select::make('role')
             //     ->options(Role::all()->pluck('name', 'id')->toArray())
             //     ->placeholder('Select a role')
