@@ -3,8 +3,9 @@
 namespace App\Filament\Resources\ExamResource\Pages;
 
 use App\Models\Exam;
-use Filament\Actions;
 use App\Models\Question;
+use Filament\Actions\Action;
+use Filament\Actions\CreateAction;
 use Filament\Forms\Components\Select;
 use App\Filament\Resources\ExamResource;
 use Filament\Forms\Components\TextInput;
@@ -18,9 +19,9 @@ class ListExams extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
-            Actions\Action::make('marge-exam')
-                ->color('')
+            CreateAction::make(),
+            Action::make('marge-exam')
+                ->color('info')
                 ->form([
                     Select::make('exam_ids')
                         ->options(Exam::all()->pluck('id', 'id'))
