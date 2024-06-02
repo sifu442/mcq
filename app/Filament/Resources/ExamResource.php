@@ -167,7 +167,7 @@ class ExamResource extends Resource
                                     'syllabus' => $data['syllabus'],
                                 ]);
 
-                                // Merge questions from the selected exams
+                                // Ensure correct column name for exam_id
                                 $questions = Question::whereIn('exam_id', $data['exam_ids'])->get();
                                 foreach ($questions as $question) {
                                     $question->replicate()->fill([
@@ -176,6 +176,7 @@ class ExamResource extends Resource
                                 }
                             });
                         })
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
