@@ -3,8 +3,6 @@
 namespace App\Filament\Resources;
 
 use stdClass;
-use Filament\Forms;
-use App\Models\Exam;
 use Filament\Tables;
 use App\Models\Subject;
 use App\Models\Question;
@@ -12,22 +10,16 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Support\HtmlString;
-use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\RichEditor;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Resources\Pages\CreateRecord;
 use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Resources\QuestionResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\QuestionResource\RelationManagers;
 
 class QuestionResource extends Resource
 {
@@ -40,7 +32,7 @@ class QuestionResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $latestExam = Exam::latest()->first();
+        $latestExam = Question::latest()->first();
 
         return $form->schema([
             Select::make('subject_id')
@@ -48,6 +40,7 @@ class QuestionResource extends Resource
                 ->createOptionForm([
                     TextInput::make('name')->required()
                 ])
+                ->default($latestExam->subject_id)
                 ->preload()
                 ->required(),
                 TextInput::make('previous_exam')->label('Exam Name'),
