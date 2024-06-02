@@ -36,17 +36,5 @@
         @stack('modals')
 
         @livewireScripts
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                renderMathInElement(document.body, {
-                    // Customize options here
-                    delimiters: [
-                        {left: "$$", right: "$$", display: true},
-                        {left: "\\(", right: "\\)", display: false},
-                        {left: "\\[", right: "\\]", display: true}
-                    ]
-                });
-            });
-        </script>
     </body>
 </html>
