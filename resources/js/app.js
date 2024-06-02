@@ -1,5 +1,6 @@
 import './bootstrap';
 import 'flowbite';
+
 document.addEventListener('DOMContentLoaded', () => {
     const togglePasswordButton = document.querySelector('#togglePassword');
     if (togglePasswordButton) {
