@@ -9,9 +9,11 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\DeleteAction;
 use App\Filament\Resources\ExamResource\Pages;
 use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Resources\ExamResource\RelationManagers\QuestionsRelationManager;
@@ -92,8 +94,9 @@ class ExamResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                EditAction::make(),
+                DeleteAction::make()
+                    ->requiresConfirmation(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

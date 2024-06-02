@@ -2,28 +2,24 @@
 
 namespace App\Filament\Resources;
 
-use tidy;
 use stdClass;
-use Filament\Forms;
 use Filament\Tables;
 use App\Models\Course;
-use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Toggle;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\DeleteAction;
 use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Resources\CourseResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\CourseResource\RelationManagers;
 use App\Filament\Resources\CourseResource\RelationManagers\ExamsRelationManager;
 
 class CourseResource extends Resource
@@ -77,7 +73,10 @@ class CourseResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([Tables\Actions\EditAction::make()])
+            ->actions([
+                EditAction::make(),
+                DeleteAction::make()->requiresConfirmation(),
+            ])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
 
