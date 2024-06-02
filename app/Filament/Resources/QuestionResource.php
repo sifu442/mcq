@@ -27,9 +27,6 @@ class QuestionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-
-
-
     public static function form(Form $form): Form
     {
         $latestExam = Question::latest()->first();
@@ -43,10 +40,14 @@ class QuestionResource extends Resource
                 ->default($latestExam->subject_id)
                 ->preload()
                 ->required(),
-                TextInput::make('previous_exam')->label('Exam Name'),
-                TextInput::make('post'),
-                DatePicker::make('date'),
-                TinyEditor::make('title')
+            TextInput::make('previous_exam')
+                ->label('Exam Name')
+                ->default($latestExam->previous_exam),
+            TextInput::make('post')
+                ->default($latestExam->previous_exam),
+            DatePicker::make('date')
+                ->default($latestExam->previous_exam),
+            TinyEditor::make('title')
                 ->required()
                 ->maxLength(255)
                 ->columnSpanFull(),
@@ -83,12 +84,16 @@ class QuestionResource extends Resource
                     }
                 ),
                 TextColumn::make('title')
-                ->searchable()
-                ->formatStateUsing(fn (string $state): HtmlString => new HtmlString($state)),
-                TextColumn::make('subject.name')->searchable(),
-                TextColumn::make('previous_exam')->searchable(),
-                TextColumn::make('post')->searchable(),
-                TextColumn::make('date')->searchable()
+                    ->searchable()
+                    ->formatStateUsing(fn (string $state): HtmlString => new HtmlString($state)),
+                TextColumn::make('subject.name')
+                    ->searchable(),
+                TextColumn::make('previous_exam')
+                    ->searchable(),
+                TextColumn::make('post')
+                    ->searchable(),
+                TextColumn::make('date')
+                    ->searchable()
                 ])
             ->defaultSort('created_at', 'desc')
             ->filters([
