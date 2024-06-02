@@ -176,7 +176,6 @@ class ExamResource extends Resource
                                 }
                             });
                         })
-
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
