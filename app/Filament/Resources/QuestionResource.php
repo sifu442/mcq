@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use stdClass;
 use Filament\Forms;
+use App\Models\Exam;
 use Filament\Tables;
 use App\Models\Subject;
 use App\Models\Question;
@@ -35,8 +36,12 @@ class QuestionResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
 
+
+
     public static function form(Form $form): Form
     {
+        $latestExam = Exam::latest()->first();
+
         return $form->schema([
             Select::make('subject_id')
                 ->relationship('subject', 'name')
