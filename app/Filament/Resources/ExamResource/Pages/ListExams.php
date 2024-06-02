@@ -77,31 +77,28 @@ class ListExams extends ListRecords
                         ->translateLabel()
                         ->columnSpanFull(),
                         ])
-                        ->action(function (array $data) {
-                            // Create new exam
-                            $newExam = Exam::create([
-                                'name' => $data['name'],
-                                'course_id' => $data['course_id'],
-                                'duration' => $data['duration'],
-                                'delay_days' => $data['delay_days'],
-                                'available_for_hours' => $data['available_for_hours'],
-                                'score' => $data['score'],
-                                'penalty' => $data['penalty'],
-                                'syllabus' => $data['syllabus'],
-                            ]);
+                ->action(function (array $data) {
+                    $newExam = Exam::create([
+                        'name' => $data['name'],
+                        'course_id' => $data['course_id'],
+                        'duration' => $data['duration'],
+                        'delay_days' => $data['delay_days'],
+                        'available_for_hours' => $data['available_for_hours'],
+                        'score' => $data['score'],
+                        'penalty' => $data['penalty'],
+                        'syllabus' => $data['syllabus'],
+                    ]);
 
-                            // Get questions from selected exams
-                            $examIds = $data['exam_ids'];
-                            $questions = Question::whereHas('exams', function ($query) use ($examIds) {
-                                $query->whereIn('exam_id', $examIds);
-                            })->get();
+                    // Get questions from selected exams
+                    $examIds = $data['exam_ids'];
+                    $questions = Question::whereHas('exams', function ($query) use ($examIds) {
+                        $query->whereIn('exam_id', $examIds);
+                    })->get();
 
-                            // Attach questions to the new exam
-                            $newExam->questions()->attach($questions->pluck('id'));
+                    $newExam->questions()->attach($questions->pluck('id'));
 
-                            return $newExam;
-                        })
-
+                    return $newExam;
+                    })
         ];
     }
 }
