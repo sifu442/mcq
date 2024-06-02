@@ -153,7 +153,30 @@ class ExamResource extends Resource
                         ->translateLabel()
                         ->columnSpanFull(),
                         ])
-                
+                        ->action(function (array $data) {
+                            DB::transaction(function () use ($data) {
+                                // Create the new exam
+                                $newExam = Exam::create([
+                                    'name' => $data['name'],
+                                    'course_id' => $data['course_id'],
+                                    'duration' => $data['duration'],
+                                    'delay_days' => $data['delay_days'],
+                                    'available_for_hours' => $data['available_for_hours'],
+                                    'score' => $data['score'],
+                                    'penalty' => $data['penalty'],
+                                    'syllabus' => $data['syllabus'],
+                                ]);
+
+                                // Merge questions from the selected exams
+                                $questions = Question::whereIn('exam_id', $data['exam_ids'])->get();
+                                foreach ($questions as $question) {
+                                    $question->replicate()->fill([
+                                        'exam_id' => $newExam->id,
+                                    ])->save();
+                                }
+                            });
+                        })
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
