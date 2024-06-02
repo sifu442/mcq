@@ -67,7 +67,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email')->searchable(),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('role')->searchable(),
+                Tables\Columns\TextColumn::make('roles')->searchable(),
             ])
             ->filters([
                 //
