@@ -46,7 +46,8 @@ class QuestionResource extends Resource
             TextInput::make('post')
                 ->default($latestExam->previous_exam),
             DatePicker::make('date')
-                ->default($latestExam->previous_exam),
+                ->default($latestExam->previous_exam)
+                ->native(false),
             TinyEditor::make('title')
                 ->required()
                 ->maxLength(255)
@@ -93,6 +94,7 @@ class QuestionResource extends Resource
                 TextColumn::make('post')
                     ->searchable(),
                 TextColumn::make('date')
+                    ->date('d/m/Y')
                     ->searchable()
                 ])
             ->defaultSort('created_at', 'desc')
