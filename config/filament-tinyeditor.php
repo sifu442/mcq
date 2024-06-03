@@ -39,8 +39,7 @@ return [
         ],
 
         'minimal' => [
-            'plugins' => 'link wordcount',
-            'toolbar' => 'bold italic link numlist bullist',
+            'toolbar' => 'bold italic',
             'upload_directory' => null,
         ],
 

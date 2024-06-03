@@ -65,9 +65,7 @@ class QuestionResource extends Resource
                 ])
                 ->columnSpanFull(),
                 TinyEditor::make('explanation')
-                ->toolbarButtons([
-                    'bold'
-                ])
+                ->profile('minimal')
                 ->columnSpanFull()
         ]);
     }
