@@ -1,4 +1,4 @@
-<div x-data="{ selectedCount: 0, answeredQuestions: {} }">
+<div x-data="examComponent()">
     <div class="text-center">
         <span class="text-lg font-bold">Time Left</span>
         <div x-data="countdownTimer({{ $duration * 60 }}, '@lang('messages.minutes')', '@lang('messages.seconds')', '@lang('messages.times_up')')" x-init="startTimer()">
@@ -20,8 +20,8 @@
                                            value="{{ $option['options'] }}"
                                            id="option{{ $question->id }}_{{ $loop->index }}"
                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                           x-on:click="toggleSelection($event, {{ $question->id }}, '{{ $option['options'] }}')"
-                                           x-bind:checked="answeredQuestions[{{ $question->id }}] === '{{ $option['options'] }}'">
+                                           x-on:change="toggleSelection($event, {{ $question->id }}, '{{ $option['options'] }}')"
+                                           x-bind:checked="answers[{{ $question->id }}] === '{{ $option['options'] }}'">
                                     <label for="option{{ $question->id }}_{{ $loop->index }}"
                                            class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                         {{ strip_tags($option['options']) }}
@@ -38,6 +38,35 @@
         </div>
     </form>
     <script>
+        function examComponent() {
+            return {
+                selectedCount: 0,
+                answers: @entangle('answers'),
+                toggleSelection(event, questionId, option) {
+                    let checkbox = event.target;
+
+                    // Deselect other options for the same question
+                    document.querySelectorAll(`input[type="checkbox"][id^="option${questionId}_"]`).forEach(el => {
+                        if (el !== checkbox) {
+                            el.checked = false;
+                        }
+                    });
+
+                    // Update the answer model for Livewire
+                    this.answers[questionId] = checkbox.checked ? option : null;
+
+                    // Handle selection count
+                    if (checkbox.checked) {
+                        if (!Object.values(this.answers).includes(option)) {
+                            this.selectedCount++;
+                        }
+                    } else {
+                        this.selectedCount--;
+                    }
+                }
+            }
+        }
+
         function countdownTimer(durationInSeconds, minutesLabel, secondsLabel, timesUpMessage) {
             return {
                 remainingSeconds: durationInSeconds,
@@ -65,34 +94,9 @@
                 },
 
                 autoSubmitExam() {
-                    @this.call('submitExam'); // If you need to ensure the context is the current component instance
+                    @this.call('submitExam'); // Ensure the context is the current component instance
                 },
             }
-        }
-
-        function toggleSelection(event, questionId, option) {
-            // Get the checkbox element
-            let checkbox = event.target;
-
-            // Deselect other options for the same question
-            document.querySelectorAll(`input[type="checkbox"][id^="option${questionId}_"]`).forEach(el => {
-                if (el !== checkbox) {
-                    el.checked = false;
-                }
-            });
-
-            // Update answered questions state
-            if (checkbox.checked) {
-                this.answeredQuestions[questionId] = option;
-            } else {
-                delete this.answeredQuestions[questionId];
-            }
-
-            // Update selected count
-            this.selectedCount = Object.keys(this.answeredQuestions).length;
-
-            // Update the answer model for Livewire
-            @this.set(`answers.${questionId}`, checkbox.checked ? option : null);
         }
     </script>
 </div>
