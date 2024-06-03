@@ -50,6 +50,7 @@ class QuestionResource extends Resource
                 ->native(false),
             TinyEditor::make('title')
                 ->required()
+                ->profile('minimal')
                 ->maxLength(255)
                 ->columnSpanFull(),
             Repeater::make('options')

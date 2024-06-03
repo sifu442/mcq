@@ -69,7 +69,7 @@ class ExamResource extends Resource
                 '2.00' => '2.00',
 
             ]),
-            TinyEditor::make('syllabus')->required()->translateLabel()->columnSpanFull(),
+            TinyEditor::make('syllabus')->required()->translateLabel()->columnSpanFull()->profile('minimal'),
         ]);
 
     }
