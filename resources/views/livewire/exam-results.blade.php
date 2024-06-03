@@ -8,7 +8,7 @@
                 <div>
                     <ol class="list-decimal list-inside">
                         <li>{{ $questionData['question'] }}
-                            <ol type="A">
+                            <ol type="A" class="list-inside ml-4">
                                 @foreach ($questionData['options'] as $option)
                                     <li class="">
                                         <div
@@ -22,7 +22,6 @@
                     </ol>
                 </div>
             @endforeach
-
         </div>
         <hr>
     @endforeach
