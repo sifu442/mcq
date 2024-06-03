@@ -19,6 +19,6 @@ class ExamResults extends Component
 
     public function render()
     {
-        return view('livewire.exam-results')->extends('layouts.app');
+        return view('livewire.exam-results')->layout('layouts.app');
     }
 }
