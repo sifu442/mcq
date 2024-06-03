@@ -4,7 +4,8 @@
         <div x-data="countdownTimer({{ $duration * 60 }}, '@lang('messages.minutes')', '@lang('messages.seconds')', '@lang('messages.times_up')')" x-init="startTimer()">
             <span x-text="timeDisplay"></span>
             <br>
-            <span class="text-sm font-bold">Answered: </span><span x-text="selectedCount"></span>
+            <span class="text-sm font-bold">Selected: </span><span x-text="selectedCount"></span>
+            <br>
             <span class="text-sm font-bold">Unanswered: </span><span x-text="unansweredCount"></span>
         </div>
     </div>
@@ -12,7 +13,7 @@
         <ol class="list-decimal list-inside">
             @foreach ($exam->questions as $question)
                 <li class="font-semibold">
-                    {{!! $question->title !!}}
+                    <span x-html="sanitizeHtml(`{!! $question->title !!}`)"></span>
                     <ul>
                         @foreach ($question->options as $index => $option)
                             <li>
@@ -75,6 +76,20 @@
                         }
                         this.answers[questionId] = null;
                     }
+                },
+                sanitizeHtml(input) {
+                    const allowedTags = ['b', 'i', 'strong', 'em'];
+                    const doc = new DOMParser().parseFromString(input, 'text/html');
+                    const elements = doc.body.getElementsByTagName('*');
+
+                    for (let i = elements.length - 1; i >= 0; i--) {
+                        const element = elements[i];
+                        if (!allowedTags.includes(element.nodeName.toLowerCase())) {
+                            element.outerHTML = element.innerHTML;
+                        }
+                    }
+
+                    return doc.body.innerHTML;
                 }
             }
         }
