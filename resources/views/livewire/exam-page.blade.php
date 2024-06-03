@@ -16,11 +16,11 @@
                 @foreach ($question->options as $option)
                     <li>
                         <div class="flex items-center ps-4 border bg-white border-gray-200 rounded-md dark:border-gray-700 py-2 my-2 drop-shadow-lg">
-                            <input type="radio" wire:model="answers.{{ $question->id }}"
+                            <input type="checkbox" wire:model="answers.{{ $question->id }}"
                                    value="{{ $option['options'] }}"
                                    id="option{{ $question->id }}_{{ $loop->index }}"
                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                   x-on:click="if (!answeredQuestions.includes({{ $question->id }})) { answeredQuestions.push({{ $question->id }}); selectedCount++; }">
+                                   x-on:click="if (!answeredQuestions.includes({{ $question->id }})) { answeredQuestions.push({{ $question->id }}); selectedCount++; }" onclick="">
                             <label for="option{{ $question->id }}_{{ $loop->index }}"
                                    class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                 {{ strip_tags($option['options']) }}
