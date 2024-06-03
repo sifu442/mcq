@@ -8,9 +8,9 @@
                 <div>
                     <ol class="list-decimal list-inside">
                         <li>{{ $questionData['question'] }}
-                            <ul class="list-[upper-alpha]">
+                            <ul class="list-[upper-alpha] list-inside">
                                 @foreach ($questionData['options'] as $option)
-                                    <li>
+                                    <li class="">
                                             {{ strip_tags($option) }}
                                     </li>
                                 @endforeach
