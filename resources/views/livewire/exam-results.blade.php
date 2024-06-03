@@ -10,7 +10,7 @@
                         <li>{{ $questionData['question'] }}
                             <ul class="list-[upper-alpha] list-inside">
                                 @foreach ($questionData['options'] as $option)
-                                    <li class="">
+                                    <li class="items-center ps-4 border border-gray-200 rounded-md dark:border-gray-700 py-5 my-5 drop-shadow-lg">
                                             {{ strip_tags($option) }}
                                     </li>
                                 @endforeach
