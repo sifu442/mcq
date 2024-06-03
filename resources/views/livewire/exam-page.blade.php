@@ -12,7 +12,7 @@
         <ol class="list-decimal list-inside">
             @foreach ($exam->questions as $question)
                 <li class="font-semibold">
-                    <?php echo $question->title ?>
+                    {{ $question->title }}
                     <ul>
                         @foreach ($question->options as $index => $option)
                             <li>
