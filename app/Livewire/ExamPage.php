@@ -14,6 +14,8 @@ class ExamPage extends Component
     public $examResults = [];
     public $examSubmitted = false;
     public $duration;
+    public $score;
+    public $penalty;
     public $totalScore = 0;
 
     public function mount($examId){
@@ -49,18 +51,15 @@ class ExamPage extends Component
                 ];
 
                 if ($isCorrect) {
-                    $this->totalScore += 1; // Increment score for correct answer
+                    $this->totalScore += $this->exam->score; // Increment score for correct answer
                 } elseif ($userAnswer !== null) {
                     // Decrement score for wrong answer
-                    $this->totalScore -= 0.25;
-                } else {
-                    // Decrement score if the user does not attempt the question
-                    $this->totalScore -= 0.25;
+                    $this->totalScore -= $this->exam->penalty;
                 }
             }
 
-            // Ensure total score is non-negative
-            $totalScore = max(0, $this->totalScore);
+            // Allow total score to be negative
+            $totalScore = $this->totalScore;
 
             ExamResponse::create([
                 'user_id' => $user->id,
@@ -75,9 +74,6 @@ class ExamPage extends Component
 
         return redirect()->route('exam-results', ['examId' => $this->examId]);
     }
-
-
-
 
 
     public function render(){
