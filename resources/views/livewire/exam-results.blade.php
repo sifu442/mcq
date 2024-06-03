@@ -1,4 +1,4 @@
-<div class="">
+<div>
     <h1 class="text-center">Exam Results</h1>
     @foreach ($examResponses as $response)
         <div>
@@ -10,7 +10,7 @@
                         <li>{{ $questionData['question'] }}
                             <ul>
                                 @foreach ($questionData['options'] as $option)
-                                    <li>
+                                    <li class="">
                                         <div
                                             class="flex items-center ps-4 border border-gray-200 rounded-md dark:border-gray-700 py-5 my-5 drop-shadow-lg {{ $questionData['user_input'] == $option ? ($questionData['user_input'] == $questionData['correct_answer'] ? 'bg-green-200' : 'bg-red-200') : ($questionData['correct_answer'] == $option ? 'bg-green-200' : 'bg-white') }}">
                                             {{ strip_tags($option) }}
