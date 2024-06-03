@@ -68,14 +68,6 @@
                 },
             }
         }
-        function onlyOne(checkbox) {
-        var checkboxes = document.getElementsByName('active');
-        checkboxes.forEach((item) => {
-            if (item !== checkbox)
-            item.checked = false;
-        })
-    }
-
 
     </script>
 
