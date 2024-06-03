@@ -12,7 +12,7 @@
     <form wire:submit.prevent="submitExam">
         <ol class="list-decimal list-inside">
             @foreach ($exam->questions as $question)
-                <li class="p-5 sm:p-2.5">
+                <li class="p-5">
                     <span x-html="sanitizeHtml(`{!! $question->title !!}`)"></span>
                     <ul>
                         @foreach ($question->options as $index => $option)
