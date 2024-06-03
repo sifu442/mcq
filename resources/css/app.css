@@ -5,3 +5,8 @@
 [x-cloak] {
     display: none;
 }
+
+mjx-container[jax="CHTML"][display="true"]{
+    display: contents !important;
+    margin: 0 !important;
+}
