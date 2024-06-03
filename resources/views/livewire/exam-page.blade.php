@@ -68,7 +68,6 @@
                 },
             }
         }
-
         function onlyOne(checkbox) {
         var checkboxes = document.getElementsByName('active');
         checkboxes.forEach((item) => {
@@ -76,6 +75,8 @@
             item.checked = false;
         })
     }
+
+
     </script>
 
 </div>
