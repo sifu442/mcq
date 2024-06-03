@@ -1,4 +1,4 @@
-<div x-data="{ selectedCount: 0, answeredQuestions: [] }">
+<div x-data="{ selectedCount: 0, answeredQuestions: {} }">
     <div class="text-center">
         <span class="text-lg font-bold">Time Left</span>
         <div x-data="countdownTimer({{ $duration * 60 }}, '@lang('messages.minutes')', '@lang('messages.seconds')', '@lang('messages.times_up')')" x-init="startTimer()">
@@ -81,11 +81,15 @@
                 }
             });
 
-            // Handle selection count and answered questions tracking
-            if (!this.answeredQuestions.includes(questionId)) {
-                this.answeredQuestions.push(questionId);
-                this.selectedCount++;
+            // Update answered questions state
+            if (checkbox.checked) {
+                this.answeredQuestions[questionId] = option;
+            } else {
+                delete this.answeredQuestions[questionId];
             }
+
+            // Update selected count
+            this.selectedCount = Object.keys(this.answeredQuestions).length;
 
             // Update the answer model for Livewire
             @this.set(`answers.${questionId}`, checkbox.checked ? option : null);
