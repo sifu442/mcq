@@ -9,28 +9,29 @@
     </div>
     <form wire:submit.prevent="submitExam">
         <ol class="list-decimal list-inside">
-        @foreach ($exam->questions as $question)
-            <li class="font-semibold">
-                {{ $question->title }}
-                <ul>
-                @foreach ($question->options as $option)
-                    <li>
-                        <div class="flex items-center ps-4 border bg-white border-gray-200 rounded-md dark:border-gray-700 py-2 my-2 drop-shadow-lg">
-                            <input type="checkbox" wire:model="answers.{{ $question->id }}"
-                                   value="{{ $option['options'] }}"
-                                   id="option{{ $question->id }}_{{ $loop->index }}"
-                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                   x-on:click="if (!answeredQuestions.includes({{ $question->id }})) { answeredQuestions.push({{ $question->id }}); selectedCount++; }" onclick="onlyOne(this)">
-                            <label for="option{{ $question->id }}_{{ $loop->index }}"
-                                   class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                {{ strip_tags($option['options']) }}
-                            </label>
-                        </div>
-                    </li>
-                @endforeach
-                </ul>
-            </li>
-        @endforeach
+            @foreach ($exam->questions as $question)
+                <li class="font-semibold">
+                    {{ $question->title }}
+                    <ul>
+                        @foreach ($question->options as $option)
+                            <li>
+                                <div class="flex items-center ps-4 border bg-white border-gray-200 rounded-md dark:border-gray-700 py-2 my-2 drop-shadow-lg">
+                                    <input type="checkbox"
+                                           value="{{ $option['options'] }}"
+                                           id="option{{ $question->id }}_{{ $loop->index }}"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                           x-on:click="toggleSelection($event, {{ $question->id }}, '{{ $option['options'] }}')"
+                                           x-bind:checked="answeredQuestions[{{ $question->id }}] === '{{ $option['options'] }}'">
+                                    <label for="option{{ $question->id }}_{{ $loop->index }}"
+                                           class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                        {{ strip_tags($option['options']) }}
+                                    </label>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
+            @endforeach
         </ol>
         <div class="flex justify-center mt-4">
             <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
@@ -69,6 +70,25 @@
             }
         }
 
-    </script>
+        function toggleSelection(event, questionId, option) {
+            // Get the checkbox element
+            let checkbox = event.target;
 
+            // Deselect other options for the same question
+            document.querySelectorAll(`input[type="checkbox"][id^="option${questionId}_"]`).forEach(el => {
+                if (el !== checkbox) {
+                    el.checked = false;
+                }
+            });
+
+            // Handle selection count and answered questions tracking
+            if (!this.answeredQuestions.includes(questionId)) {
+                this.answeredQuestions.push(questionId);
+                this.selectedCount++;
+            }
+
+            // Update the answer model for Livewire
+            @this.set(`answers.${questionId}`, checkbox.checked ? option : null);
+        }
+    </script>
 </div>
