@@ -4,7 +4,8 @@
         <div x-data="countdownTimer({{ $duration * 60 }}, '@lang('messages.minutes')', '@lang('messages.seconds')', '@lang('messages.times_up')')" x-init="startTimer()">
             <span x-text="timeDisplay"></span>
             <br>
-            <span class="text-sm font-bold">Selected: </span><span x-text="selectedCount"></span>
+            <span class="text-sm font-bold">Answered: </span><span x-text="selectedCount"></span>
+            <span class="text-sm font-bold">Unanswered: </span><span x-text="unansweredCount"></span>
         </div>
     </div>
     <form wire:submit.prevent="submitExam">
@@ -45,7 +46,11 @@
         function examComponent() {
             return {
                 selectedCount: 0,
+                unansweredCount: @entangle('unansweredCount'),
                 answers: @entangle('answers'),
+                init() {
+                    this.unansweredCount = {{ $exam->questions->count() }} - Object.keys(this.answers).length;
+                },
                 toggleSelection(event, questionId, option) {
                     let checkbox = event.target;
 
@@ -60,11 +65,13 @@
                     if (checkbox.checked) {
                         if (!this.answers[questionId]) {
                             this.selectedCount++;
+                            this.unansweredCount--;
                         }
                         this.answers[questionId] = option;
                     } else {
                         if (this.answers[questionId]) {
                             this.selectedCount--;
+                            this.unansweredCount++;
                         }
                         this.answers[questionId] = null;
                     }
