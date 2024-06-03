@@ -13,7 +13,7 @@ export default {
 
     theme: {
         extend: {
-            colors:{
+            colors: {
                 'primary' : '#FDAE4B',
                 'base' : '#fff9f5',
                 'secondary' : '#24263A',
@@ -23,6 +23,9 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            listStyleType: {
+                
+            }
         },
     },
 
