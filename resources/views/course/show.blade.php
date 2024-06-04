@@ -154,12 +154,6 @@
                     </svg>
                 </a>
             </div>
-
-
-
-
-
         </div>
-
 
 </x-app-layout>
