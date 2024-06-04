@@ -11,6 +11,11 @@
                             <ul class="list-[upper-alpha] list-inside">
                                 @foreach ($questionData['options'] as $option)
                                     <li class="ps-4 border border-gray-200 rounded-md dark:border-gray-700 py-5 my-5 drop-shadow-lg {{ $questionData['user_input'] == $option ? ($questionData['user_input'] == $questionData['correct_answer'] ? 'bg-green-200' : 'bg-red-200') : ($questionData['correct_answer'] == $option ? 'bg-green-200' : 'bg-white') }}">
+                                        <span
+         class="bg-primary mr-2.5 flex h-[26px] w-full max-w-[26px] items-center justify-center rounded-full text-base text-white"
+         >
+      3
+      </span>
                                             {{ strip_tags($option) }}
                                     </li>
                                 @endforeach
