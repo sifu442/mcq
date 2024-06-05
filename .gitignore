@@ -6,3 +6,8 @@
 storage/*.key
 .env.backup
 .vscode
+config/filament-tinyeditor.php
+public/css/amidesfahani/filament-tinyeditor/tiny-css.css
+public/css/bangla.css
+public/js/amidesfahani/filament-tinyeditor/components/tinyeditor.js
+resources/views/vendor/filament-tinyeditor/tiny-editor.blade.php
