@@ -1,11 +1,9 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
 <div class="container mx-auto">
     <h1 class="text-center text-2xl font-bold">Purchase Course</h1>
     <div class="bg-white p-6 rounded-lg shadow-lg">
         <h2 class="text-xl font-semibold">{{ $course->title }}</h2>
-        <p>Fee: ${{ $course->fee }}</p>
+        <p>Fee: {{ $course->price }}</p>
         <p>User Name: {{ $user->name }}</p>
         <p>User ID: {{ $user->id }}</p>
         <form action="{{ route('course.purchase.submit', $course) }}" method="POST" class="mt-4">
@@ -22,4 +20,4 @@
         </form>
     </div>
 </div>
-@endsection
+</x-app-layout>
