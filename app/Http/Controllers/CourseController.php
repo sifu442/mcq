@@ -40,7 +40,7 @@ class CourseController extends Controller
         $course = Course::findOrFail($courseId);
         $user = auth()->user();
 
-        return view('course.buy', compact('course', 'user'));
+        return view('course.purchase', compact('course', 'user'));
     }
 
     public function purchase(Request $request, $courseId)
@@ -63,5 +63,5 @@ class CourseController extends Controller
 
         return redirect()->route('home')->with('success', 'Purchase successful!');
     }
-    
+
 }
