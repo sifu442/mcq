@@ -50,7 +50,7 @@ class PurchaseResource extends Resource
                         $record->update(['status' => 'rejected']);
                     })
                     ->color('danger')
-                    ->icon('heroicon-x-mark')
+                    ->icon('heroicon-s-x-mark')
                     ->requiresConfirmation()
                     ->visible(fn ($record) => $record->status === 'pending'),
             ])
