@@ -15,6 +15,7 @@ class Purchase extends Model
         'payment_method',
         'phone_number',
         'amount',
+        'status'
     ];
 
     public function user()
@@ -26,5 +27,5 @@ class Purchase extends Model
     {
         return $this->belongsTo(Course::class);
     }
-    
+
 }
