@@ -57,7 +57,7 @@ class CourseController extends Controller
             'course_id' => $course->id,
             'payment_method' => $request->input('payment_method'),
             'phone_number' => $request->input('phone_number'),
-            'amount' => $course->fee,
+            'amount' => $course->price,
         ]);
 
         return redirect()->route('home')->with('success', 'Purchase successful!');
