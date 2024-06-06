@@ -33,4 +33,23 @@ class CourseController extends Controller
             'dayOfWeek' => $dayOfWeek,
         ]);
     }
+    public function buy($courseId)
+    {
+        $course = Course::findOrFail($courseId);
+        $user = auth()->user();
+
+        return view('course.purchase', compact('course', 'user'));
+    }
+
+    public function purchase(Request $request, $courseId)
+    {
+        $request->validate([
+            'payment_method' => 'required|string',
+            'phone_number' => 'required|string|max:15',
+        ]);
+
+        // Process the purchase...
+
+        return redirect()->route('home')->with('success', 'Purchase successful!');
+    }
 }
