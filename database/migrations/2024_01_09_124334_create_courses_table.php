@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean('featured')->default(false);
             $table->decimal('total_exams');
             $table->integer('gap');
+            $table->integer('participation_time');
             $table->string('resources')->nullable();
             $table->timestamps();
 
