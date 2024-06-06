@@ -6,6 +6,7 @@ use Filament\Tables;
 use App\Models\Purchase;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\PurchaseResource\Pages;
 
@@ -33,7 +34,24 @@ class PurchaseResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Action::make('approve')
+                    ->label('Approve')
+                    ->action(function ($record) {
+                        $record->update(['status' => 'approved']);
+                    })
+                    ->color('success')
+                    ->icon('heroicon-o-check')
+                    ->requiresConfirmation()
+                    ->visible(fn ($record) => $record->status === 'pending'),
+
+                Action::make('reject')
+                    ->label('Reject')
+                    ->action(function ($record) {
+                        $record->update(['status' => 'rejected']);
+                    })
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->visible(fn ($record) => $record->status === 'pending'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
