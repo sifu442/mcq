@@ -23,14 +23,6 @@ class DatabaseSeeder extends Seeder
              'password' => Hash::make('password')
          ]);
 
-         Exam::factory(3)->create();
 
-         Exam::factory()->create([
-            'title' => '45th BCS',
-            'description' => '45th BCS',
-            'slug' => '45th-bcs',
-            'price' => '100',
-            'total_exams' => '50',
-         ]);
     }
 }
