@@ -45,9 +45,7 @@ class CourseResource extends Resource
             TextInput::make('slug')->required()->maxLength(255),
             TextInput::make('time_span')->required()->numeric()->suffix('days'),
 
-            DatePicker::make('published_at')->native(false)->minDate(now()->subYears(2))->maxDate(now()),
-
-            Toggle::make('is_free')->label('Free')->reactive()->afterStateUpdated(fn(callable $set) => $set('price', 0)),
+            //Toggle::make('is_free')->label('Free')->reactive()->afterStateUpdated(fn(callable $set) => $set('price', 0)),
 
             TextInput::make('price')->translateLabel()->numeric()->prefix('৳')->maxValue(42949672.95)->hidden(fn(callable $get) => $get('is_free'))->required(),
 
