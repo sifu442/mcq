@@ -60,11 +60,12 @@
                     </div>
                 </div>
             @endforeach
-            @auth
-        <button wire:click="showPurchaseModal({{ $course->id }})" class="btn btn-primary">Buy Course</button>
-    @else
-        <a href="{{ route('login') }}" class="btn btn-primary">Buy Course</a>
-    @endauth
+            @if(auth()->check())
+    <button onclick="window.location.href='{{ route('course.purchase', ['course' => $course->id]) }}'" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Buy</button>
+@else
+    <button onclick="window.location.href='{{ route('register') }}'" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Buy</button>
+@endif
+
         </div>
 
 
