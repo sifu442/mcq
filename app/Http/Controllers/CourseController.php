@@ -34,19 +34,20 @@ class CourseController extends Controller
             'dayOfWeek' => $dayOfWeek,
         ]);
     }
+
     public function buy($courseId)
     {
         $course = Course::findOrFail($courseId);
         $user = auth()->user();
 
-        return view('course.purchase', compact('course', 'user'));
+        return view('course.buy', compact('course', 'user'));
     }
 
     public function purchase(Request $request, $courseId)
     {
         $request->validate([
             'payment_method' => 'required|string',
-            'phone_number' => 'required|string|max:15|regex:/^\+?[1-9]\d{1,14}$/',
+            'phone_number' => 'required|string|max:15|regex:/^\d{11}$/',
         ]);
 
         $course = Course::findOrFail($courseId);
@@ -62,4 +63,5 @@ class CourseController extends Controller
 
         return redirect()->route('home')->with('success', 'Purchase successful!');
     }
+    
 }
