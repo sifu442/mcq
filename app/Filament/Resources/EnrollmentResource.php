@@ -63,8 +63,6 @@ class EnrollmentResource extends Resource
     {
         return [
             'index' => Pages\ListEnrollments::route('/'),
-            'create' => Pages\CreateEnrollment::route('/create'),
-            'edit' => Pages\EditEnrollment::route('/{record}/edit'),
         ];
     }
 }
