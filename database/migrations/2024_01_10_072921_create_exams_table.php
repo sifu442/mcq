@@ -16,7 +16,6 @@ return new class extends Migration {
             $table->foreignId('course_id');
             $table->string('syllabus');
             $table->integer('duration');
-            $table->integer('delay_days');
             $table->integer('available_for_hours');
             $table->decimal('score');
             $table->decimal('penalty');
