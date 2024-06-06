@@ -4,7 +4,7 @@
             <div class="p-8">
                 <h2 class="block mt-1 text-lg leading-tight font-medium text-black">{{ $course->name }}</h2>
                 <p class="mt-2 text-gray-500">Course: {{ $course->title }}</p>
-                <p class="mt-2 text-gray-500">Fee: {{ $course->price }}</p>
+                <p class="mt-2 text-gray-500">Fee: {{ $course->price }} TK</p>
                 <p class="mt-2 text-gray-500">Student: {{ $user->name }}</p>
                 <p class="mt-2 text-gray-500">Roll: {{ $user->id }}</p>
                 <form method="POST" action="{{ route('course.purchase', ['course' => $course->id]) }}">
