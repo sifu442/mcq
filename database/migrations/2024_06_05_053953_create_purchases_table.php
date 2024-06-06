@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('payment_method');
             $table->string('phone_number');
             $table->enum('status', ['pending', 'approved', 'disapproved'])->default('pending');
+            $table->decimal('amount', 8, 2);
             $table->timestamps();
         });
     }
