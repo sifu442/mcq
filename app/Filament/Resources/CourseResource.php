@@ -51,7 +51,7 @@ class CourseResource extends Resource
 
             TextInput::make('total_exams')->translateLabel()->numeric()->required(),
 
-            TextInput::make('deducted_price')->translateLabel()->numeric()->prefix('৳')->maxValue(42949672.95),
+            TextInput::make('discounted_price')->translateLabel()->numeric()->prefix('৳')->maxValue(42949672.95),
 
             Toggle::make('featured')->onIcon('heroicon-m-bolt')->offIcon('heroicon-m-user'),
             TinyEditor::make('description')->columnSpanFull()->profile('minimal'),
