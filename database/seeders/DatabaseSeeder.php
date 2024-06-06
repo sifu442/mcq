@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Exam;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -19,6 +21,16 @@ class DatabaseSeeder extends Seeder
              'name' => 'Sifat',
              'email' => 'test@admin.com',
              'password' => Hash::make('password')
+         ]);
+
+         Exam::factory(3)->create();
+
+         Exam::factory()->create([
+            'title' => '45th BCS',
+            'description' => '45th BCS',
+            'slug' => '45th-bcs',
+            'price' => '100',
+            'total_exams' => '50',
          ]);
     }
 }
