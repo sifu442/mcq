@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Course;
+use App\Models\Purchase;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -45,10 +46,19 @@ class CourseController extends Controller
     {
         $request->validate([
             'payment_method' => 'required|string',
-            'phone_number' => 'required|string|max:15',
+            'phone_number' => 'required|string|max:15|regex:/^\+?[1-9]\d{1,14}$/',
         ]);
 
-        // Process the purchase...
+        $course = Course::findOrFail($courseId);
+
+        // Create a new purchase record
+        Purchase::create([
+            'user_id' => auth()->id(),
+            'course_id' => $course->id,
+            'payment_method' => $request->input('payment_method'),
+            'phone_number' => $request->input('phone_number'),
+            'amount' => $course->fee,
+        ]);
 
         return redirect()->route('home')->with('success', 'Purchase successful!');
     }
