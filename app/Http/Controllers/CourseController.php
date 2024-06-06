@@ -63,5 +63,4 @@ class CourseController extends Controller
 
         return redirect()->route('home')->with('success', 'Purchase successful!');
     }
-
 }
