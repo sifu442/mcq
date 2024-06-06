@@ -45,4 +45,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/courses/{course}/exams', 
 Route::middleware(['auth:sanctum', 'verified'])->get('/exam/{examId}', ExamPage::class)->name('exam.page');
 Route::middleware(['auth:sanctum', 'verified'])->get('/exam-results/{examId}', ExamResults::class)->name('exam-results');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/course/{course}/buy', [CourseController::class, 'buy'])->name('course.buy');
+Route::post('/course/{course}/purchase', [CourseController::class, 'purchase'])->name('course.purchase');
+
 
