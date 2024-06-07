@@ -24,7 +24,7 @@ return [
             'custom_configs' => [
                 'image_advtab' => true,
                 'external_plugins' => [
-                    'tiny_mce_wiris' => asset('node_modules/@wiris/mathtype-tinymce6/plugin.min.js'),
+                    'tiny_mce_wiris' => asset('vendor/mathtype/mathtype-tinymce6/plugin.min.js'),
                 ],
                 'draggable_modal' => true,
                 'extended_valid_elements' => '*[.*]',
