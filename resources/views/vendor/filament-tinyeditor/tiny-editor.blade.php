@@ -99,5 +99,5 @@
 // });
 
 </script>
-<script src="{{ asset('node_modules/@wiris/mathtype-tinymce6/plugin.min.js') }}"></script>
+<script src="{{ asset('vendor/mathtype/mathtype-tinymce6/plugin.min.js') }}"></script>
 @endPushOnce
