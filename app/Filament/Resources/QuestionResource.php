@@ -18,8 +18,9 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Pages\CreateRecord;
-use AmidEsfahani\FilamentTinyEditor\TinyEditor;
+//use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Resources\QuestionResource\Pages;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class QuestionResource extends Resource
 {
@@ -66,7 +67,7 @@ class QuestionResource extends Resource
                 ])
                 ->columnSpanFull(),
                 TinyEditor::make('explanation')
-                ->profile('minimal')
+                ->simple()
                 ->columnSpanFull()
         ]);
     }
