@@ -97,5 +97,7 @@
 // 		event.returnValue = '{{ __("Are you sure you want to leave?") }}';
 //     }
 // });
+
 </script>
+<script src="{{ asset('node_modules/@wiris/mathtype-tinymce6/plugin.min.js') }}"></script>
 @endPushOnce
