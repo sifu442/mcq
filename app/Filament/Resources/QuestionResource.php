@@ -50,6 +50,7 @@ class QuestionResource extends Resource
                 ->default($latestExam->date)
                 ->native(false),
             TinyEditor::make('title')
+                ->profile('simple')
                 ->columnSpanFull(),
             Repeater::make('options')
                 ->required()
@@ -64,6 +65,7 @@ class QuestionResource extends Resource
                 ])
                 ->columnSpanFull(),
                 TinyEditor::make('explanation')
+                ->simple()
                 ->columnSpanFull()
         ]);
     }

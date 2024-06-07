@@ -20,7 +20,7 @@ return [
 
         'simple' => [
             'plugins' => 'autoresize directionality emoticons link wordcount',
-            'toolbar' => 'removeformat | bold italic | rtl ltr | link emoticons',
+            'toolbar' => 'removeformat | bold italic | rtl ltr | link emoticons | tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry"',
             'custom_configs' => [
                 'image_advtab' => true,
                 'external_plugins' => [
