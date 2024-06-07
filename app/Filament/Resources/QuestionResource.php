@@ -65,7 +65,6 @@ class QuestionResource extends Resource
                 ])
                 ->columnSpanFull(),
                 TinyEditor::make('explanation')
-                ->simple()
                 ->columnSpanFull()
         ]);
     }
