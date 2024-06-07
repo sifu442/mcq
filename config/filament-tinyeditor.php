@@ -39,7 +39,7 @@ return [
         ],
 
         'minimal' => [
-            'toolbar' => 'bold italic',
+            'toolbar' => 'bold italic tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry',
             'upload_directory' => null,
         ],
 
