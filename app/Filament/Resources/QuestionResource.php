@@ -49,7 +49,8 @@ class QuestionResource extends Resource
             DatePicker::make('date')
                 ->default($latestExam->date)
                 ->native(false),
-            TinyEditor::make('title'),
+            TinyEditor::make('title')
+                ->columnSpanFull(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
