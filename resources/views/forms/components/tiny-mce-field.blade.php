@@ -1,4 +1,12 @@
-<x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
+<x-dynamic-component
+    :component="$getFieldWrapperView()"
+    :field="$field"
+    :id="$getId()"
+    :label="$getLabel()"
+    :hint="$getHint()"
+    :required="$isRequired()"
+    :statePath="$getStatePath()"
+    >
     <div x-data="{
         editor: null,
         init() {
