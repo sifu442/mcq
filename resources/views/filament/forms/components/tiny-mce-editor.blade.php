@@ -10,6 +10,7 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function () {
+                console.log('Initializing TinyMCE for editor:', '#tiny-mce-editor-{{ $getId() }}');
                 tinymce.init({
                     selector: '#tiny-mce-editor-{{ $getId() }}',
                     plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
