@@ -27,6 +27,4 @@
     >
         <textarea x-ref="editor" {{ $applyStateBindingModifiers('wire:model') }}="{{ $getStatePath() }}"></textarea>
     </div>
-    <textarea x-ref="editor" {{ $applyStateBindingModifiers('wire:model') }}="{{ $getStatePath() }}"></textarea>
-</div>
 </x-dynamic-component>
