@@ -20,7 +20,6 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Pages\CreateRecord;
 //use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Resources\QuestionResource\Pages;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class QuestionResource extends Resource
 {
