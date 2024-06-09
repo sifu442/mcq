@@ -13,10 +13,11 @@
                 tinymce.init({
                     selector: '#tiny-mce-editor-{{ $getId() }}',
                     setup: function (editor) {
-                        editor.on('Change', function (e) {
+                        editor.on('Change', function () {
                             @this.set('{{ $getStatePath() }}', editor.getContent());
                         });
-                    }
+                    },
+                    readonly: false, // Ensure the editor is writable
                 });
             });
         </script>
