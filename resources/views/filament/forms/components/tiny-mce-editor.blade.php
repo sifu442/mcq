@@ -12,7 +12,14 @@
             document.addEventListener('DOMContentLoaded', function () {
                 tinymce.init({
                     selector: '#tiny-mce-editor-{{ $getId() }}',
-                    readonly: false, // Ensure the editor is writable
+                    plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
+                    toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+                    setup: function (editor) {
+                        editor.on('Change', function () {
+                            @this.set('{{ $getStatePath() }}', editor.getContent());
+                        });
+                    },
+                    readonly: false,
                 });
             });
         </script>
