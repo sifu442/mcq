@@ -17,6 +17,7 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@tinymce/tinymce-vue": "^6.0.0",
         "@wiris/mathtype-tinymce6": "^8.9.2",
         "tinymce": "^7.1.2"
     }
