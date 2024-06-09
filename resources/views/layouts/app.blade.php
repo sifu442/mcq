@@ -13,7 +13,7 @@
         <script id="MathJax-script" async
           src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
         </script>
-        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+        <script src="https://cdn.tiny.cloud/1/lrii0uxtuwcwtm989pioll20tuxfxuq3dyuyf0tzbqs7urbz/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
