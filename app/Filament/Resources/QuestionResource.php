@@ -11,6 +11,7 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Select;
+use App\Forms\Components\TinyMCEField;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
@@ -18,7 +19,6 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Pages\CreateRecord;
-use App\Filament\Forms\Components\TinyMCEField;
 use App\Filament\Resources\QuestionResource\Pages;
 
 class QuestionResource extends Resource
