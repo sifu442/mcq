@@ -18,7 +18,7 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Pages\CreateRecord;
-//use AmidEsfahani\FilamentTinyEditor\TinyEditor;
+use App\Forms\Components\TinyMCEEditor;
 use App\Filament\Resources\QuestionResource\Pages;
 
 class QuestionResource extends Resource
@@ -48,8 +48,7 @@ class QuestionResource extends Resource
             DatePicker::make('date')
                 ->default($latestExam->date)
                 ->native(false),
-            TinyEditor::make('title')
-                ->profile('simple')
+            TinyMCEEditor::make('title')
                 ->columnSpanFull(),
             Repeater::make('options')
                 ->required()
@@ -63,7 +62,7 @@ class QuestionResource extends Resource
                         ->name('Correct Answer'),
                 ])
                 ->columnSpanFull(),
-                TinyEditor::make('explanation')
+            TinyMCEEditor::make('explanation')
                 ->columnSpanFull()
         ]);
     }
