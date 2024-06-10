@@ -57,7 +57,10 @@ class QuestionResource extends Resource
                 ->maxItems(4)
                 ->schema([
                     TinyEditor::make('options')
-                        ->enabledMathEditor(),
+                    ->profile('default')
+                    ->setExternalPlugins([
+                        'tiny_mce_wiris' => 'https://www.wiris.net/demo/plugins/tiny_mce/plugin.js',
+                    ]),
                     Checkbox::make('is_correct')
                         ->fixIndistinctState()
                         ->name('Correct Answer'),
