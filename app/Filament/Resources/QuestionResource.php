@@ -56,7 +56,8 @@ class QuestionResource extends Resource
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->schema([
-                    TextInput::make('options'),
+                    TinyEditor::make('options')
+                        ->enabledMathEditor(),
                     Checkbox::make('is_correct')
                         ->fixIndistinctState()
                         ->name('Correct Answer'),
