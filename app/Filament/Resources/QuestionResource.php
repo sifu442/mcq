@@ -11,7 +11,6 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Select;
-use App\Forms\Components\TinyMCEField;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
@@ -20,6 +19,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\QuestionResource\Pages;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class QuestionResource extends Resource
 {
@@ -48,7 +48,7 @@ class QuestionResource extends Resource
             DatePicker::make('date')
                 ->default($latestExam->date)
                 ->native(false),
-            TinyMCEField::make('title')
+            TinyEditor::make('title')
                 ->columnSpanFull(),
             Repeater::make('options')
                 ->required()
@@ -62,7 +62,7 @@ class QuestionResource extends Resource
                         ->name('Correct Answer'),
                 ])
                 ->columnSpanFull(),
-            TinyMCEField::make('explanation')
+            TinyEditor::make('explanation')
                 ->columnSpanFull()
         ]);
     }
