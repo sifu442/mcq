@@ -32,14 +32,10 @@ Route::get('/course/{course:slug}', [CourseController::class, 'show'])->name('co
 //      });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
 Route::middleware(['auth:sanctum', 'verified'])->get('/user/profile', function () {
         return view('profile.show');
     })->name('profile.show');
-
-
-// web.php
-Route::middleware(['auth:sanctum', 'verified'])->get('/courses/{course}/exams', [ExamController::class, 'exams'])->name('courses.exams');
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard/{course}/exams', [DashboardController::class, 'exams'])->name('dashboard.exams');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/exam/{examId}', ExamPage::class)->name('exam.page');

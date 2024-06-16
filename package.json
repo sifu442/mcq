@@ -17,8 +17,12 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
-        "@tinymce/tinymce-vue": "^6.0.0",
-        "@wiris/mathtype-tinymce6": "^8.9.2",
-        "tinymce": "^7.1.2"
+        "@ckeditor/ckeditor5-build-classic": "^41.4.2",
+        "@wiris/mathtype-ckeditor5": "^8.9.2",
+        "@yayure/ckeditor5-mathlive": "^41.3.1",
+        "alpinejs": "^3.14.0",
+        "ckeditor5-build-classic-mathtype": "^1.0.0",
+        "ckeditor5-mathtype": "^1.0.4",
+        "mathlive": "^0.100.0"
     }
 }

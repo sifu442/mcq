@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ExamResource\Pages;
 use App\Models\Exam;
 use App\Models\Question;
 use Filament\Actions\Action;
+use App\Forms\Components\CKEditor;
 use Filament\Actions\CreateAction;
 use Filament\Forms\Components\Select;
 use App\Filament\Resources\ExamResource;
@@ -74,7 +75,7 @@ class ListExams extends ListRecords
                             '1.50' => '1.50',
                             '2.00' => '2.00',
                             ]),
-                    TinyEditor::make('syllabus')
+                    CKEditor::make('syllabus')
                         ->required()
                         ->translateLabel()
                         ->columnSpanFull(),

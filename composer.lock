@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a3a714bfbd140956f6779ae77a2745ff",
+    "content-hash": "6ae3b8db7ca6d88ff5b796e34e403c89",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -3747,88 +3747,6 @@
                 }
             ],
             "time": "2024-03-01T22:28:42+00:00"
-        },
-        {
-            "name": "mohamedsabil83/filament-forms-tinyeditor",
-            "version": "v2.3.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mohamedsabil83/filament-forms-tinyeditor.git",
-                "reference": "659fe09fb11e5c0913900a32bd16cef01715f56e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mohamedsabil83/filament-forms-tinyeditor/zipball/659fe09fb11e5c0913900a32bd16cef01715f56e",
-                "reference": "659fe09fb11e5c0913900a32bd16cef01715f56e",
-                "shasum": ""
-            },
-            "require": {
-                "filament/forms": "^3.0",
-                "illuminate/contracts": "^9.0|^10.0|^11.0",
-                "php": "^8.1",
-                "spatie/laravel-package-tools": "^1.14.0"
-            },
-            "require-dev": {
-                "larastan/larastan": "^2.2",
-                "laravel/pint": "^1.0",
-                "nunomaduro/collision": "^7.0|^8.0",
-                "orchestra/testbench": "8.0|^9.0",
-                "pestphp/pest": "^2.0",
-                "pestphp/pest-plugin-laravel": "^2.0",
-                "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan-deprecation-rules": "^1.0",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^10.0|^11.0",
-                "spatie/laravel-ray": "^1.26"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Mohamedsabil83\\FilamentFormsTinyeditor\\FilamentFormsTinyeditorServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Mohamedsabil83\\FilamentFormsTinyeditor\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "MohamedSabil83",
-                    "email": "me@mohamedsabil83.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A TinyMce editor component for Filament",
-            "homepage": "https://github.com/mohamedsabil83/filament-forms-tinyeditor",
-            "keywords": [
-                "Forms",
-                "filament",
-                "laravel",
-                "tinyeditor",
-                "tinymce"
-            ],
-            "support": {
-                "issues": "https://github.com/mohamedsabil83/filament-forms-tinyeditor/issues",
-                "source": "https://github.com/mohamedsabil83/filament-forms-tinyeditor/tree/v2.3.2"
-            },
-            "funding": [
-                {
-                    "url": "https://paypal.me/technolizer",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/mohamedsabil83",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-03-28T11:10:35+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -10679,6 +10597,67 @@
                 }
             ],
             "time": "2024-05-31T14:57:53+00:00"
+        },
+        {
+            "name": "thedoctor0/laravel-factory-generator",
+            "version": "1.4.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TheDoctor0/laravel-factory-generator.git",
+                "reference": "fed9260ab27522e3630bc379a14786b1880fa76d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TheDoctor0/laravel-factory-generator/zipball/fed9260ab27522e3630bc379a14786b1880fa76d",
+                "reference": "fed9260ab27522e3630bc379a14786b1880fa76d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^10.0|^11.0",
+                "illuminate/filesystem": "^10.0|^11.0",
+                "illuminate/support": "^10.0|^11.0",
+                "php": "^8.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "TheDoctor0\\LaravelFactoryGenerator\\FactoryGeneratorServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TheDoctor0\\LaravelFactoryGenerator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Automatically generate Laravel factories for your models.",
+            "keywords": [
+                "factories",
+                "factory",
+                "generator",
+                "laravel",
+                "tests"
+            ],
+            "support": {
+                "issues": "https://github.com/TheDoctor0/laravel-factory-generator/issues",
+                "source": "https://github.com/TheDoctor0/laravel-factory-generator/tree/1.4.3"
+            },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/thedoctor0",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/thedoctor0",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-05-14T06:51:07+00:00"
         },
         {
             "name": "theseer/tokenizer",

@@ -15,12 +15,11 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\DeleteAction;
-use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Resources\CourseResource\Pages;
 use App\Filament\Resources\CourseResource\RelationManagers\ExamsRelationManager;
+use App\Forms\Components\CKEditor;
 
 class CourseResource extends Resource
 {
@@ -28,6 +27,8 @@ class CourseResource extends Resource
 
     //protected static ?string $modelLabel = 'কোর্স';
     //protected static ?string $pluralModelLabel = 'কোর্সগুলো';
+
+    protected static ?string $navigationGroup = 'Course Content';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -54,7 +55,7 @@ class CourseResource extends Resource
             TextInput::make('discounted_price')->translateLabel()->numeric()->prefix('৳')->maxValue(42949672.95),
 
             Toggle::make('featured')->onIcon('heroicon-m-bolt')->offIcon('heroicon-m-user'),
-            TinyEditor::make('description')->columnSpanFull()->profile('minimal'),
+            CKEditor::make('description')->required()->columnSpanFull(),
             FileUpload::make('attachment')->multiple(),
         ]);
     }

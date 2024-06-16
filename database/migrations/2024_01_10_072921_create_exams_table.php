@@ -16,9 +16,11 @@ return new class extends Migration {
             $table->foreignId('course_id');
             $table->string('syllabus');
             $table->integer('duration');
+            $table->integer('gap');
+            $table->integer('participation_time');
             $table->decimal('score');
             $table->decimal('penalty');
-
+            $table->decimal('marks')->nullable();
             $table->timestamps();
         });
     }

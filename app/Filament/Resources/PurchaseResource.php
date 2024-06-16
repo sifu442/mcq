@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Tables;
 use App\Models\Purchase;
+use App\Models\Enrollment;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
@@ -16,20 +17,10 @@ class PurchaseResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                TextColumn::make('id')->sortable(),
-                TextColumn::make('user.name')->label('User')->sortable(),
-                TextColumn::make('course.title')->label('Course')->sortable(),
-                TextColumn::make('payment_method')->sortable(),
-                TextColumn::make('phone_number')->sortable(),
-                TextColumn::make('amount')->sortable(),
-                TextColumn::make('status')->sortable(),
-                TextColumn::make('created_at')->label('Purchased At')->dateTime()->sortable(),
-            ])
+            ->columns([TextColumn::make('id')->sortable(), TextColumn::make('user.name')->label('User')->sortable(), TextColumn::make('course.title')->label('Course')->sortable(), TextColumn::make('payment_method')->sortable(), TextColumn::make('phone_number')->sortable(), TextColumn::make('amount')->sortable(), TextColumn::make('status')->sortable(), TextColumn::make('created_at')->label('Purchased At')->dateTime()->sortable()])
             ->filters([
                 //
             ])
@@ -38,11 +29,23 @@ class PurchaseResource extends Resource
                     ->label('Approve')
                     ->action(function ($record) {
                         $record->update(['status' => 'approved']);
+
+                        // Enroll user into the course
+                        $user = $record->user;
+                        $course = $record->course;
+                        $user->courses()->syncWithoutDetaching($course);
+
+                        $enrollment = new Enrollment([
+                            'user_id' => $record->user_id,
+                            'course_id' => $record->course_id,
+                            'enrolled_at' => now(),
+                        ]);
+                        $enrollment->save();
                     })
                     ->color('success')
                     ->icon('heroicon-o-check')
                     ->requiresConfirmation()
-                    ->visible(fn ($record) => $record->status === 'pending'),
+                    ->visible(fn($record) => $record->status === 'pending'),
 
                 Action::make('reject')
                     ->label('Reject')
@@ -52,20 +55,16 @@ class PurchaseResource extends Resource
                     ->color('danger')
                     ->icon('heroicon-s-x-mark')
                     ->requiresConfirmation()
-                    ->visible(fn ($record) => $record->status === 'pending'),
+                    ->visible(fn($record) => $record->status === 'pending'),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
 
     public static function getRelations(): array
     {
         return [
-            //
-        ];
+                //
+            ];
     }
 
     public static function getPages(): array

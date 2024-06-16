@@ -19,20 +19,24 @@ class CourseController extends Controller
         }
         $uniqueSubjects = $subjects->unique();
 
-        $exams = $course->exams;
 
-        $currentDate = Carbon::now();
-        $examDate = $currentDate->addDays(4);
-        $formattedExamDate = $examDate->format('d/m/Y');
-        $dayOfWeek = $examDate->format('l');
+        // Calculate exam dates
+    $currentDate = Carbon::now();
+    $examDates = [];
+    $delayDays = 3; // Initial delay days
+    foreach ($course->exams as $exam) {
+        $examDates[] = [
+            'date' => $currentDate->addDays($delayDays)->format('d/m/Y'),
+            'dayOfWeek' => $currentDate->format('l'),
+        ];
+        $delayDays += $exam->delays_date + $exam->available_for_hours / 24;
+    }
 
-        return view('course.show', [
-            'course' => $course,
-            'subjects' => $uniqueSubjects,
-            'exams' => $exams,
-            'examDate' => $formattedExamDate,
-            'dayOfWeek' => $dayOfWeek,
-        ]);
+    return view('course.show', [
+        'course' => $course,
+        'subjects' => $uniqueSubjects,
+        'examDates' => $examDates,
+    ]);
     }
 
     public function buy($courseId)

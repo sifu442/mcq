@@ -10,12 +10,6 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        <script id="MathJax-script" async
-          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-        </script>
-        <script src="https://cdn.tiny.cloud/1/lrii0uxtuwcwtm989pioll20tuxfxuq3dyuyf0tzbqs7urbz/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-
-        <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <!-- Styles -->

@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Livewire;
+
 use App\Models\Exam;
-use Livewire\Component;
 use App\Models\ExamResponse;
+use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class ExamPage extends Component
 {
@@ -14,16 +16,40 @@ class ExamPage extends Component
     public $examResults = [];
     public $examSubmitted = false;
     public $duration;
-    public $score;
-    public $penalty;
     public $totalScore = 0;
 
-    public function mount($examId){
+    public function mount($examId)
+    {
         $this->examId = $examId;
         $this->exam = Exam::with('questions')->find($this->examId);
+
+        if (!$this->exam) {
+            abort(404, 'Exam not found');
+        }
+
+        $user = Auth::user();
+
+        // Check if the user has already submitted the exam
+        $examResponse = ExamResponse::where('user_id', $user->id)->where('exam_id', $this->examId)->first();
+        if ($examResponse) {
+            abort(403, 'You have already submitted this exam.');
+        }
+
+        // Check if the exam is ongoing or upcoming
+        $now = Carbon::now();
+        $enrolledAt = $user->courses()->where('course_id', $this->exam->course_id)->first()->pivot->enrolled_at;
+
+        $examStartTime = Carbon::parse($enrolledAt)->addDays($this->exam->delay_days);
+        $examEndTime = $examStartTime->clone()->addHours($this->exam->available_for_hours);
+
+        if ($now->lt($examStartTime)) {
+            abort(403, 'This exam is not yet available.');
+        } elseif ($now->gt($examEndTime)) {
+            abort(403, 'This exam is no longer available.');
+        }
+
         $this->duration = $this->exam->duration;
     }
-
 
     public function submitExam()
     {
@@ -31,7 +57,7 @@ class ExamPage extends Component
             return;
         }
 
-        $user = Auth::user(); // Get the authenticated user
+        $user = Auth::user();
 
         if ($this->exam) {
             $responseData = [];
@@ -40,7 +66,6 @@ class ExamPage extends Component
                 $userAnswer = $this->answers[$question->id] ?? null;
                 $isCorrect = $userAnswer === $correctAnswer;
 
-                // Assuming options is a collection of arrays with 'options' and 'is_correct' keys
                 $options = collect($question->options)->pluck('options')->toArray();
 
                 $responseData[] = [
@@ -51,14 +76,12 @@ class ExamPage extends Component
                 ];
 
                 if ($isCorrect) {
-                    $this->totalScore += $this->exam->score; // Increment score for correct answer
+                    $this->totalScore += $this->exam->score;
                 } elseif ($userAnswer !== null) {
-                    // Decrement score for wrong answer
                     $this->totalScore -= $this->exam->penalty;
                 }
             }
 
-            // Allow total score to be negative
             $totalScore = $this->totalScore;
 
             ExamResponse::create([
@@ -75,8 +98,8 @@ class ExamPage extends Component
         return redirect()->route('exam-results', ['examId' => $this->examId]);
     }
 
-
-    public function render(){
+    public function render()
+    {
         return view('livewire.exam-page')->layout('layouts.app');
     }
 }

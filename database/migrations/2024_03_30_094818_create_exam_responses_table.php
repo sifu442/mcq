@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('exam_id');
             $table->json('response_data'); // JSON column to store user responses
             $table->decimal('total_score');
+            $table->boolean('can_retake')->default(false);
             $table->timestamps();
         });
     }

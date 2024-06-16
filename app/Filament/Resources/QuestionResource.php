@@ -9,6 +9,7 @@ use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use App\Forms\Components\CKEditor;
 use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
@@ -19,17 +20,55 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\QuestionResource\Pages;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class QuestionResource extends Resource
 {
     protected static ?string $model = Question::class;
+
+    protected static ?string $navigationGroup = 'Course Content';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         $latestExam = Question::latest()->first();
+
+        if(is_null($latestExam)) {
+            return $form->schema([
+                Select::make('subject_id')
+                    ->relationship('subject', 'name')
+                    ->createOptionForm([
+                        TextInput::make('name')->required()
+                    ])
+                    ->preload()
+                    ->required(),
+                TextInput::make('previous_exam')
+                    ->label('Exam Name'),
+                TextInput::make('post'),
+                DatePicker::make('date')
+                    ->native(false),
+                CKEditor::make('title')
+                    ->required()
+                    ->columnSpanFull(),
+                Repeater::make('options')
+                    ->required()
+                    ->deletable(false)
+                    ->defaultItems(4)
+                    ->maxItems(4)
+                    ->schema([
+                        CKEditor::make('options')
+                        ,
+                        Checkbox::make('is_correct')
+                            ->fixIndistinctState()
+                            ->name('Correct Answer'),
+                    ])
+                    ->columnSpanFull(),
+                CKEditor::make('explanation')
+
+                    ->columnSpanFull()
+            ]);
+
+        }
 
         return $form->schema([
             Select::make('subject_id')
@@ -48,25 +87,25 @@ class QuestionResource extends Resource
             DatePicker::make('date')
                 ->default($latestExam->date)
                 ->native(false),
-            TinyEditor::make('title')
-                ->columnSpanFull(),
+            CKEditor::make('title')
+                ->columnSpanFull()
+
+                ->required(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->schema([
-                    TinyEditor::make('options')
-                    ->profile('default')
-                    ->setExternalPlugins([
-                        'tiny_mce_wiris' => 'https://www.wiris.net/demo/plugins/tiny_mce/plugin.js',
-                    ]),
+                    CKEditor::make('options')
+                    ,
                     Checkbox::make('is_correct')
                         ->fixIndistinctState()
                         ->name('Correct Answer'),
                 ])
                 ->columnSpanFull(),
-            TinyEditor::make('explanation')
+            CKEditor::make('explanation')
+
                 ->columnSpanFull()
         ]);
     }

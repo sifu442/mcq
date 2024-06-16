@@ -8,6 +8,7 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use App\Forms\Components\CKEditor;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -15,9 +16,7 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\DeleteAction;
 use App\Filament\Resources\ExamResource\Pages;
-use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use App\Filament\Resources\ExamResource\RelationManagers\QuestionsRelationManager;
-
 
 class ExamResource extends Resource
 {
@@ -26,6 +25,7 @@ class ExamResource extends Resource
     //protected static ?string $modelLabel = 'পরীক্ষা';
     //protected static ?string $pluralModelLabel = 'পরীক্ষাসমূহ';
 
+    protected static ?string $navigationGroup = 'Course Content';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -35,12 +35,12 @@ class ExamResource extends Resource
         return $form->schema([
             TextInput::make('name')
                 ->required()
-                ->unique()
+                ->unique(ignoreRecord: true)
                 ->translateLabel(),
             Select::make('course_id')->relationship('course', 'title')->required(),
             TextInput::make('duration')->required()->numeric()->suffix('Minutes')->translateLabel(),
-            TextInput::make('delay_days')->required()->numeric()->suffix('Days')->translateLabel(),
-            TextInput::make('available_for_hours')->required()->numeric()->suffix('Hours')->translateLabel(),
+            TextInput::make('gap')->required()->numeric()->suffix('Days')->translateLabel()->default(3),
+            TextInput::make('participation_time')->required()->numeric()->suffix('Hours')->translateLabel(),
             Select::make('score')
             ->required()
             ->options([
@@ -69,7 +69,7 @@ class ExamResource extends Resource
                 '2.00' => '2.00',
 
             ]),
-            TinyEditor::make('syllabus')->required()->translateLabel()->columnSpanFull()->profile('minimal'),
+            CKEditor::make('syllabus')->required()->translateLabel()->columnSpanFull(),
         ]);
 
     }

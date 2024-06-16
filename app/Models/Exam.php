@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Exam extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'course_id', 'duration', 'available_for_hours', 'syllabus', 'score', 'penalty'];
-
+    protected $fillable = ['name', 'course_id', 'syllabus', 'duration', 'score', 'penalty', 'marks'];
 
     public function questions()
     {
@@ -21,4 +21,14 @@ class Exam extends Model
     {
         return $this->belongsTo(Course::class);
     }
+
+    // public function isOngoingOrUpcoming()
+    // {
+    //     $now = Carbon::now();
+    //     $startDateTime = Carbon::parse($this->start_date);
+    //     $endDateTime = Carbon::parse($this->end_date);
+
+    //     // Check if the current date and time is between the start and end date of the exam
+    //     return $now->between($startDateTime, $endDateTime);
+    // }
 }

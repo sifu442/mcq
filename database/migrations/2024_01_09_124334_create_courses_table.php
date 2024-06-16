@@ -21,8 +21,6 @@ return new class extends Migration
             $table->decimal('discounted_price', 8, 2)->nullable();
             $table->boolean('featured')->default(false);
             $table->decimal('total_exams');
-            $table->integer('gap');
-            $table->integer('participation_time');
             $table->string('resources')->nullable();
             $table->timestamps();
 

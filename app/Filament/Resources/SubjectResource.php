@@ -24,6 +24,7 @@ class SubjectResource extends Resource
     //protected static ?string $modelLabel = 'বিষয়';
     //protected static ?string $pluralModelLabel = 'বিষয়সমূহ';
 
+    protected static ?string $navigationGroup = 'Course Content';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

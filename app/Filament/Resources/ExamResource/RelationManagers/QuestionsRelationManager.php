@@ -6,6 +6,7 @@ use Filament\Tables;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Forms\Components\CKEditor;
 use Illuminate\Support\HtmlString;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
@@ -14,7 +15,6 @@ use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
-use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class QuestionsRelationManager extends RelationManager
@@ -33,10 +33,8 @@ class QuestionsRelationManager extends RelationManager
             TextInput::make('exam_name'),
             TextInput::make('post'),
             DatePicker::make('date'),
-            TinyEditor::make('title')
+            CKEditor::make('title')
                 ->required()
-                ->profile('minimal')
-                ->maxLength(255)
                 ->columnSpanFull(),
             Repeater::make('options')
                 ->required()
@@ -44,12 +42,11 @@ class QuestionsRelationManager extends RelationManager
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->schema([
-                    TextInput::make('options'),
+                    CKEditor::make('options'),
                     Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
                 ])
                 ->columnSpanFull(),
-            TinyEditor::make('explanation')
-                ->profile('minimal')
+            CKEditor::make('explanation')
                 ->columnSpanFull()
         ]);
     }
@@ -106,9 +103,8 @@ class QuestionsRelationManager extends RelationManager
                         TextInput::make('exam_name'),
                         TextInput::make('post'),
                         DatePicker::make('date'),
-                        TinyEditor::make('title')
-                        ->required()
-                        ->maxLength(255),
+                        CKEditor::make('title')
+                        ->required(),
 
                     Repeater::make('options')
                         ->required()
@@ -119,7 +115,7 @@ class QuestionsRelationManager extends RelationManager
                             TextInput::make('options'),
                             Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
                         ]),
-                    TinyEditor::make('explanation')
+                    CKEditor::make('explanation')
                 ])->hidden(fn (callable $get) => $get('showAdditionalFields'))
             ])
             ->action(function (array $data) {
