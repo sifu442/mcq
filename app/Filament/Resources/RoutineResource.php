@@ -4,20 +4,21 @@ namespace App\Filament\Resources;
 
 use stdClass;
 use Filament\Forms;
+use App\Models\Exam;
 use Filament\Tables;
 use App\Models\Routine;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Livewire\Component as Livewire;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\RoutineResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\RoutineResource\RelationManagers;
-use Livewire\Component as Livewire;
 
 class RoutineResource extends Resource
 {
@@ -38,9 +39,13 @@ class RoutineResource extends Resource
                             ->label('Exam')
                             ->relationship('exam', 'name')
                             ->live()
-                            ->dehydrated(false)
-                            ->afterStateUpdated(function (Livewire $livewire) {
-                                $livewire->reset('data.exam_id');
+                            ->afterStateUpdated(function (Select $component) {
+                                $examId = $component->getStatePath('exam_id.value');
+                                if ($examId) {
+                                    $exam = Exam::findOrFail($examId);
+                                    $component->getParent()->getChildComponent('start_time')->value($exam->start_time);
+                                    $component->getParent()->getChildComponent('end_time')->value($exam->end_time);
+                                }
                             }),
                         DatePicker::make('start_time')
                             ->label('Start Time')
