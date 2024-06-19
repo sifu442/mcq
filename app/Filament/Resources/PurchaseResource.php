@@ -46,25 +46,24 @@ class PurchaseResource extends Resource
                     ->label('Approve')
                     ->action(function ($record) {
                         $record->update(['status' => 'approved']);
-                    
+
                         // Retrieve the course associated with the purchase
                         $course = $record->course;
-                    
+
                         if ($course) {
                             // Retrieve exams associated with the course
                             $exams = $course->exams;
-                        
+
                             // Create routines for each exam
                             foreach ($exams as $exam) {
                                 $scheduledAt = now()->addDays($exam->gap);
                                 $endTime = $scheduledAt->copy()->addHours($exam->participation_time);
-                            
+
                                 Routine::create([
                                     'user_id' => $record->user_id,
                                     'course_id' => $course->id,
                                     'exam_id' => $exam->id,
-                                    'scheduled_at' => $scheduledAt,
-                                    'participation_time' => $exam->participation_time,
+                                    'start_time' => $scheduledAt,
                                     'end_time' => $endTime,
                                 ]);
                             }
