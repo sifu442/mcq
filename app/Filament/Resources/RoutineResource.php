@@ -36,8 +36,11 @@ class RoutineResource extends Resource
                         'lg' => 3
                     ])
                     ->schema([
-                        Fieldset::make('Metadata')
-                        ->relationship('metadata'),
+                        Fieldset::make('exam')
+                        ->relationship('exam')
+                        ->schema([
+
+                        ]),
                         TextInput::make('exam_name')
                             ->label('Exam'),
                             //->relationship('exam', 'name'),
