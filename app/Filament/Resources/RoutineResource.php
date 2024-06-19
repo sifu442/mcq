@@ -37,7 +37,7 @@ class RoutineResource extends Resource
                         Select::make('exam.name')
                         ->label('Exam')
                         ->relationship('exam', 'name')
-                        ->reactive() // Make it reactive to changes
+                        ->live() // Make it reactive to changes
                             ->afterStateUpdated(function ($state, $set, $get) {
                                 // Fetch the exam date when the exam is changed
                                 $exam = \App\Models\Exam::find($state);
