@@ -43,10 +43,10 @@ class RoutineResource extends Resource
                         Repeater::make('exams')
                             ->relationship('exams')  // Correct relationship type
                             ->schema([
-                                Select::make('exam_id')
-                                    ->label('Exam')
-                                    ->relationship('exams', 'name')
-                                    ->required(),
+                                // Select::make('exam_id')
+                                //     ->label('Exam')
+                                //     ->relationship('exams', 'name')
+                                //     ->required(),
                                 DateTimePicker::make('pivot.start_time')
                                     ->label('Start Time')
                                     ->required(),
@@ -54,6 +54,7 @@ class RoutineResource extends Resource
                                     ->label('End Time')
                                     ->required(),
                             ])
+                            ->reorderableWithDragAndDrop(false)
                             ->label('Exams')
                             ->columns([
                                 'lg' => 2,
