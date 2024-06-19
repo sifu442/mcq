@@ -37,16 +37,7 @@ class RoutineResource extends Resource
                     ->schema([
                         Select::make('exam_id')
                             ->label('Exam')
-                            ->relationship('exam', 'name')
-                            ->live()
-                            ->afterStateUpdated(function (Select $component) {
-                                $examId = $component->getStatePath('exam_id.value');
-                                if ($examId) {
-                                    $exam = Exam::findOrFail($examId);
-                                    $component->getParent()->getChildComponent('start_time')->value($exam->start_time);
-                                    $component->getParent()->getChildComponent('end_time')->value($exam->end_time);
-                                }
-                            }),
+                            ->relationship('exam', 'name'),
                         DatePicker::make('start_time')
                             ->label('Start Time'),
                         DatePicker::make('end_time')
