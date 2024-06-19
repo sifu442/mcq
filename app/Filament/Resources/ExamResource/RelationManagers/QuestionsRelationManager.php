@@ -152,6 +152,5 @@ class QuestionsRelationManager extends RelationManager
             $this->ownerRecord->questions()->attach($question->id);
         }
 
-        $this->notify('success', 'Question attached successfully.');
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use Log;
+use Carbon\Carbon;
 use Filament\Tables;
 use App\Models\Purchase;
 use App\Models\Enrollment;
@@ -30,22 +32,38 @@ class PurchaseResource extends Resource
                     ->action(function ($record) {
                         $record->update(['status' => 'approved']);
 
-                        // Enroll user into the course
+                        // Enroll user in the course
                         $user = $record->user;
                         $course = $record->course;
-                        $user->courses()->syncWithoutDetaching($course);
 
-                        $enrollment = new Enrollment([
-                            'user_id' => $record->user_id,
-                            'course_id' => $record->course_id,
-                            'enrolled_at' => now(),
-                        ]);
-                        $enrollment->save();
+                        // Assuming there's a many-to-many relationship between users and courses
+                        $user->courses()->attach($course->id);
+
+                        // Create the routine
+                        $currentDate = Carbon::now();
+                        $delayDays = 3; // Initial delay days
+                        $exams = $course->exams;
+
+                        foreach ($exams as $exam) {
+                            $examDate = $currentDate->copy()->addDays($delayDays);
+
+                            // Create a routine entry
+                            Routine::create([
+                                'user_id' => $user->id,
+                                'course_id' => $course->id,
+                                'exam_id' => $exam->id,
+                                'exam_date' => $examDate,
+                                'participation_time' => $exam->participation_time,
+                            ]);
+
+                            // Update delay days for the next exam
+                            $delayDays += $exam->gap + ($exam->participation_time / 24);
+                        }
                     })
                     ->color('success')
                     ->icon('heroicon-o-check')
                     ->requiresConfirmation()
-                    ->visible(fn($record) => $record->status === 'pending'),
+                    ->visible(fn ($record) => $record->status === 'pending'),
 
                 Action::make('reject')
                     ->label('Reject')
@@ -55,7 +73,7 @@ class PurchaseResource extends Resource
                     ->color('danger')
                     ->icon('heroicon-s-x-mark')
                     ->requiresConfirmation()
-                    ->visible(fn($record) => $record->status === 'pending'),
+                    ->visible(fn ($record) => $record->status === 'pending'),
             ])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
