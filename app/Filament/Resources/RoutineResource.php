@@ -38,11 +38,17 @@ class RoutineResource extends Resource
                             ->label('Exam')
                             ->relationship('exam', 'name')
                             ->live() // Make the field reactive to changes
-                            ->afterStateUpdated(function (callable $set, $state) {
-                                if ($state) {
-                                    $exam = Exam::find($state);
-                                    $set('start_time', $exam->start_time);
-                                    $set('end_time', $exam->end_time);
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                $exam = Exam::find($state);
+                                if ($exam) {
+                                    $routine = Routine::where('exam_id', $state)->first();
+                                    if ($routine) {
+                                        $set('start_time', $routine->start_time);
+                                        $set('end_time', $routine->end_time);
+                                    } else {
+                                        $set('start_time', null);
+                                        $set('end_time', null);
+                                    }
                                 }
                             }),
                         DateTimePicker::make('start_time')
