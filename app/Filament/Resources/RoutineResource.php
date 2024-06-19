@@ -18,6 +18,7 @@ use App\Filament\Resources\RoutineResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\RoutineResource\RelationManagers;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\TextInput;
 
 class RoutineResource extends Resource
 {
@@ -34,23 +35,9 @@ class RoutineResource extends Resource
                         'lg' => 3
                     ])
                     ->schema([
-                        Select::make('exam_id')
-                            ->label('Exam')
-                            ->relationship('exam', 'name')
-                            ->live() // Make the field reactive to changes
-                            ->afterStateUpdated(function ($state, callable $set) {
-                                $exam = Exam::find($state);
-                                if ($exam) {
-                                    $routine = Routine::where('exam_id', $state)->first();
-                                    if ($routine) {
-                                        $set('start_time', $routine->start_time);
-                                        $set('end_time', $routine->end_time);
-                                    } else {
-                                        $set('start_time', null);
-                                        $set('end_time', null);
-                                    }
-                                }
-                            }),
+                        TextInput::make('exam.name')
+                            ->label('Exam'),
+                            //->relationship('exam', 'name'),
                         DateTimePicker::make('start_time')
                             ->label('Start Time'),
                         DateTimePicker::make('end_time')
