@@ -9,6 +9,7 @@ use App\Models\Routine;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
@@ -36,7 +37,15 @@ class RoutineResource extends Resource
                         Select::make('exam.name')
                         ->label('Exam')
                         ->relationship('exam', 'name')
-                        ,
+                        ->reactive() // Make it reactive to changes
+                            ->afterStateUpdated(function ($state, $set, $get) {
+                                // Fetch the exam date when the exam is changed
+                                $exam = \App\Models\Exam::find($state);
+                                if ($exam) {
+                                    $set('exam_date', $exam->exam_date);
+                                }
+                            }),
+                        Hidden::make('exam_date'),
                         DatePicker::make('start_time')->label('Start Time'),
                         DatePicker::make('end_time')->label('End Time'),
                     ])
