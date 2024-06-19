@@ -37,8 +37,7 @@ class RoutineResource extends Resource
                         'lg' => 3
                     ])
                     ->schema([
-                        Builder::make('exams')
-                            ->relationship('exams')
+                        Builder\Block::make('exams')
                             ->schema([
                                 Select::make('exam_id')
                                     ->label('Exam')
