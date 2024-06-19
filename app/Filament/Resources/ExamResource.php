@@ -37,39 +37,58 @@ class ExamResource extends Resource
                 ->required()
                 ->unique(ignoreRecord: true)
                 ->translateLabel(),
-            //Select::make('course_id')->relationship('course', 'title')->required(),
-            TextInput::make('duration')->required()->numeric()->suffix('Minutes')->translateLabel(),
-            TextInput::make('gap')->required()->numeric()->suffix('Days')->translateLabel()->default(3),
-            TextInput::make('participation_time')->required()->numeric()->suffix('Hours')->translateLabel(),
+            Select::make('course_id')
+                ->relationship('courses', 'title')
+                ->label('Select Course')
+                ->required(),
+            TextInput::make('duration')
+                ->required()
+                ->numeric()
+                ->suffix('Minutes')
+                ->translateLabel(),
+            TextInput::make('gap')
+                ->required()
+                ->numeric()
+                ->suffix('Days')
+                ->translateLabel()
+                ->default(3),
+            TextInput::make('participation_time')
+                ->required()
+                ->numeric()
+                ->suffix('Hours')
+                ->translateLabel(),
             Select::make('score')
-            ->required()
-            ->options([
-                '1' => '1',
-                '2' => '2',
-                '3' => '3',
-                '2' => '2' ,
-                '3' => '3' ,
-                '4' => '4' ,
-                '5' => '5' ,
-                '6' => '6' ,
-                '7' => '7' ,
-                '8' => '8' ,
-                '9' => '9' ,
-                '10' =>'10',
-            ]),
+                ->required()
+                ->options([
+                    '1' => '1',
+                    '2' => '2',
+                    '3' => '3',
+                    '2' => '2' ,
+                    '3' => '3' ,
+                    '4' => '4' ,
+                    '5' => '5' ,
+                    '6' => '6' ,
+                    '7' => '7' ,
+                    '8' => '8' ,
+                    '9' => '9' ,
+                    '10' =>'10',
+                ]),
             Select::make('penalty')
-            ->required()
-            ->options([
-                '0.25' => '0.25',
-                '0.50' => '0.50',
-                '0.70' => '0.50',
-                '1.00' => '1.00' ,
-                '1.25' => '1.25',
-                '1.50' => '1.50',
-                '2.00' => '2.00',
+                ->required()
+                ->options([
+                    '0.25' => '0.25',
+                    '0.50' => '0.50',
+                    '0.70' => '0.50',
+                    '1.00' => '1.00' ,
+                    '1.25' => '1.25',
+                    '1.50' => '1.50',
+                    '2.00' => '2.00',
 
-            ]),
-            CKEditor::make('syllabus')->required()->translateLabel()->columnSpanFull(),
+                ]),
+            CKEditor::make('syllabus')
+                ->required()
+                ->translateLabel()
+                ->columnSpanFull(),
         ]);
 
     }
