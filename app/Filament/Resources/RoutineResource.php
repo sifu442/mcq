@@ -50,9 +50,6 @@ class RoutineResource extends Resource
                         }),
                         DatePicker::make('start_time')->label('Start Time'),
                         DatePicker::make('end_time')->label('End Time'),
-                        Hidden::make('exam_date'),
-                        DatePicker::make('start_time')->label('Start Time'),
-                        DatePicker::make('end_time')->label('End Time'),
                     ])
 
             ]);
