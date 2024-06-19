@@ -26,6 +26,7 @@ class Exam extends Model
     {
         return $this->hasMany(Routine::class);
     }
+    
 
     // public function isOngoingOrUpcoming()
     // {
