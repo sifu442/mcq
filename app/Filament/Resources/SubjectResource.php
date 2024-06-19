@@ -32,7 +32,9 @@ class SubjectResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->required()
+                TextInput::make('name')
+                    ->unique(ignoreRecord: true)
+                    ->required()
             ]);
     }
 
