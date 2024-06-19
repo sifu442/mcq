@@ -12,13 +12,14 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\RoutineResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\RoutineResource\RelationManagers;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\TextInput;
 
 class RoutineResource extends Resource
 {
@@ -35,6 +36,8 @@ class RoutineResource extends Resource
                         'lg' => 3
                     ])
                     ->schema([
+                        Fieldset::make('Metadata')
+                        ->relationship('metadata'),
                         TextInput::make('exam_name')
                             ->label('Exam'),
                             //->relationship('exam', 'name'),
