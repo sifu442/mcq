@@ -38,25 +38,43 @@ class CourseResource extends Resource
             TextInput::make('title')
                 ->required()
                 ->maxLength(255)
-                ->unique()
+                ->unique(ignoreRecord: true)
                 ->live(onBlur: true)
                 ->afterStateUpdated(function (Set $set, $state) {
                     $set('slug', Str::slug($state));
                 }),
-            TextInput::make('slug')->required()->maxLength(255),
-            TextInput::make('time_span')->required()->numeric()->suffix('days'),
-
+            TextInput::make('slug')
+                ->required()
+                ->unique(ignoreRecord: true)
+                ->maxLength(255),
+            TextInput::make('time_span')
+                ->required()
+                ->numeric()
+                ->suffix('days'),
             //Toggle::make('is_free')->label('Free')->reactive()->afterStateUpdated(fn(callable $set) => $set('price', 0)),
-
-            TextInput::make('price')->translateLabel()->numeric()->prefix('৳')->maxValue(42949672.95)->hidden(fn(callable $get) => $get('is_free'))->required(),
-
-            TextInput::make('total_exams')->translateLabel()->numeric()->required(),
-
-            TextInput::make('discounted_price')->translateLabel()->numeric()->prefix('৳')->maxValue(42949672.95),
-
-            Toggle::make('featured')->onIcon('heroicon-m-bolt')->offIcon('heroicon-m-user'),
-            CKEditor::make('description')->required()->columnSpanFull(),
-            FileUpload::make('attachment')->multiple(),
+            TextInput::make('price')
+                ->translateLabel()
+                ->numeric()
+                ->prefix('৳')
+                ->maxValue(42949672.95)
+                ->hidden(fn(callable $get) => $get('is_free'))->required(),
+            TextInput::make('total_exams')
+                ->translateLabel()
+                ->numeric()
+                ->required(),
+            TextInput::make('discounted_price')
+                ->translateLabel()
+                ->numeric()
+                ->prefix('৳')
+                ->maxValue(42949672.95),
+            Toggle::make('featured')
+                ->onIcon('heroicon-m-bolt')
+                ->offIcon('heroicon-m-user'),
+            CKEditor::make('description')
+                ->required()
+                ->columnSpanFull(),
+            FileUpload::make('attachment')
+                ->multiple(),
         ]);
     }
 
