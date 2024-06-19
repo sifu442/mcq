@@ -38,6 +38,7 @@ class RoutineResource extends Resource
                     ->schema([
                         Repeater::make('exams')
                             ->relationship('exams')
+                            ->default(1)
                             ->schema([
                                 Select::make('exam_id')
                                     ->label('Exam')
