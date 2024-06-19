@@ -4,18 +4,22 @@ namespace App\Filament\Resources;
 
 use stdClass;
 use Filament\Forms;
-use App\Models\Routine;
+use App\Models\Exam;
 use Filament\Tables;
+use App\Models\Routine;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
-use App\Filament\Resources\RoutineResource\Pages;
-use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DateTimePicker;
+use App\Filament\Resources\RoutineResource\Pages;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\RoutineResource\RelationManagers;
 
 class RoutineResource extends Resource
 {
@@ -26,35 +30,28 @@ class RoutineResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([               
-                        Select::make('user_id')
-                            ->label('User')
-                            ->relationship('user', 'name')
-                            ->required(),
-                        Select::make('course_id')
-                            ->label('Course')
-                            ->relationship('course', 'title')
-                            ->required(),
+            ->schema([
+                Section::make()
+                    ->columns([
+                        'lg' => 3
+                    ])
+                    ->schema([
                         Repeater::make('exams')
-                            ->relationship('exams')  // Correct relationship type
+                            ->relationship('exam')
                             ->schema([
-                                // Select::make('exam_id')
-                                //     ->label('Exam')
-                                //     ->relationship('exams', 'name')
-                                //     ->required(),
-                                DateTimePicker::make('pivot.start_time')
+                                Select::make('exam_id')
+                                    ->label('Exam')
+                                    ->relationship('exam', 'name')
+                                    ->required()
+                                    ->disbaled(),
+                                DateTimePicker::make('start_time')
                                     ->label('Start Time')
                                     ->required(),
-                                DateTimePicker::make('pivot.end_time')
+                                DateTimePicker::make('end_time')
                                     ->label('End Time')
                                     ->required(),
                             ])
-                            ->reorderableWithDragAndDrop(false)
-                            ->addable(false)
-                            ->label('Exams')
-                            ->columns([
-                                'lg' => 2,
-                            ]),
+                    ])
             ]);
     }
 
@@ -76,14 +73,11 @@ class RoutineResource extends Resource
                     ->sortable(),
                 TextColumn::make('course.title')
                     ->sortable(),
-                TextColumn::make('exams.name')
-                    ->label('Exam')
+                TextColumn::make('exam.name')
                     ->sortable(),
-                TextColumn::make('exams.pivot.start_time')->dateTime()
-                    ->label('Start Time')
+                TextColumn::make('start_time')->dateTime()
                     ->sortable(),
-                TextColumn::make('exams.pivot.end_time')->dateTime()
-                    ->label('End Time')
+                TextColumn::make('end_time')->dateTime()
                     ->sortable(),
             ])
             ->filters([
@@ -115,6 +109,5 @@ class RoutineResource extends Resource
         ];
     }
 }
-
 
 
