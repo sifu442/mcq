@@ -9,16 +9,15 @@ use App\Models\Routine;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Livewire\Component as Livewire;
-use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
-use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\RoutineResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\RoutineResource\RelationManagers;
+use Livewire\Component as Livewire;
 
 class RoutineResource extends Resource
 {
@@ -35,26 +34,40 @@ class RoutineResource extends Resource
                         'lg' => 3
                     ])
                     ->schema([
-                        Select::make('exam.name')
-                        ->label('Exam')
-                        ->relationship('exam', 'name')
-                        ->live()
-                        ->afterStateUpdated(function ($state, Livewire $livewire, Forms\Set $set, Forms\Get $get) {
-                            // Check if the state is set and the form is not in create mode
-                            if ($state && !$livewire->isCreate()) {
-                                // Fetch the exam
-                                $exam = \App\Models\Exam::find($state);
-                                // If exam exists, set start and end time
-                                if ($exam) {
-                                    $set('start_time', $exam->start_time);
-                                    $set('end_time', $exam->end_time);
+                        Select::make('exam_id')
+                            ->label('Exam')
+                            ->relationship('exam', 'name')
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, Livewire $livewire, Forms\Set $set, Forms\Get $get) {
+                                if ($state) {
+                                    $exam = \App\Models\Exam::find($state);
+                                    if ($exam) {
+                                        $set('start_time', $exam->start_time);
+                                        $set('end_time', $exam->end_time);
+                                    }
                                 }
-                            }
-                        }),
-                        DatePicker::make('start_time')->label('Start Time'),
-                        DatePicker::make('end_time')->label('End Time'),
+                            }),
+                        DatePicker::make('start_time')
+                            ->label('Start Time')
+                            ->default(function (Forms\Get $get) {
+                                $examId = $get('exam_id');
+                                if ($examId) {
+                                    $exam = \App\Models\Exam::find($examId);
+                                    return $exam ? $exam->start_time : null;
+                                }
+                                return null;
+                            }),
+                        DatePicker::make('end_time')
+                            ->label('End Time')
+                            ->default(function (Forms\Get $get) {
+                                $examId = $get('exam_id');
+                                if ($examId) {
+                                    $exam = \App\Models\Exam::find($examId);
+                                    return $exam ? $exam->end_time : null;
+                                }
+                                return null;
+                            }),
                     ])
-
             ]);
     }
 
@@ -76,7 +89,12 @@ class RoutineResource extends Resource
                     ->sortable(),
                 TextColumn::make('course.title')
                     ->sortable(),
-
+                TextColumn::make('exam.name')
+                    ->sortable(),
+                TextColumn::make('start_time')->dateTime()
+                    ->sortable(),
+                TextColumn::make('end_time')->dateTime()
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -107,3 +125,4 @@ class RoutineResource extends Resource
         ];
     }
 }
+
