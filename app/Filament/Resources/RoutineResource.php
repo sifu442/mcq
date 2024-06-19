@@ -39,10 +39,10 @@ class RoutineResource extends Resource
                         Fieldset::make('exam')
                         ->relationship('exam')
                         ->schema([
-
+                            TextInput::make('name')
                         ]),
-                        TextInput::make('exam_name')
-                            ->label('Exam'),
+                        //TextInput::make('exam_name')
+                            //->label('Exam'),
                             //->relationship('exam', 'name'),
                         DateTimePicker::make('start_time')
                             ->label('Start Time'),
