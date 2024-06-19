@@ -44,6 +44,7 @@ class ExamResource extends Resource
             TextInput::make('duration')
                 ->required()
                 ->numeric()
+                ->default(30)
                 ->suffix('Minutes')
                 ->translateLabel(),
             TextInput::make('gap')
@@ -56,8 +57,11 @@ class ExamResource extends Resource
                 ->required()
                 ->numeric()
                 ->suffix('Hours')
+                ->default(24)
                 ->translateLabel(),
             Select::make('score')
+                ->native(false)
+                ->default('1')
                 ->required()
                 ->options([
                     '1' => '1',
@@ -75,6 +79,7 @@ class ExamResource extends Resource
                 ]),
             Select::make('penalty')
                 ->required()
+                ->default('0.50')
                 ->options([
                     '0.25' => '0.25',
                     '0.50' => '0.50',
