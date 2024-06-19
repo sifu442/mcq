@@ -32,12 +32,9 @@ class RoutineResource extends Resource
     {
         return $form
             ->schema([
-                Section::make()
-                    ->columns([
-                        'lg' => 3
-                    ])
-                    ->schema([
-                        Builder\Block::make('exams')
+                Builder::make('content')
+                    ->blocks([
+                        Builder\Block::make('heading')
                             ->schema([
                                 Select::make('exam_id')
                                     ->label('Exam')
