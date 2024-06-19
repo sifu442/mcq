@@ -12,7 +12,7 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
@@ -36,16 +36,20 @@ class RoutineResource extends Resource
                         'lg' => 3
                     ])
                     ->schema([
-                        Fieldset::make('Exam')
-                        ->relationship('exam')
-                        ->schema([
-                            TextInput::make('name')
-                                ->disabled()
-                        ]),
-                        DateTimePicker::make('start_time')
-                            ->label('Start Time'),
-                        DateTimePicker::make('end_time')
-                            ->label('End Time'),
+                        Repeater::make('exams')
+                            ->relationship('exam')
+                            ->schema([
+                                Select::make('exam_id')
+                                    ->label('Exam')
+                                    ->relationship('exam', 'name')
+                                    ->required(),
+                                DateTimePicker::make('start_time')
+                                    ->label('Start Time')
+                                    ->required(),
+                                DateTimePicker::make('end_time')
+                                    ->label('End Time')
+                                    ->required(),
+                            ])
                     ])
             ]);
     }
