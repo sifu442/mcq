@@ -36,14 +36,12 @@ class RoutineResource extends Resource
                         'lg' => 3
                     ])
                     ->schema([
-                        Fieldset::make('exam')
+                        Fieldset::make('Exam')
                         ->relationship('exam')
                         ->schema([
                             TextInput::make('name')
+                                ->disabled()
                         ]),
-                        //TextInput::make('exam_name')
-                            //->label('Exam'),
-                            //->relationship('exam', 'name'),
                         DateTimePicker::make('start_time')
                             ->label('Start Time'),
                         DateTimePicker::make('end_time')
