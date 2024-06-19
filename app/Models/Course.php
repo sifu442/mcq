@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -31,16 +32,16 @@ class Course extends Model
         $query->where('featured', true);
     }
 
-    public function exams()
+    public function purchases(): HasMany
     {
-        return $this->hasMany(Exam::class);
+        return $this->hasMany(Purchase::class);
     }
 
-    public function enrolledUsers()
+    public function exams()
     {
-        return $this->belongsToMany(User::class, 'course_user')
-                    ->withPivot('enrolled_at')
-                    ->withTimestamps();
+        return $this->belongsToMany(Exam::class);
     }
+
+
 
 }

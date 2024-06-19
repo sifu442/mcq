@@ -17,9 +17,14 @@ class Exam extends Model
         return $this->belongsToMany(Question::class, 'exam_question')->withTimestamps();
     }
 
-    public function course()
+    public function courses()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsToMany(Course::class);
+    }
+
+    public function routines()
+    {
+        return $this->hasMany(Routine::class);
     }
 
     // public function isOngoingOrUpcoming()

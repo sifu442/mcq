@@ -2,16 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use Log;
+
 use Carbon\Carbon;
 use Filament\Tables;
+use App\Models\Routine;
 use App\Models\Purchase;
 use App\Models\Enrollment;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Illuminate\Support\Facades\DB;
 use Filament\Tables\Actions\Action;
+use Illuminate\Support\Facades\Log;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\PurchaseResource\Pages;
+use App\Filament\Resources\PurchaseResource\Pages\ListPurchases;
 
 class PurchaseResource extends Resource
 {
@@ -22,7 +28,16 @@ class PurchaseResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([TextColumn::make('id')->sortable(), TextColumn::make('user.name')->label('User')->sortable(), TextColumn::make('course.title')->label('Course')->sortable(), TextColumn::make('payment_method')->sortable(), TextColumn::make('phone_number')->sortable(), TextColumn::make('amount')->sortable(), TextColumn::make('status')->sortable(), TextColumn::make('created_at')->label('Purchased At')->dateTime()->sortable()])
+            ->columns([
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('user.name')->label('User')->sortable(),
+                TextColumn::make('course.title')->label('Course')->sortable(),
+                TextColumn::make('payment_method')->sortable(),
+                TextColumn::make('phone_number')->sortable(),
+                TextColumn::make('amount')->sortable(),
+                TextColumn::make('status')->sortable(),
+                TextColumn::make('created_at')->label('Purchased At')->dateTime()->sortable()
+            ])
             ->filters([
                 //
             ])
@@ -31,39 +46,36 @@ class PurchaseResource extends Resource
                     ->label('Approve')
                     ->action(function ($record) {
                         $record->update(['status' => 'approved']);
-
-                        // Enroll user in the course
-                        $user = $record->user;
+                    
+                        // Retrieve the course associated with the purchase
                         $course = $record->course;
-
-                        // Assuming there's a many-to-many relationship between users and courses
-                        $user->courses()->attach($course->id);
-
-                        // Create the routine
-                        $currentDate = Carbon::now();
-                        $delayDays = 3; // Initial delay days
-                        $exams = $course->exams;
-
-                        foreach ($exams as $exam) {
-                            $examDate = $currentDate->copy()->addDays($delayDays);
-
-                            // Create a routine entry
-                            Routine::create([
-                                'user_id' => $user->id,
-                                'course_id' => $course->id,
-                                'exam_id' => $exam->id,
-                                'exam_date' => $examDate,
-                                'participation_time' => $exam->participation_time,
-                            ]);
-
-                            // Update delay days for the next exam
-                            $delayDays += $exam->gap + ($exam->participation_time / 24);
+                    
+                        if ($course) {
+                            // Retrieve exams associated with the course
+                            $exams = $course->exams;
+                        
+                            // Create routines for each exam
+                            foreach ($exams as $exam) {
+                                $scheduledAt = now()->addDays($exam->gap);
+                                $endTime = $scheduledAt->copy()->addHours($exam->participation_time);
+                            
+                                Routine::create([
+                                    'user_id' => $record->user_id,
+                                    'course_id' => $course->id,
+                                    'exam_id' => $exam->id,
+                                    'scheduled_at' => $scheduledAt,
+                                    'participation_time' => $exam->participation_time,
+                                    'end_time' => $endTime,
+                                ]);
+                            }
                         }
                     })
                     ->color('success')
                     ->icon('heroicon-o-check')
                     ->requiresConfirmation()
                     ->visible(fn ($record) => $record->status === 'pending'),
+
+
 
                 Action::make('reject')
                     ->label('Reject')
@@ -77,6 +89,7 @@ class PurchaseResource extends Resource
             ])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
+
 
     public static function getRelations(): array
     {

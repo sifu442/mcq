@@ -28,4 +28,5 @@ class Purchase extends Model
         return $this->belongsTo(Course::class);
     }
 
+
 }

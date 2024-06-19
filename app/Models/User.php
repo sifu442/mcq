@@ -52,9 +52,20 @@ class User extends Authenticatable
      */
     protected $appends = ['profile_photo_url'];
 
-    public function courses()
+
+    public function purchases(): HasMany
     {
-        return $this->belongsToMany(Course::class, 'course_user')->withTimestamps();
+        return $this->hasMany(Purchase::class);
+    }
+
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function routines(): HasMany
+    {
+        return $this->hasMany(Routine::class);
     }
 
 }
