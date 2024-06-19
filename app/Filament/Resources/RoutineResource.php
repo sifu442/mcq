@@ -19,6 +19,7 @@ use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\RoutineResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\RoutineResource\RelationManagers;
+use Filament\Forms\Components\DateTimePicker;
 
 class RoutineResource extends Resource
 {
@@ -39,7 +40,7 @@ class RoutineResource extends Resource
                             ->label('Exam')
                             ->relationship('exam', 'name')
                             ->disabled(),
-                        DatePicker::make('start_time')
+                        DateTimePicker::make('start_time')
                             ->label('Start Time'),
                         DatePicker::make('end_time')
                             ->label('End Time'),
