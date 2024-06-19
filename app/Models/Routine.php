@@ -28,8 +28,9 @@ class Routine extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function exam(): BelongsTo
+    public function exams()
     {
-        return $this->belongsTo(Exam::class);
+        return $this->belongsToMany(Exam::class, 'exam_routine')
+            ->withPivot('start_time', 'end_time');
     }
 }
