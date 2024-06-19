@@ -10,12 +10,10 @@ use App\Models\Routine;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Livewire\Component as Livewire;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
-use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\RoutineResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\RoutineResource\RelationManagers;
@@ -38,11 +36,10 @@ class RoutineResource extends Resource
                     ->schema([
                         Select::make('exam_id')
                             ->label('Exam')
-                            ->relationship('exam', 'name')
-                            ->disabled(),
+                            ->relationship('exam', 'name'),
                         DateTimePicker::make('start_time')
                             ->label('Start Time'),
-                        DatePicker::make('end_time')
+                        DateTimePicker::make('end_time')
                             ->label('End Time'),
                     ])
             ]);
