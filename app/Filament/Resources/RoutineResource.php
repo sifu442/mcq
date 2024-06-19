@@ -26,12 +26,7 @@ class RoutineResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Section::make()
-                    ->columns([
-                        'lg' => 3
-                    ])
-                    ->schema([
+            ->schema([               
                         Select::make('user_id')
                             ->label('User')
                             ->relationship('user', 'name')
@@ -55,11 +50,11 @@ class RoutineResource extends Resource
                                     ->required(),
                             ])
                             ->reorderableWithDragAndDrop(false)
+                            ->addable(false)
                             ->label('Exams')
                             ->columns([
                                 'lg' => 2,
                             ]),
-                    ]),
             ]);
     }
 
