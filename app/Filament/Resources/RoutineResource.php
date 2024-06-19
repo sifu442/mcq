@@ -37,13 +37,12 @@ class RoutineResource extends Resource
                     ])
                     ->schema([
                         Repeater::make('exams')
-                            ->relationship('exam')
+                            ->relationship('exams')
                             ->schema([
                                 Select::make('exam_id')
                                     ->label('Exam')
                                     ->relationship('exam', 'name')
-                                    ->required()
-                                    ->disbaled(),
+                                    ->required(),
                                 DateTimePicker::make('start_time')
                                     ->label('Start Time')
                                     ->required(),
