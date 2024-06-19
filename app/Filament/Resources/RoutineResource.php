@@ -9,6 +9,7 @@ use App\Models\Routine;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Livewire\Component as Livewire;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
@@ -37,14 +38,18 @@ class RoutineResource extends Resource
                         Select::make('exam.name')
                         ->label('Exam')
                         ->relationship('exam', 'name')
-                        ->live() // Make it reactive to changes
-                            ->afterStateUpdated(function ($state, $set, $get) {
-                                // Fetch the exam date when the exam is changed
+                        ->live()
+                        ->afterStateUpdated(function ($state, Livewire $livewire, Forms\Set $set) {
+                            if ($state) {
                                 $exam = \App\Models\Exam::find($state);
                                 if ($exam) {
-                                    $set('exam_date', $exam->exam_date);
+                                    $set('start_time', $exam->start_time);
+                                    $set('end_time', $exam->end_time);
                                 }
-                            }),
+                            }
+                        }),
+                        DatePicker::make('start_time')->label('Start Time'),
+                        DatePicker::make('end_time')->label('End Time'),
                         Hidden::make('exam_date'),
                         DatePicker::make('start_time')->label('Start Time'),
                         DatePicker::make('end_time')->label('End Time'),
