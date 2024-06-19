@@ -39,7 +39,7 @@ class RoutineResource extends Resource
                             ->relationship('exam', 'name')
                             ->reactive()
                             ->afterStateUpdated(function ($state, Livewire $livewire, Forms\Set $set, Forms\Get $get) {
-                                if ($state && $livewire->isEditing) {
+                                if ($state) {
                                     $exam = \App\Models\Exam::find($state);
                                     if ($exam) {
                                         $set('start_time', $exam->start_time);
