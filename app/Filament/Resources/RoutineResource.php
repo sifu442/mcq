@@ -48,25 +48,9 @@ class RoutineResource extends Resource
                                 }
                             }),
                         DatePicker::make('start_time')
-                            ->label('Start Time')
-                            ->default(function (Forms\Get $get) {
-                                $examId = $get('exam_id');
-                                if ($examId) {
-                                    $exam = \App\Models\Exam::find($examId);
-                                    return $exam ? $exam->start_time : null;
-                                }
-                                return null;
-                            }),
+                            ->label('Start Time'),
                         DatePicker::make('end_time')
-                            ->label('End Time')
-                            ->default(function (Forms\Get $get) {
-                                $examId = $get('exam_id');
-                                if ($examId) {
-                                    $exam = \App\Models\Exam::find($examId);
-                                    return $exam ? $exam->end_time : null;
-                                }
-                                return null;
-                            }),
+                            ->label('End Time'),
                     ])
             ]);
     }
