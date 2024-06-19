@@ -35,7 +35,7 @@ class RoutineResource extends Resource
                         'lg' => 3
                     ])
                     ->schema([
-                        TextInput::make('exam.name')
+                        TextInput::make('exam_name')
                             ->label('Exam'),
                             //->relationship('exam', 'name'),
                         DateTimePicker::make('start_time')
