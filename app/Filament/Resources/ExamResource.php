@@ -37,7 +37,7 @@ class ExamResource extends Resource
                 ->required()
                 ->unique(ignoreRecord: true)
                 ->translateLabel(),
-            Select::make('course_id')->relationship('course', 'title')->required(),
+            //Select::make('course_id')->relationship('course', 'title')->required(),
             TextInput::make('duration')->required()->numeric()->suffix('Minutes')->translateLabel(),
             TextInput::make('gap')->required()->numeric()->suffix('Days')->translateLabel()->default(3),
             TextInput::make('participation_time')->required()->numeric()->suffix('Hours')->translateLabel(),
