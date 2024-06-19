@@ -15,13 +15,15 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\ReplicateAction;
 use App\Filament\Resources\ExamResource\Pages;
 use App\Filament\Resources\ExamResource\RelationManagers\QuestionsRelationManager;
 
 class ExamResource extends Resource
 {
     protected static ?string $model = Exam::class;
+
+    //protected static ?string $modelLabel = 'পরীক্ষা';
+    //protected static ?string $pluralModelLabel = 'পরীক্ষাসমূহ';
 
     protected static ?string $navigationGroup = 'Course Content';
 
