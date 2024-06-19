@@ -24,7 +24,8 @@ class Exam extends Model
 
     public function routines()
     {
-        return $this->hasMany(Routine::class);
+        return $this->belongsToMany(Routine::class, 'exam_routine')
+            ->withPivot('start_time', 'end_time');
     }
     
 
