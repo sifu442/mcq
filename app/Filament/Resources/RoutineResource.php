@@ -39,9 +39,12 @@ class RoutineResource extends Resource
                         ->label('Exam')
                         ->relationship('exam', 'name')
                         ->live()
-                        ->afterStateUpdated(function ($state, Livewire $livewire, Forms\Set $set) {
-                            if ($state) {
+                        ->afterStateUpdated(function ($state, Livewire $livewire, Forms\Set $set, Forms\Get $get) {
+                            // Check if the state is set and the form is not in create mode
+                            if ($state && !$livewire->isCreate()) {
+                                // Fetch the exam
                                 $exam = \App\Models\Exam::find($state);
+                                // If exam exists, set start and end time
                                 if ($exam) {
                                     $set('start_time', $exam->start_time);
                                     $set('end_time', $exam->end_time);
