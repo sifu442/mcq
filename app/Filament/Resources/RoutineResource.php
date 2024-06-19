@@ -36,7 +36,15 @@ class RoutineResource extends Resource
                     ->schema([
                         Select::make('exam_id')
                             ->label('Exam')
-                            ->relationship('exam', 'name'),
+                            ->relationship('exam', 'name')
+                            ->live() // Make the field reactive to changes
+                            ->afterStateUpdated(function (callable $set, $state) {
+                                if ($state) {
+                                    $exam = Exam::find($state);
+                                    $set('start_time', $exam->start_time);
+                                    $set('end_time', $exam->end_time);
+                                }
+                            }),
                         DateTimePicker::make('start_time')
                             ->label('Start Time'),
                         DateTimePicker::make('end_time')
