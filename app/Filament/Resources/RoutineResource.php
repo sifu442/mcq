@@ -37,15 +37,10 @@ class RoutineResource extends Resource
                         Select::make('exam_id')
                             ->label('Exam')
                             ->relationship('exam', 'name')
-                            ->reactive()
-                            ->afterStateUpdated(function ($state, Livewire $livewire, Forms\Set $set, Forms\Get $get) {
-                                if ($state) {
-                                    $exam = \App\Models\Exam::find($state);
-                                    if ($exam) {
-                                        $set('start_time', $exam->start_time);
-                                        $set('end_time', $exam->end_time);
-                                    }
-                                }
+                            ->live()
+                            ->dehydrated(false)
+                            ->afterStateUpdated(function (Livewire $livewire) {
+                                $livewire->reset('data.exam_id');
                             }),
                         DatePicker::make('start_time')
                             ->label('Start Time')
