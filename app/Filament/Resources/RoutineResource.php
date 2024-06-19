@@ -20,6 +20,7 @@ use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\RoutineResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\RoutineResource\RelationManagers;
+use Filament\Forms\Components\Builder;
 
 class RoutineResource extends Resource
 {
@@ -36,7 +37,7 @@ class RoutineResource extends Resource
                         'lg' => 3
                     ])
                     ->schema([
-                        Repeater::make('exams')
+                        Builder::make('exams')
                             ->relationship('exams')
                             ->schema([
                                 Select::make('exam_id')
