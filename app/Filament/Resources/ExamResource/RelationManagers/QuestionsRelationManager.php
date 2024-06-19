@@ -69,7 +69,8 @@ class QuestionsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make(),
+                Tables\Actions\AttachAction::make()
+                    ->preloadRecordSelect(),
                 $this->getQuestionAttachAction(),
             ])
             ->actions([
