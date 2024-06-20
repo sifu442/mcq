@@ -48,6 +48,7 @@ class EnrollmentResource extends Resource
                 Repeater::make('routine')
                     ->schema([
                         Select::make('exam_id')
+                            ->fromQuery(Exam::all(), 'name')
                             ->native(false)
                             ->disabled(),
                         DatePicker::make('start_time'),
