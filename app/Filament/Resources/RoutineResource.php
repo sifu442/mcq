@@ -38,7 +38,7 @@ class RoutineResource extends Resource
                     ->schema([
                                 Select::make('exam_id')
                                     ->label('Exam')
-                                    ->relationship('exam', 'name')
+                                    ->relationship('exams', 'name')
                                     ->required(),
                                 DateTimePicker::make('start_time')
                                     ->label('Start Time')
