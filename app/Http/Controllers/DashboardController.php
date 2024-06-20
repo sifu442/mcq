@@ -69,6 +69,6 @@ class DashboardController extends Controller
             }
         }
 
-        return view('dashboard.exams', compact('ongoingExams', 'upcomingExams', 'previousExams'));
+        return view('exams', compact('ongoingExams', 'upcomingExams', 'previousExams'));
     }
 }
