@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="">
-        {{-- <h2 class="text-center">Welcome, {{ $user->name }}</h2> --}}
+        <h2 class="text-center">Welcome, {{ $user->name }}</h2>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">

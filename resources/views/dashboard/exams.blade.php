@@ -1,3 +1,5 @@
+<!-- resources/views/exams.blade.php -->
+
 <x-app-layout>
     <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab"
