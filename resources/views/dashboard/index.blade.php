@@ -11,10 +11,10 @@
             @foreach ($enrollments as $enrollment)
                 <a href="{{-- route('exams', ['course' => $course->id]) --}}" class="no-underline">
                     <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 transition duration-150 ease-in-out">
-                        <img class="rounded-t-lg w-full" src="/path/to/your/image.jpg" alt="{{ $enrollment->course->title }}" />
+                        {{--<img class="rounded-t-lg w-full" src="/path/to/your/image.jpg" alt="{{ $enrollment->course->title }}" />--}}
                         <div class="p-5">
                             <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                {{ $course->title }}
+                                {{ $enrollment->course->title }}
                             </h2>
                             <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ $enrollment->course->time_span }} day/days</p>
                             <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ $enrollment->course->price }} Taka</p>
