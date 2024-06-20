@@ -34,12 +34,24 @@ class EnrollmentResource extends Resource
                 Select::make('course_id')
                     ->relationship('course', 'title')
                     ->live()
+                    ->afterStateUpdated(fn (callable $set) => $set('routine', []))
                     ->required(),
                 DatePicker::make('enrolled_at'),
                 Repeater::make('routine')
                     ->schema([
                         Select::make('exam_id')
-                            ->options(Exam::all()->pluck('name', 'id')),
+                        ->options(function (callable $get) {
+                            // Get the selected course_id
+                            $courseId = $get('course_id');
+
+                            if ($courseId) {
+                                // Fetch exams related to the selected course
+                                return Exam::where('course_id', $courseId)->pluck('name', 'id');
+                            }
+
+                            // Return empty array if no course selected
+                            return [];
+                        }),
                         DatePicker::make('start_time'),
                         DatePicker::make('end_time'),
                     ])
