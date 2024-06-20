@@ -22,6 +22,8 @@ class EnrollmentResource extends Resource
 {
     protected static ?string $model = Enrollment::class;
 
+    protected static ?string $modelLabel = 'Enrollment & Routine';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
