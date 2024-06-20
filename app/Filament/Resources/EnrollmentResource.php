@@ -25,7 +25,8 @@ class EnrollmentResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('user')
+                Select::make('user_id')
+                    ->relationship('user', 'name')
             ]);
     }
 
