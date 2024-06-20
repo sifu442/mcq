@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources;
 
 use stdClass;
@@ -29,6 +28,8 @@ class RoutineResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $exams = Exam::all(); // Retrieve all exams
+
         return $form
             ->schema([
                 Section::make()
@@ -36,22 +37,32 @@ class RoutineResource extends Resource
                         'lg' => 3
                     ])
                     ->schema([
-                        Repeater::make('exams')
-                        ->label('Exam Dates')
-                        ->schema([
-                            Select::make('exam_id')
-                                ->label('Exam')
-                                ->relationship('exam', 'name')
-                                ->required(),
-                            DateTimePicker::make('start_time')
-                                ->label('Start Time')
-                                ->required(),
-                            DateTimePicker::make('end_time')
-                                ->label('End Time')
-                                ->required(),
-                        ])
-                        ->relationship('exams')
-                        ->default(1)
+                        Repeater::make('exam_routines')
+                            ->label('Exam Routines')
+                            ->recordActions([
+                                function (Form $form) use ($exams) {
+                                    return $form
+                                        ->schema([
+                                            Select::make('exam_id')
+                                                ->label('Exam')
+                                                ->options($exams->pluck('name', 'id')->toArray()) // Assuming 'name' is the attribute to display
+                                                ->required(),
+                                            DateTimePicker::make('start_time')
+                                                ->label('Start Time')
+                                                ->required(),
+                                            DateTimePicker::make('end_time')
+                                                ->label('End Time')
+                                                ->required(),
+                                        ]);
+                                },
+                            ])
+                            ->records(
+                                $exams->map(function ($exam) {
+                                    return [
+                                        'exam_id' => $exam->id,
+                                    ];
+                                })
+                            )
                     ])
             ]);
     }
