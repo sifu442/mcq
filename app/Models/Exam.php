@@ -22,12 +22,7 @@ class Exam extends Model
         return $this->belongsToMany(Course::class);
     }
 
-    public function routines()
-    {
-        return $this->belongsToMany(Routine::class, 'exam_routine')
-            ->withPivot('start_time', 'end_time');
-    }
-    
+
 
     // public function isOngoingOrUpcoming()
     // {
