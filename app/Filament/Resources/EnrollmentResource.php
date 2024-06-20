@@ -27,6 +27,10 @@ class EnrollmentResource extends Resource
             ->schema([
                 Select::make('user_id')
                     ->relationship('user', 'name')
+                    ->required(),
+                Select::make('course_id')
+                    ->relationship('course', 'title')
+                    ->required(),
             ]);
     }
 
