@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\EnrollmentResource\Pages;
 use App\Filament\Resources\EnrollmentResource\RelationManagers;
+use App\Models\Exam;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 
 class EnrollmentResource extends Resource
@@ -30,7 +33,16 @@ class EnrollmentResource extends Resource
                     ->required(),
                 Select::make('course_id')
                     ->relationship('course', 'title')
+                    ->live()
                     ->required(),
+                DatePicker::make('enrolled_at'),
+                Repeater::make('routine')
+                    ->schema([
+                        Select::make('exam_id')
+                            ->options(Exam::all()->pluck('name', 'id')),
+                        DatePicker::make('start_time'),
+                        DatePicker::make('end_time'),
+                    ])
             ]);
     }
 
