@@ -31,6 +31,8 @@ class EnrollmentResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $exams = Exam::pluck('name', 'id')->toArray();
+
         return $form
             ->schema([
                 Section::make()
@@ -48,7 +50,7 @@ class EnrollmentResource extends Resource
                 Repeater::make('routine')
                     ->schema([
                         Select::make('exam_id')
-                            ->fromQuery(Exam::all(), 'name')
+                            ->options($exams)
                             ->native(false)
                             ->disabled(),
                         DatePicker::make('start_time'),
