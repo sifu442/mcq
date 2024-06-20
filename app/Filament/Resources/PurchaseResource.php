@@ -52,15 +52,25 @@ class PurchaseResource extends Resource
                         // Retrieve the exams for the course
                         $exams = DB::table('course_exam')->where('course_id', $courseId)->get();
                         $examRoutines = [];
-                        foreach ($exams as $exam) {
+                        $currentStartTime = $enrolledAt; // Start with enrolled time as first start time
+
+                        foreach ($exams as $index => $exam) {
                             $gapDays = DB::table('exams')->where('id', $exam->exam_id)->value('gap');
-                            $startTime = Carbon::now()->addDays($gapDays);
-                            $endTime = $startTime->copy()->addHours(2); // Assuming participation_time is 2 hours
+                            $participationHours = DB::table('exams')->where('id', $exam->exam_id)->value('participation_time');
+
+                            // Calculate start and end times for the exam
+                            $startTime = $currentStartTime->copy()->addDays($gapDays);
+                            $endTime = $startTime->copy()->addHours($participationHours);
+
+                            // Prepare routine entry
                             $examRoutines[] = [
                                 'exam_id' => $exam->exam_id,
                                 'start_time' => $startTime->toDateTimeString(),
                                 'end_time' => $endTime->toDateTimeString(),
                             ];
+
+                            // Update current start time for next exam
+                            $currentStartTime = $startTime;
                         }
 
                         // Create the enrollment record
@@ -68,7 +78,7 @@ class PurchaseResource extends Resource
                             'user_id' => $userId,
                             'course_id' => $courseId,
                             'enrolled_at' => $enrolledAt,
-                            'routine' => $examRoutines,
+                            'routine' => json_encode($examRoutines),
                         ]);
                     })
                     ->color('success')
