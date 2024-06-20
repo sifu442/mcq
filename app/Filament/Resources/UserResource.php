@@ -42,7 +42,6 @@ class UserResource extends Resource
                 ->relationship('roles', 'name')
                 ->placeholder('Select a role')
                 ->required(),
-            Select::make('permissions')
         ]);
     }
 
