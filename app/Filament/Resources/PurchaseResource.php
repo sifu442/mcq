@@ -2,17 +2,22 @@
 
 namespace App\Filament\Resources;
 
+
+use Carbon\Carbon;
 use Filament\Tables;
 use App\Models\Routine;
 use App\Models\Purchase;
+use App\Models\Enrollment;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Illuminate\Support\Facades\DB;
 use Filament\Tables\Actions\Action;
+use Illuminate\Support\Facades\Log;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\PurchaseResource\Pages;
-
+use App\Filament\Resources\PurchaseResource\Pages\ListPurchases;
 
 class PurchaseResource extends Resource
 {
