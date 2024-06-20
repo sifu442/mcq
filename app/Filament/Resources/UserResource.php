@@ -39,7 +39,7 @@ class UserResource extends Resource
                 ->dehydrated(fn(?string $state): bool => filled($state))
                 ->required(fn(string $operation): bool => $operation === 'create'),
             Select::make('role')
-                ->options(Role::all()->pluck('name', 'id')->toArray())
+                ->relationship('roles', 'name')
                 ->placeholder('Select a role')
                 ->required(),
             Select::make('permissions')
