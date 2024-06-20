@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Course;
+use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,9 +13,11 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $enrolledCourses = auth()->user()->courses;
+        $enrollments = Enrollment::with(['course'])
+            ->where('user_id', $user->id)
+            ->get();
 
-        return view('dashboard.dashboard', compact('enrolledCourses'));
+        return view('dashboard', compact('user', 'enrollments'));
     }
 
     public function exams()
