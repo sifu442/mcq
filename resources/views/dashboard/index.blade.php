@@ -9,7 +9,7 @@
             <h2>You are not enrolled in any courses.</h2>
         @else
             @foreach ($enrollments as $enrollment)
-                <a href="{{-- route('exams', ['course' => $course->id]) --}}" class="no-underline">
+                <a href="{{ route('exams', ['course' => $course->id]) }}" class="no-underline">
                     <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 transition duration-150 ease-in-out">
                         {{--<img class="rounded-t-lg w-full" src="/path/to/your/image.jpg" alt="{{ $enrollment->course->title }}" />--}}
                         <div class="p-5">
