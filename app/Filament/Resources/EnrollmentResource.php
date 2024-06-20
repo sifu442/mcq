@@ -54,6 +54,7 @@ class EnrollmentResource extends Resource
                         DatePicker::make('end_time'),
                     ])
                     ->live()
+                    ->addable(false)
                     ->columns(3)
                     ->columnSpanFull()
             ]);
