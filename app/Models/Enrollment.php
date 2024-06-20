@@ -13,7 +13,7 @@ class Enrollment extends Model
 
     protected $casts = [
         'enrolled_at' => 'datetime',
-        'routine' => 'json'
+        'routine' => 'array'
     ];
 
     public function user()

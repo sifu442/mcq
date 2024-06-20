@@ -40,29 +40,30 @@ class RoutineResource extends Resource
                         Repeater::make('exam_routines')
                             ->label('Exam Routines')
                             ->recordActions([
-                                function (Form $form) use ($exams) {
-                                    return $form
-                                        ->schema([
-                                            Select::make('exam_id')
-                                                ->label('Exam')
-                                                ->options($exams->pluck('name', 'id')->toArray()) // Assuming 'name' is the attribute to display
-                                                ->required(),
-                                            DateTimePicker::make('start_time')
-                                                ->label('Start Time')
-                                                ->required(),
-                                            DateTimePicker::make('end_time')
-                                                ->label('End Time')
-                                                ->required(),
-                                        ]);
-                                },
+                                Form::make()->schema([
+                                    Select::make('exam_id')
+                                        ->label('Exam')
+                                        ->options($exams->pluck('name', 'id')->toArray()) // Assuming 'name' is the attribute to display
+                                        ->required(),
+                                    DateTimePicker::make('start_time')
+                                        ->label('Start Time')
+                                        ->required(),
+                                    DateTimePicker::make('end_time')
+                                        ->label('End Time')
+                                        ->required(),
+                                ])
                             ])
-                            ->records(
-                                $exams->map(function ($exam) {
-                                    return [
-                                        'exam_id' => $exam->id,
-                                    ];
-                                })
-                            )
+                            ->recordViews([
+                                TextColumn::make('Exam')->getValueUsing(function ($record) {
+                                    return $record->exam->name;
+                                }),
+                                TextColumn::make('Start Time')->getValueUsing(function ($record) {
+                                    return $record->start_time;
+                                }),
+                                TextColumn::make('End Time')->getValueUsing(function ($record) {
+                                    return $record->end_time;
+                                }),
+                            ])
                     ])
             ]);
     }
