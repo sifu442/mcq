@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Exam;
-use App\Models\Enrollment;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Enrollment;
+use App\Models\Exam;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -19,15 +20,21 @@ class DashboardController extends Controller
         return view('dashboard.index', compact('user', 'enrollments'));
     }
 
-    public function show()
+    public function showExams(Request $request)
     {
         $user = Auth::user();
         $now = Carbon::now();
+        $courseId = $request->input('course');
 
         // Retrieve exams related to the logged-in user's enrollments
-        $enrollments = Enrollment::with(['course', 'course.exams'])
-            ->where('user_id', $user->id)
-            ->get();
+        $enrollmentsQuery = Enrollment::with(['course', 'course.exams'])
+            ->where('user_id', $user->id);
+
+        if ($courseId) {
+            $enrollmentsQuery->where('course_id', $courseId);
+        }
+
+        $enrollments = $enrollmentsQuery->get();
 
         $ongoingExams = [];
         $upcomingExams = [];
@@ -69,7 +76,6 @@ class DashboardController extends Controller
             }
         }
 
-        return view('exams', compact('ongoingExams', 'upcomingExams', 'previousExams'));
+        return view('dashboard.exams', compact('ongoingExams', 'upcomingExams', 'previousExams'));
     }
-
 }
