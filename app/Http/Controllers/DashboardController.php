@@ -34,8 +34,9 @@ class DashboardController extends Controller
         $previousExams = [];
 
         foreach ($enrollments as $enrollment) {
-            $routine = json_decode($enrollment->routine, true);
-            if ($routine) {
+            $routine = $enrollment->routine; // Assuming it's already an array
+
+            if (is_array($routine)) {
                 foreach ($routine as $examRoutine) {
                     $exam = Exam::find($examRoutine['exam_id']);
                     if ($exam) {
@@ -69,6 +70,6 @@ class DashboardController extends Controller
             }
         }
 
-        return view('exams', compact('ongoingExams', 'upcomingExams', 'previousExams'));
+        return view('dashboard.exams', compact('ongoingExams', 'upcomingExams', 'previousExams'));
     }
 }
