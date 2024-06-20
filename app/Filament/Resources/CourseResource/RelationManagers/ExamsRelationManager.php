@@ -3,15 +3,12 @@
 namespace App\Filament\Resources\CourseResource\RelationManagers;
 
 use stdClass;
-use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class ExamsRelationManager extends RelationManager
@@ -21,12 +18,32 @@ class ExamsRelationManager extends RelationManager
     public function form(Form $form): Form
     {
         return $form->schema([
-            TextInput::make('name')->required()->translateLabel(),
-            Select::make('course_id')->relationship('courses', 'title')->required(),
-            TextInput::make('syllabus')->required()->translateLabel(),
-            TextInput::make('duration')->required()->numeric()->suffix('Minutes')->translateLabel(),
-            TextInput::make('delay_days')->label('Gap')->required()->numeric()->suffix('Days')->translateLabel(),
-            TextInput::make('available_for_hours')->required()->numeric()->suffix('Hours')->translateLabel(),
+            TextInput::make('name')
+                ->required()
+                ->translateLabel(),
+            Select::make('course_id')
+                ->label('Select A Course')
+                ->relationship('courses', 'title')
+                ->required(),
+            TextInput::make('syllabus')
+                ->required()
+                ->translateLabel(),
+            TextInput::make('duration')
+                ->required()
+                ->numeric()
+                ->suffix('Minutes')
+                ->translateLabel(),
+            TextInput::make('delay_days')
+                ->label('Gap')
+                ->required()
+                ->numeric()
+                ->suffix('Days')
+                ->translateLabel(),
+            TextInput::make('available_for_hours')
+                ->required()
+                ->numeric()
+                ->suffix('Hours')
+                ->translateLabel(),
             Select::make('score')
                 ->required()
                 ->options([
@@ -56,19 +73,25 @@ class ExamsRelationManager extends RelationManager
                         return (string) ($rowLoop->iteration + $livewire->tableRecordsPerPage * ($currentPage - 1));
                     }),
                 TextColumn::make('name'),
-                TextColumn::make('questions_count')->label('Number of Questions')->counts('questions')->translateLabel('Question'),
+                TextColumn::make('questions_count')
+                    ->label('Number of Questions')
+                    ->counts('questions')
+                    ->translateLabel('Question'),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make()->preloadRecordSelect(),
+                Tables\Actions\AttachAction::make()
+                    ->preloadRecordSelect(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
                     ->requiresConfirmation()
             ])
-            ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
+            ->bulkActions([Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\DeleteBulkAction::make()
+                ])]);
     }
 }
