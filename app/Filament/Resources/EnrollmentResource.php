@@ -40,9 +40,9 @@ class EnrollmentResource extends Resource
                 Repeater::make('routine')
                     ->schema([
                         Select::make('exam_id')
-                        ->options(function (callable $get) {
+                        ->options(function (callable $get, $set, $state) {
                             // Get the selected course_id
-                            $courseId = $get('course_id');
+                            $courseId = $get('../../course_id'); // Use relative path to get the course_id from parent level
 
                             if ($courseId) {
                                 // Fetch exams related to the selected course
@@ -51,10 +51,12 @@ class EnrollmentResource extends Resource
 
                             // Return empty array if no course selected
                             return [];
-                        }),
+                        })
+                        ->live(),
                         DatePicker::make('start_time'),
                         DatePicker::make('end_time'),
                     ])
+                    ->live()
             ]);
     }
 
