@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\EnrollmentResource\Pages;
 use App\Filament\Resources\EnrollmentResource\RelationManagers;
+use Filament\Forms\Components\Select;
 
 class EnrollmentResource extends Resource
 {
@@ -24,7 +25,7 @@ class EnrollmentResource extends Resource
     {
         return $form
             ->schema([
-                
+                Select::make('user')
             ]);
     }
 
