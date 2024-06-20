@@ -36,7 +36,6 @@ class RoutineResource extends Resource
                         'lg' => 3
                     ])
                     ->schema([
-
                                 Select::make('exam_id')
                                     ->label('Exam')
                                     ->relationship('exam', 'name')
@@ -47,7 +46,7 @@ class RoutineResource extends Resource
                                 DateTimePicker::make('end_time')
                                     ->label('End Time')
                                     ->required(),
-                        
+
                     ])
             ]);
     }
