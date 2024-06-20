@@ -3,8 +3,6 @@
 namespace App\Filament\Resources;
 
 use Carbon\Carbon;
-use Filament\Tables;
-use App\Models\Routine;
 use App\Models\Purchase;
 use App\Models\Enrollment;
 use Filament\Tables\Table;
@@ -12,8 +10,9 @@ use Filament\Resources\Resource;
 use Illuminate\Support\Facades\DB;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\PurchaseResource\Pages;
-use Illuminate\Database\Eloquent\Collection;
 
 class PurchaseResource extends Resource
 {
@@ -49,7 +48,7 @@ class PurchaseResource extends Resource
 
                         $exams = DB::table('course_exam')->where('course_id', $courseId)->get();
                         $examRoutines = [];
-                        $currentStartTime = $enrolledAt; 
+                        $currentStartTime = $enrolledAt;
 
                         foreach ($exams as $index => $exam) {
                             $gapDays = DB::table('exams')->where('id', $exam->exam_id)->value('gap');
@@ -88,7 +87,11 @@ class PurchaseResource extends Resource
                     ->requiresConfirmation()
                     ->visible(fn ($record) => $record->status === 'pending'),
             ])
-            ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
+            ->bulkActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make()
+                ])
+            ]);
     }
 
     public static function getRelations(): array
