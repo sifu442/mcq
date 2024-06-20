@@ -46,21 +46,6 @@ class RoutineResource extends Resource
                         DateTimePicker::make('end_time')
                             ->label('End Time')
                             ->required(),
-                        Repeater::make('exams')
-                            ->label('Exam Dates')
-                            ->relationship('exams') // adjust if necessary
-                            ->schema([
-                                Select::make('exam_id')
-                                    ->label('Exam')
-                                    ->relationship('exams', 'name') // use 'exam' instead of 'exams'
-                                    ->disabled(),
-                                DateTimePicker::make('start_time')
-                                    ->label('Start Time')
-                                    ->disabled(),
-                                DateTimePicker::make('end_time')
-                                    ->label('End Time')
-                                    ->disabled(),
-                            ])
                     ])
             ]);
     }
