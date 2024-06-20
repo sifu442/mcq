@@ -4,12 +4,12 @@ namespace App\Filament\Resources;
 
 use stdClass;
 use Filament\Forms;
-use App\Models\Role;
 use App\Models\User;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
@@ -38,20 +38,11 @@ class UserResource extends Resource
                 ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
                 ->dehydrated(fn(?string $state): bool => filled($state))
                 ->required(fn(string $operation): bool => $operation === 'create'),
-            Select::make('roles')
-                ->relationship('roles', 'name')
-                ->preload(),
-            //     Select::make('role')
-            //     ->options(Role::all()->pluck('name', 'id')->toArray())
-            //     ->placeholder('Select a role')
-            //     ->dependable()
-            //     ->required(),
-            // Select::make('permissions')
-            //     ->dependOn('role')
-            //     ->getDependingValueFrom('role', function ($roleId) {
-            //         $role = Role::find($roleId);
-            //         return $role ? $role->permissions->pluck('name')->toArray() : [];
-            //     }),
+            Select::make('role')
+                ->options(Role::all()->pluck('name', 'id')->toArray())
+                ->placeholder('Select a role')
+                ->required(),
+            Select::make('permissions')
         ]);
     }
 
