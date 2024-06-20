@@ -17,7 +17,7 @@ class DashboardController extends Controller
             ->where('user_id', $user->id)
             ->get();
 
-        return view('dashboard', compact('user', 'enrollments'));
+        return view('dashboard.index', compact('user', 'enrollments'));
     }
 
     public function exams()
