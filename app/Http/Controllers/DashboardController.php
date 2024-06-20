@@ -24,7 +24,7 @@ class DashboardController extends Controller
         return view('dashboard.index', compact('user', 'enrollments', 'courses'));
     }
 
-    public function showExams(Request $request)
+    public function show(Request $request)
     {
         $user = Auth::user();
         $now = Carbon::now();
