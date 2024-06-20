@@ -22,7 +22,7 @@ class ExamsRelationManager extends RelationManager
     {
         return $form->schema([
             TextInput::make('name')->required()->translateLabel(),
-            Select::make('course_id')->relationship('course', 'title')->required(),
+            Select::make('course_id')->relationship('courses', 'title')->required(),
             TextInput::make('syllabus')->required()->translateLabel(),
             TextInput::make('duration')->required()->numeric()->suffix('Minutes')->translateLabel(),
             TextInput::make('delay_days')->label('Gap')->required()->numeric()->suffix('Days')->translateLabel(),
