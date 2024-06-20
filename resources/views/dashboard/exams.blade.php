@@ -130,25 +130,12 @@
         </li>
     </ul>
 </div>
-@if (count($ongoingExams) > 0)
-@foreach ($ongoingExams as $exam)
+
 <div id="default-tab-content">
     <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="previous" role="tabpanel" aria-labelledby="previous-tab">
-        <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-            Exam: {{ $exam->name }}
-        </p>
-        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-            Time: {{ $exam->duration }} Mins
-        </p>
-        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-            Ended At: {{ $exam->end_date }}
-        @else
-        <p class="text-sm text-gray-500 dark:text-gray-400">No previous exams.</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong class="font-medium text-gray-800 dark:text-white">previous tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+
     </div>
-    @endforeach
-    @endif
-
-
 
     <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
         <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong class="font-medium text-gray-800 dark:text-white">Dashboard tab's associated content</strong>. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
