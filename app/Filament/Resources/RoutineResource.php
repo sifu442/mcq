@@ -36,16 +36,22 @@ class RoutineResource extends Resource
                         'lg' => 3
                     ])
                     ->schema([
-                        Select::make('exam_id')
-                            ->label('Exam')
-                            ->relationship('exams', 'name') // use 'exam' instead of 'exams'
-                            ->required(),
-                        DateTimePicker::make('start_time')
-                            ->label('Start Time')
-                            ->required(),
-                        DateTimePicker::make('end_time')
-                            ->label('End Time')
-                            ->required(),
+                        Repeater::make('exams')
+                        ->label('Exam Dates')
+                        ->schema([
+                            Select::make('exam_id')
+                                ->label('Exam')
+                                ->relationship('exams', 'name')
+                                ->required(),
+                            DateTimePicker::make('start_time')
+                                ->label('Start Time')
+                                ->required(),
+                            DateTimePicker::make('end_time')
+                                ->label('End Time')
+                                ->required(),
+                        ])
+                        ->relationship('exams')
+                        ->default(1)
                     ])
             ]);
     }
