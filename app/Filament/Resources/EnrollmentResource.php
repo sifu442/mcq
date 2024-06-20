@@ -16,6 +16,7 @@ use App\Filament\Resources\EnrollmentResource\RelationManagers;
 use App\Models\Exam;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 
 class EnrollmentResource extends Resource
@@ -32,31 +33,23 @@ class EnrollmentResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('user_id')
+                Section::make()
+                    ->columns(3)
+                    ->schema([
+                        Select::make('user_id')
                     ->relationship('user', 'name')
-                    ->required(),
+                    ->disabled(),
                 Select::make('course_id')
                     ->relationship('course', 'title')
-                    ->live()
-                    ->afterStateUpdated(fn (callable $set) => $set('routine', []))
-                    ->required(),
-                DatePicker::make('enrolled_at'),
+                    ->disabled(),
+                DatePicker::make('enrolled_at')
+                    ->disabled(),
+                    ]),
                 Repeater::make('routine')
                     ->schema([
                         Select::make('exam_id')
-                        ->options(function (callable $get, $set, $state) {
-                            // Get the selected course_id
-                            $courseId = $get('../../course_id'); // Use relative path to get the course_id from parent level
-
-                            if ($courseId) {
-                                // Fetch exams related to the selected course
-                                return Exam::where('course_id', $courseId)->pluck('name', 'id');
-                            }
-
-                            // Return empty array if no course selected
-                            return [];
-                        })
-                        ->live(),
+                            ->native(false)
+                            ->disabled(),
                         DatePicker::make('start_time'),
                         DatePicker::make('end_time'),
                     ])
