@@ -76,11 +76,12 @@
                                 </li>
                             </ol>
                         </a>
-                    </div>
-                @endforeach
-            @else
+                        @endforeach
+                @else
                 <p class="text-sm text-gray-500 dark:text-gray-400">No upcoming exams.</p>
-            @endif
+                @endif
+                    </div>
+
         </div>
 
         @if (count($previousExams) > 0)
