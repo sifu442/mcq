@@ -35,7 +35,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardCon
 Route::middleware(['auth:sanctum', 'verified'])->get('/user/profile', function () {
         return view('profile.show');
     })->name('profile.show');
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard/{course}/exams', [DashboardController::class, 'exams'])->name('dashboard.exams');
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard/{course}/exams', [DashboardController::class, 'show'])->name('dashboard.exams');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/exam/{examId}', ExamPage::class)->name('exam.page');
