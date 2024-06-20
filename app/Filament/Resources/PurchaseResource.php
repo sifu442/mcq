@@ -68,7 +68,7 @@ class PurchaseResource extends Resource
                             'user_id' => $userId,
                             'course_id' => $courseId,
                             'enrolled_at' => $enrolledAt,
-                            'routine' => json_encode($examRoutines),
+                            'routine' => json_encode($examRoutines, JSON_UNESCAPED_SLASHES),
                         ]);
                     })
                     ->color('success')
