@@ -57,7 +57,7 @@
             @if (count($upcomingExams) > 0)
                 @foreach ($upcomingExams as $exam)
                     <div class="mb-4">
-                        <a href="{{ route('exam.page', ['examId' => $exam->id]) }}">
+                        <a href="{{-- route('exam.page', ['examId' => $exam->id]) --}}">
                             <ol class="max-w-lg divide-y divide-gray-200 dark:divide-gray-700 list-decimal list-inside">
                                 <li class="pb-3 sm:pb-4">
                                     <span class="flex items-center space-x-4 rtl:space-x-reverse">
