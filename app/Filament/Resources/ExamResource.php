@@ -39,8 +39,9 @@ class ExamResource extends Resource
                 ->translateLabel(),
             Select::make('course_id')
                 ->relationship('courses', 'title')
-                ->label('Select Course')
-                ->required(),
+                ->multiple()
+                ->preload(5)
+                ->label('Course'),
             TextInput::make('duration')
                 ->required()
                 ->numeric()

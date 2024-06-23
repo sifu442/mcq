@@ -3,6 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Filament\Panel;
+use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
+use Filament\Models\Contracts\FilamentUser;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Jetstream\HasProfilePhoto;
 use Spatie\Permission\Traits\HasRoles;
@@ -13,14 +17,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
-    use HasApiTokens;
-    use HasFactory;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
-    use HasRoles;
+    use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable, HasRoles, HasPanelShield;
 
     /**
      * The attributes that are mass assignable.
@@ -61,6 +60,16 @@ class User extends Authenticatable
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
+    }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'enrollments')->withPivot('enrolled_at');
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->hasRole(['super_admin', 'teacher']);
     }
 
 }

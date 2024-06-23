@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use App\Models\Enrollment;
-use App\Models\Exam;
 use Carbon\Carbon;
+use App\Models\Exam;
+use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\ExamResponse;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -19,8 +21,9 @@ class DashboardController extends Controller
         return view('dashboard.index', compact('user', 'enrollments'));
     }
 
-    public function show()
+    public function show($slug)
     {
+        $course = Course::where('slug', $slug)->firstOrFail();
         $user = Auth::user();
         $now = Carbon::now();
 
@@ -34,7 +37,12 @@ class DashboardController extends Controller
         $previousExams = [];
 
         foreach ($enrollments as $enrollment) {
-            $routine = $enrollment->routine; // Assuming it's already an array
+            $routine = $enrollment->routine; // Assuming routine is already an array
+
+            // Ensure $routine is an array
+            if (is_string($routine)) {
+                $routine = json_decode($routine, true);
+            }
 
             if (is_array($routine)) {
                 foreach ($routine as $examRoutine) {
@@ -43,7 +51,19 @@ class DashboardController extends Controller
                         $startTime = Carbon::parse($examRoutine['start_time']);
                         $endTime = Carbon::parse($examRoutine['end_time']);
 
-                        if ($now->between($startTime, $endTime)) {
+                        $examResponse = ExamResponse::where('user_id', $user->id)
+                            ->where('exam_id', $exam->id)
+                            ->first();
+
+                        if ($examResponse) {
+                            $previousExams[] = (object) [
+                                'id' => $exam->id,
+                                'name' => $exam->name,
+                                'duration' => $exam->duration,
+                                'end_date' => $endTime->format('Y-m-d H:i:s'),
+                                'total_score' => $examResponse->total_score
+                            ];
+                        } elseif ($now->between($startTime, $endTime)) {
                             $ongoingExams[] = (object) [
                                 'id' => $exam->id,
                                 'name' => $exam->name,

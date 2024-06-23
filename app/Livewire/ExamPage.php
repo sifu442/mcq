@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Exam;
+use App\Models\Enrollment;
 use App\Models\ExamResponse;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
@@ -21,31 +22,54 @@ class ExamPage extends Component
     public function mount($examId)
     {
         $this->examId = $examId;
+        $this->loadExam();
+    }
+
+    public function loadExam()
+    {
+        $user = Auth::user();
+
+        // Find the enrollment for the course that has the exam
+        $enrollment = Enrollment::where('user_id', $user->id)
+            ->whereHas('course.exams', function ($query) {
+                $query->where('exams.id', $this->examId);
+            })
+            ->first();
+
+        if (!$enrollment) {
+            \Log::info('Enrollment not found', ['user_id' => $user->id, 'exam_id' => $this->examId]);
+            abort(403, 'You are not enrolled in this course or this exam is not part of your routine.');
+        }
+
+        // Check if the exam is in the user's routine
+        $examInRoutine = collect($enrollment->routine)->firstWhere('exam_id', $this->examId);
+
+        if (!$examInRoutine) {
+            \Log::info('Exam not found in routine', ['exam_id' => $this->examId, 'routine' => $enrollment->routine]);
+            abort(403, 'This exam is not part of your routine.');
+        }
+
+        // Check exam availability using start_time from the routine
+        $examStartTime = Carbon::parse($examInRoutine['start_time']);
+
+        if (Carbon::now()->lt($examStartTime)) {
+            \Log::info('Exam not available yet', ['exam_id' => $this->examId, 'start_time' => $examStartTime]);
+            abort(403, 'This exam is not yet available.');
+        }
+
+        // Load the exam details including questions
         $this->exam = Exam::with('questions')->find($this->examId);
 
         if (!$this->exam) {
             abort(404, 'Exam not found');
         }
 
-        $user = Auth::user();
-
         // Check if the user has already submitted the exam
-        $examResponse = ExamResponse::where('user_id', $user->id)->where('exam_id', $this->examId)->first();
+        $examResponse = ExamResponse::where('user_id', $user->id)
+            ->where('exam_id', $this->examId)
+            ->first();
         if ($examResponse) {
             abort(403, 'You have already submitted this exam.');
-        }
-
-        // Check if the exam is ongoing or upcoming
-        $now = Carbon::now();
-        $enrolledAt = $user->courses()->where('course_id', $this->exam->course_id)->first()->pivot->enrolled_at;
-
-        $examStartTime = Carbon::parse($enrolledAt)->addDays($this->exam->delay_days);
-        $examEndTime = $examStartTime->clone()->addHours($this->exam->available_for_hours);
-
-        if ($now->lt($examStartTime)) {
-            abort(403, 'This exam is not yet available.');
-        } elseif ($now->gt($examEndTime)) {
-            abort(403, 'This exam is no longer available.');
         }
 
         $this->duration = $this->exam->duration;
