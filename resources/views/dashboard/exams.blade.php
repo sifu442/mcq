@@ -54,9 +54,9 @@
 
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="upcoming" role="tabpanel"
             aria-labelledby="upcoming-tab">
-            @if (count($upcomingExams) > 0)
-                @foreach ($upcomingExams as $exam)
                     <div class="mb-4">
+                        @if (count($upcomingExams) > 0)
+                            @foreach ($upcomingExams as $exam)
                         <a href="{{-- route('exam.page', ['examId' => $exam->id]) --}}">
                             <ol class="max-w-lg divide-y divide-gray-200 dark:divide-gray-700 list-decimal list-inside">
                                 <li class="pb-3 sm:pb-4">
@@ -77,9 +77,9 @@
                             </ol>
                         </a>
                         @endforeach
-                @else
-                <p class="text-sm text-gray-500 dark:text-gray-400">No upcoming exams.</p>
-                @endif
+                        @else
+                        <p class="text-sm text-gray-500 dark:text-gray-400">No upcoming exams.</p>
+                        @endif
                     </div>
 
         </div>
