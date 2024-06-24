@@ -31,7 +31,8 @@ class ListExams extends ListRecords
                         ->required()
                         ->translateLabel(),
                     Select::make('course_id')
-                        ->relationship('course', 'title')
+                        ->relationship('courses', 'title')
+                        ->multiple()
                         ->required(),
                     TextInput::make('duration')
                         ->required()

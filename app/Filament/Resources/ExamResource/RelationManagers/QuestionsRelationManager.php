@@ -15,6 +15,8 @@ use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Actions\AttachAction;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class QuestionsRelationManager extends RelationManager
@@ -30,7 +32,7 @@ class QuestionsRelationManager extends RelationManager
                     TextInput::make('name')->required()
                 ])
                 ->required(),
-            TextInput::make('exam_name'),
+            TextInput::make('previous_exam'),
             TextInput::make('post'),
             DatePicker::make('date'),
             CKEditor::make('title')
@@ -69,8 +71,9 @@ class QuestionsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make()
+                AttachAction::make()
                     ->preloadRecordSelect(),
+                    CreateAction::make(),
                 $this->getQuestionAttachAction(),
             ])
             ->actions([
