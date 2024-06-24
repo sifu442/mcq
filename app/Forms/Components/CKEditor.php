@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Forms\Components;
 
 use Filament\Forms\Components\Field;
@@ -12,8 +11,8 @@ class CKEditor extends Field
     {
         parent::setUp();
 
-        $this->dehydrateStateUsing(static function (string $state): string {
-            return trim($state);
+        $this->dehydrateStateUsing(static function (?string $state): string {
+            return trim($state ?? '');
         });
     }
 }

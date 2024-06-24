@@ -25,30 +25,78 @@ class QuestionsRelationManager extends RelationManager
 
     public function form(Form $form): Form
     {
+        $latestExam = Question::latest()->first();
+
+        if(is_null($latestExam)) {
+            return $form->schema([
+                Select::make('subject_id')
+                    ->relationship('subject', 'name')
+                    ->createOptionForm([
+                        TextInput::make('name')->required()
+                    ])
+                    ->preload()
+                    ->required(),
+                TextInput::make('previous_exam')
+                    ->label('Exam Name'),
+                TextInput::make('post'),
+                DatePicker::make('date')
+                    ->native(false),
+                CKEditor::make('title')
+                    ->required()
+                    ->columnSpanFull(),
+                Repeater::make('options')
+                    ->required()
+                    ->deletable(false)
+                    ->defaultItems(4)
+                    ->maxItems(4)
+                    ->schema([
+                        CKEditor::make('options'),
+                        Checkbox::make('is_correct')
+                            ->fixIndistinctState()
+                            ->name('Correct Answer'),
+                    ])
+                    ->columnSpanFull(),
+                CKEditor::make('explanation')
+                    ->columnSpanFull()
+            ]);
+        }
+
         return $form->schema([
             Select::make('subject_id')
                 ->relationship('subject', 'name')
                 ->createOptionForm([
                     TextInput::make('name')->required()
                 ])
+                ->default($latestExam->subject_id)
+                ->preload()
                 ->required(),
-            TextInput::make('previous_exam'),
-            TextInput::make('post'),
-            DatePicker::make('date'),
+            TextInput::make('previous_exam')
+                ->label('Exam Name')
+                ->default($latestExam->previous_exam),
+            TextInput::make('post')
+                ->default($latestExam->post),
+            DatePicker::make('date')
+                ->default($latestExam->date)
+                ->native(false),
             CKEditor::make('title')
-                ->required()
-                ->columnSpanFull(),
+                ->columnSpanFull()
+
+                ->required(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->schema([
-                    CKEditor::make('options'),
-                    Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
+                    CKEditor::make('options')
+                    ,
+                    Checkbox::make('is_correct')
+                        ->fixIndistinctState()
+                        ->name('Correct Answer'),
                 ])
                 ->columnSpanFull(),
             CKEditor::make('explanation')
+
                 ->columnSpanFull()
         ]);
     }
