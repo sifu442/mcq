@@ -37,7 +37,6 @@ class ExamPage extends Component
             ->first();
 
         if (!$enrollment) {
-            \Log::info('Enrollment not found', ['user_id' => $user->id, 'exam_id' => $this->examId]);
             abort(403, 'You are not enrolled in this course or this exam is not part of your routine.');
         }
 
@@ -45,7 +44,6 @@ class ExamPage extends Component
         $examInRoutine = collect($enrollment->routine)->firstWhere('exam_id', $this->examId);
 
         if (!$examInRoutine) {
-            \Log::info('Exam not found in routine', ['exam_id' => $this->examId, 'routine' => $enrollment->routine]);
             abort(403, 'This exam is not part of your routine.');
         }
 
@@ -53,7 +51,6 @@ class ExamPage extends Component
         $examStartTime = Carbon::parse($examInRoutine['start_time']);
 
         if (Carbon::now()->lt($examStartTime)) {
-            \Log::info('Exam not available yet', ['exam_id' => $this->examId, 'start_time' => $examStartTime]);
             abort(403, 'This exam is not yet available.');
         }
 
