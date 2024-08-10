@@ -42,6 +42,7 @@ class QuestionResource extends Resource
                     ])
                     ->preload()
                     ->required(),
+                TextInput::make('topic'),
                 TextInput::make('previous_exam')
                     ->label('Exam Name'),
                 TextInput::make('post'),

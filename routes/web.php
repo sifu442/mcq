@@ -24,6 +24,7 @@ Route::get('/exam/{examId}', ExamPage::class)->name('exam.page');
 Route::get('/', HomeController::class)->name('home');
 
 Route::get('/course/{course:slug}', [CourseController::class, 'show'])->name('course.show');
+Route::get('/courses/{course}/download-routine', [CourseController::class, 'downloadRoutine'])->name('course.downloadRoutine');
 
 // Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
 //          Route::get('/dashboard', function () {

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('subject_id')->constrained()->onDelete('cascade')->nullable();
             $table->json('options');
             $table->string('previous_exam')->nullable();
+            $table->string('topic')->nullable();
             $table->string('post')->nullable();
             $table->timestamp('date')->nullable();
             $table->longText('explanation')->nullable();

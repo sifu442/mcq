@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Resources;
 
 use Carbon\Carbon;
@@ -13,6 +12,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\PurchaseResource\Pages;
+use Illuminate\Support\Facades\Log;
 
 class PurchaseResource extends Resource
 {
@@ -65,6 +65,9 @@ class PurchaseResource extends Resource
                             $currentStartTime = $startTime;
                         }
 
+                        // Log the exam routines to verify the content
+                        Log::info('Exam Routines', ['exam_routines' => $examRoutines]);
+
                         Enrollment::create([
                             'user_id' => $userId,
                             'course_id' => $courseId,
@@ -108,4 +111,3 @@ class PurchaseResource extends Resource
         ];
     }
 }
-

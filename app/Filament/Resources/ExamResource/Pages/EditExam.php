@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ExamResource\Pages;
 
 use App\Filament\Resources\ExamResource;
 use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditExam extends EditRecord

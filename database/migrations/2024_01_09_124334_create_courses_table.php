@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('price', 8, 2);
             $table->decimal('discounted_price', 8, 2)->nullable();
             $table->boolean('featured')->default(false);
+            $table->boolean('hidden')->default(false);
             $table->decimal('total_exams');
             $table->string('resources')->nullable();
             $table->timestamps();

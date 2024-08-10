@@ -36,23 +36,23 @@ class ExamPage extends Component
             })
             ->first();
 
-        if (!$enrollment) {
-            abort(403, 'You are not enrolled in this course or this exam is not part of your routine.');
-        }
+        // if (!$enrollment) {
+        //     abort(403, 'You are not enrolled in this course or this exam is not part of your routine.');
+        // }
 
-        // Check if the exam is in the user's routine
-        $examInRoutine = collect($enrollment->routine)->firstWhere('exam_id', $this->examId);
+        // // Check if the exam is in the user's routine
+        // $examInRoutine = collect($enrollment->routine)->firstWhere('exam_id', $this->examId);
 
-        if (!$examInRoutine) {
-            abort(403, 'This exam is not part of your routine.');
-        }
+        // if (!$examInRoutine) {
+        //     abort(403, 'This exam is not part of your routine.');
+        // }
 
         // Check exam availability using start_time from the routine
-        $examStartTime = Carbon::parse($examInRoutine['start_time']);
+        //$examStartTime = Carbon::parse($examInRoutine['start_time']);
 
-        if (Carbon::now()->lt($examStartTime)) {
-            abort(403, 'This exam is not yet available.');
-        }
+        // if (Carbon::now()->lt($examStartTime)) {
+        //     abort(403, 'This exam is not yet available.');
+        // }
 
         // Load the exam details including questions
         $this->exam = Exam::with('questions')->find($this->examId);
