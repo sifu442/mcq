@@ -17,6 +17,7 @@
             font-family: 'Noto Sans Bengali', sans-serif;
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('pdf.css') }}" type="text/css">
     <title>{{ $course->title }}</title>
 </head>
 
@@ -29,26 +30,6 @@
             <li>{{ $subject->name }}</li>
         @endforeach
     </ul>
-
-    <h2>Exam Routine:</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Exam Name</th>
-                <th>Date</th>
-                <th>Day</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($examInfo as $exam)
-                <tr>
-                    <td>{{ $exam['examName'] }}</td>
-                    <td>{{ $exam['date'] }}</td>
-                    <td>{{ $exam['dayOfWeek'] }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
     <table class="w-full">
         <tr>
             <td class="w-half">
@@ -87,22 +68,19 @@
             <tr class="items">
                 @foreach($data as $item)
                     <td>
-                        {{ $item['quantity'] }}
+                        {{ $exam['examName'] }}
                     </td>
                     <td>
-                        {{ $item['description'] }}
+                        {{ $exam['date'] }}
                     </td>
                     <td>
-                        {{ $item['price'] }}
+                        {{ $exam['dayOfWeek'] }}
                     </td>
                 @endforeach
             </tr>
         </table>
     </div>
 
-    <div class="total">
-        Total: $129.00 USD
-    </div>
 
     <div class="footer margin-top">
         <div>Thank you</div>
