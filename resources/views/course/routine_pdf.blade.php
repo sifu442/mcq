@@ -54,7 +54,7 @@
                         {{ $exam['examName'] }}
                     </td>
                     <td>
-                        {{ $exam['date'] }}
+                        {{ $exam['date'] }} ({{ $exam['dayOfWeek'] }})
                     </td>
                     <td>
                         {{ $exam['dayOfWeek'] }}
@@ -67,8 +67,7 @@
 
     <div class="footer margin-top">
         <div>Thank you</div>
-        <div>&copy; Laravel Daily</div>
+        <div>&copy; MCQ</div>
     </div>
 </body>
-
 </html>
