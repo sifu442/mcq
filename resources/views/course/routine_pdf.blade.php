@@ -42,27 +42,10 @@
     </table>
 
     <div class="margin-top">
-        <table class="w-full">
-            <tr>
-                <td class="w-half">
-                    <div><h4>To:</h4></div>
-                    <div>John Doe</div>
-                    <div>123 Acme Str.</div>
-                </td>
-                <td class="w-half">
-                    <div><h4>From:</h4></div>
-                    <div>Laravel Daily</div>
-                    <div>London</div>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="margin-top">
         <table class="products">
             <tr>
-                <th>Qty</th>
-                <th>Description</th>
+                <th>Exam Name</th>
+                <th>Date</th>
                 <th>Price</th>
             </tr>
             <tr class="items">
