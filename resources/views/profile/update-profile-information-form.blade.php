@@ -52,9 +52,13 @@
             </div>
         @endif
 
-        <!-- Name -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="user_id" value="{{ __('User ID') }}" />
+            <x-input id="user_id" type="text" class="mt-1 block w-full bg-gray-100" value="{{ $this->user->id }}" readonly />
+        </div>
+        
+        <!-- Name -->
+        <div class="col-span-6 sm:col-span-4">
             <x-label for="name" value="{{ __('Name') }}" />
             <x-input id="name" type="text" class="mt-1 block w-full" wire:model="state.name" required autocomplete="name" />
             <x-input-error for="name" class="mt-2" />
