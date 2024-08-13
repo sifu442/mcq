@@ -16,7 +16,7 @@
 
             <div class="mt-4">
                 <x-label for="mobile_phone" value="{{ __('Mobile Phone') }}" />
-                <x-input id="mobile_phone" class="block mt-1 w-full" type="number" name="mobile_phone" :value="old('mobile_phone')" required autocomplete="username" />
+                <x-input id="mobile_phone" class="block mt-1 w-full" type="tel" name="mobile_phone" :value="old('mobile_phone')" required autocomplete="username" />
             </div>
 
             <div class="relative mt-4">
