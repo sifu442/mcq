@@ -144,6 +144,7 @@ class QuestionsRelationManager extends RelationManager
                     ->label('Search Question')
                     ->relationship('questions', 'title')
                     ->searchable()
+                    ->preload()
                     ->native(false)
                     ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
                     ->live()
