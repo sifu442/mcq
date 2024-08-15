@@ -17,7 +17,7 @@
             font-family: 'Noto Sans Bengali', sans-serif;
         }
     </style>
-    <link rel="stylesheet" href="{{ asset('') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/pdf.css') }}" type="text/css">
     <title>{{ $course->title }}</title>
 </head>
 
