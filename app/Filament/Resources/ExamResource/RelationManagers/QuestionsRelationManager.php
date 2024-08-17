@@ -15,8 +15,6 @@ use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
-use Filament\Tables\Actions\AttachAction;
-use Filament\Tables\Actions\CreateAction;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class QuestionsRelationManager extends RelationManager
@@ -119,9 +117,6 @@ class QuestionsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                // AttachAction::make()
-                //     ->preloadRecordSelect(),
-                //     CreateAction::make(),
                 $this->getQuestionAttachAction(),
             ])
             ->actions([
