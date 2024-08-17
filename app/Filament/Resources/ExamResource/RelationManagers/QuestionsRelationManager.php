@@ -119,7 +119,22 @@ class QuestionsRelationManager extends RelationManager
             ->headerActions([
                 Action::make('Attach')
                     ->action(function (array $data): void {
-                        $this->ownerRecord->questions()->attach($data['search-question']);
+                        if ($data['search-question']) {
+                            // Attach the selected question to the Exam model
+                            $this->ownerRecord->questions()->attach($data['search-question']);
+                        } else {
+                            // Create a new question and attach it to the Exam model
+                            $newQuestion = Question::create([
+                                'subject_id' => $data['subject_id'],
+                                'previous_exam' => $data['previous_exam'],
+                                'post' => $data['post'],
+                                'date' => $data['date'],
+                                'title' => $data['title'],
+                                'options' => $data['options'],
+                                'explanation' => $data['explanation'],
+                            ]);
+                            $this->ownerRecord->questions()->attach($newQuestion->id);
+                        }
                     })
                     ->form([
                         Select::make('search-question')
@@ -132,6 +147,43 @@ class QuestionsRelationManager extends RelationManager
                                     ->toArray()
                             )
                             ->getOptionLabelUsing(fn ($value): ?string => Question::find($value)?->title)
+                            ->live(),
+                        Select::make('subject_id')
+                        ->relationship('subject', 'name')
+                        ->createOptionForm([
+                            TextInput::make('name')->required()
+                        ])
+                        ->required()
+                        ->visible(fn ($get) => !$get('search-question')),
+                        TextInput::make('previous_exam')
+                            ->label('Exam Name')
+                            ->visible(fn ($get) => !$get('search-question')),
+                        TextInput::make('post')
+                            ->visible(fn ($get) => !$get('search-question')),
+                        DatePicker::make('date')
+                            ->native(false)
+                            ->visible(fn ($get) => !$get('search-question')),
+                        CKEditor::make('title')
+                            ->columnSpanFull()
+                            ->required()
+                            ->visible(fn ($get) => !$get('search-question')),
+                        Repeater::make('options')
+                            ->required()
+                            ->deletable(false)
+                            ->defaultItems(4)
+                            ->maxItems(4)
+                            ->schema([
+                                CKEditor::make('options'),
+                                Checkbox::make('is_correct')
+                                    ->fixIndistinctState()
+                                    ->name('Correct Answer'),
+                            ])
+                            ->columnSpanFull()
+                            ->visible(fn ($get) => !$get('search-question')),
+                        CKEditor::make('explanation')
+                            ->columnSpanFull()
+                            ->visible(fn ($get) => !$get('search-question')),
+
                     ])
             ])
             ->actions([
