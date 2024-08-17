@@ -1,5 +1,8 @@
 <x-app-layout>
     @section('content')
+    @php
+    $carouselItems = \App\Models\Carousel::all();
+    @endphp
         <div id="default-carousel" class="relative w-full" data-carousel="slide">
             <!-- Carousel wrapper -->
             <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
