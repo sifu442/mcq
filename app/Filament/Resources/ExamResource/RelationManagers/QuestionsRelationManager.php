@@ -147,10 +147,10 @@ class QuestionsRelationManager extends RelationManager
                                     ->pluck('title', 'id')
                                     ->toArray()
                             )
-                            ->afterStateUpdated(function (Set $set, $state) {
-                                $question = Question::find($state);
-                                if ($question) {
-                                    $set('title', $question->title);
+                            ->afterStateUpdated(function (callable $set, $state, $get) {
+                                // If no question is selected, copy the search text to the title field
+                                if (!$state) {
+                                    $set('title', $get('search-question'));
                                 }
                             })
                             ->getOptionLabelUsing(fn ($value): ?string => Question::find($value)?->title)
