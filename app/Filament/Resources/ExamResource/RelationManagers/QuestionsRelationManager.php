@@ -148,7 +148,7 @@ class QuestionsRelationManager extends RelationManager
                                     ->toArray()
                             )
                             ->getOptionLabelUsing(fn ($value): ?string => Question::find($value)?->title)
-                            ->live(onBlur: true),
+                            ->live(),
                         Select::make('subject_id')
                         ->native(false)
                         ->relationship('subject', 'name')
