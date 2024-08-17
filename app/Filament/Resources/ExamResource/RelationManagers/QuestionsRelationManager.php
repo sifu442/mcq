@@ -18,6 +18,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\AttachAction;
 use Filament\Resources\RelationManagers\RelationManager;
+use Webbingbrasil\FilamentCopyActions\Forms\Actions\CopyAction;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -142,6 +143,7 @@ class QuestionsRelationManager extends RelationManager
                             ->label('Search Questions')
                             ->native(false)
                             ->searchable()
+                            ->prefixAction(CopyAction::make()->copyable(fn ($component) => $component->getOptionLabel()))
                             ->getSearchResultsUsing(fn (string $search): array =>
                                 Question::where('title', 'like', "%{$search}%")
                                     ->limit(50)
