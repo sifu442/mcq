@@ -16,6 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\AttachAction;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -117,7 +118,7 @@ class QuestionsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                $this->getQuestionAttachAction(),
+                AttachAction::make()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
