@@ -117,7 +117,8 @@ class QuestionsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-
+                AttachAction::make()
+                    ->isRecordSelectPreloaded()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
