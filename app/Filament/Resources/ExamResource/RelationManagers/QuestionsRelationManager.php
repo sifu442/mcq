@@ -147,14 +147,6 @@ class QuestionsRelationManager extends RelationManager
                                     ->pluck('title', 'id')
                                     ->toArray()
                             )
-                            ->afterStateUpdated(function ($state, Set $set) {
-                                if ($state) {
-                                    $question = Question::find($state);
-                                    $set('hidden_title', $question->title);
-                                } else {
-                                    $set('hidden_title', null);
-                                }
-                            })
                             ->getOptionLabelUsing(fn ($value): ?string => Question::find($value)?->title)
                             ->live(),
                         Select::make('subject_id')
