@@ -157,6 +157,7 @@ class QuestionsRelationManager extends RelationManager
                             ->getOptionLabelUsing(fn ($value): ?string => Question::find($value)?->title)
                             ->live(onBlur: true),
                         Select::make('subject_id')
+                        ->native(false)
                         ->relationship('subject', 'name')
                         ->createOptionForm([
                             TextInput::make('name')->required()
