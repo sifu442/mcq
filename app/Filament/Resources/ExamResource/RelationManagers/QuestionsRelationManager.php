@@ -117,8 +117,12 @@ class QuestionsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                
-                // AttachAction::make()
+                Action::make('create')
+                    ->label('Create Question')
+                    ->form([
+                        CKEditor::make('title')
+                            ->columnSpanFull()
+                    ]),
                 //     ->preloadRecordSelect(),
                 //     CreateAction::make(),
                 // $this->getQuestionAttachAction(),
