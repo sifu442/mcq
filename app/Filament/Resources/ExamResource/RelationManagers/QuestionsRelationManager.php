@@ -117,8 +117,11 @@ class QuestionsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                AttachAction::make()
-                    ->isRecordSelectPreloaded()
+                Action::make('Attach')
+                    ->form([
+                        Select::make('search-question')
+                            ->label('Search Question')
+                    ])
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
