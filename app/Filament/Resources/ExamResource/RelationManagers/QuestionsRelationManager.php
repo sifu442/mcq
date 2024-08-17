@@ -3,7 +3,6 @@ namespace App\Filament\Resources\ExamResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
-use Livewire\Livewire;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -12,7 +11,6 @@ use Illuminate\Support\HtmlString;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -123,21 +121,7 @@ class QuestionsRelationManager extends RelationManager
                     ->label('Create Question')
                     ->form([
                         CKEditor::make('title')
-            ->label('Question Title')
-            ->columnSpanFull()
-            ->reactive()
-            ->afterStateUpdated(fn ($state, $set) => $set('searchTerm', $state)),
-
-        // Include the Livewire component for searching
-        Fieldset::make('Matching Questions')
-            ->schema([
-                TextInput::make('searchTerm')
-                    ->label('Search')
-                    ->hidden()
-                    ->afterStateUpdated(fn ($state, $set) => $set('searchTerm', $state)),
-                Livewire::make('question-search'),
-            ])
-            ->columns(1),
+                            ->columnSpanFull()
                     ]),
                 //     ->preloadRecordSelect(),
                 //     CreateAction::make(),
