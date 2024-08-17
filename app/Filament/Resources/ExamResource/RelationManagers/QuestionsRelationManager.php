@@ -148,8 +148,8 @@ class QuestionsRelationManager extends RelationManager
                                     ->toArray()
                             )
                             ->afterStateUpdated(function (callable $set, $state) {
-                                if ($state) {
-                                    $set('title', '');
+                                if (is_null($state)) {
+                                    $set('title', $state);
                                 }
                             })
                             ->getOptionLabelUsing(fn ($value): ?string => Question::find($value)?->title)
@@ -173,12 +173,6 @@ class QuestionsRelationManager extends RelationManager
                         CKEditor::make('title')
                             ->columnSpanFull()
                             ->required()
-                            ->live()
-                            ->afterStateUpdated(function (callable $set, $state, $context) {
-                                if (empty($context['search-question'])) {
-                                    $set($state);
-                            }
-                            })
                             ->visible(fn ($get) => !$get('search-question')),
                         Repeater::make('options')
                             ->required()
