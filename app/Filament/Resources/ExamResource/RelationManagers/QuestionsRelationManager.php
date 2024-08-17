@@ -171,6 +171,12 @@ class QuestionsRelationManager extends RelationManager
                         CKEditor::make('title')
                             ->columnSpanFull()
                             ->required()
+                            ->live()
+                            ->afterStateUpdated(function (callable $set, $state, $context) {
+                                if (empty($context['search-question'])) {
+                                    $set($state);
+                                }
+                            })
                             ->visible(fn ($get) => !$get('search-question')),
                         Repeater::make('options')
                             ->required()
