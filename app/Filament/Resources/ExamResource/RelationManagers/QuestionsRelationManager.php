@@ -147,8 +147,10 @@ class QuestionsRelationManager extends RelationManager
                                     ->pluck('title', 'id')
                                     ->toArray()
                             )
-                            ->afterStateUpdated(function (callable $set) {
-                                $set('title', '');
+                            ->afterStateUpdated(function (callable $set, $state) {
+                                if ($state) {
+                                    $set('title', '');
+                                }
                             })
                             ->getOptionLabelUsing(fn ($value): ?string => Question::find($value)?->title)
                             ->live(onBlur: true),
