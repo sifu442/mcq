@@ -95,7 +95,6 @@ class QuestionsRelationManager extends RelationManager
                 ])
                 ->columnSpanFull(),
             CKEditor::make('explanation')
-
                 ->columnSpanFull()
         ]);
     }
