@@ -3,6 +3,7 @@ namespace App\Filament\Resources\ExamResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Forms\Set;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -15,8 +16,8 @@ use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
-use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Actions\AttachAction;
+use Filament\Resources\RelationManagers\RelationManager;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -146,6 +147,12 @@ class QuestionsRelationManager extends RelationManager
                                     ->pluck('title', 'id')
                                     ->toArray()
                             )
+                            ->afterStateUpdated(function (Set $set, $state) {
+                                $question = Question::find($state);
+                                if ($question) {
+                                    $set('title', $question->title);
+                                }
+                            })
                             ->getOptionLabelUsing(fn ($value): ?string => Question::find($value)?->title)
                             ->live(),
                         Select::make('subject_id')
