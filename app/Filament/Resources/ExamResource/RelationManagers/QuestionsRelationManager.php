@@ -112,14 +112,13 @@ class QuestionsRelationManager extends RelationManager
                         return (string) ($rowLoop->iteration + $livewire->tableRecordsPerPage * ($currentPage - 1));
                     }),
                 TextColumn::make('title')
-                ->formatStateUsing(fn (string $state): HtmlString => new HtmlString($state)),
+                    ->formatStateUsing(fn (string $state): HtmlString => new HtmlString($state)),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                AttachAction::make()
-                ->preloadRecordSelect()
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
