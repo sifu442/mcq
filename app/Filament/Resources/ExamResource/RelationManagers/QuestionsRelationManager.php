@@ -122,6 +122,13 @@ class QuestionsRelationManager extends RelationManager
                         Select::make('search-question')
                             ->label('Search Questions')
                             ->searchable()
+                            ->getSearchResultsUsing(fn (string $search): array =>
+                                Question::where('title', 'like', "%{$search}%")
+                                    ->limit(50)
+                                    ->pluck('title', 'id')
+                                    ->toArray()
+                            )
+                            ->getOptionLabelUsing(fn ($value): ?string => Question::find($value)?->title)
                     ])
             ])
             ->actions([
