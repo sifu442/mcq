@@ -140,6 +140,7 @@ class QuestionsRelationManager extends RelationManager
                     ->form([
                         Select::make('search-question')
                             ->label('Search Questions')
+                            ->native(false)
                             ->searchable()
                             ->getSearchResultsUsing(fn (string $search): array =>
                                 Question::where('title', 'like', "%{$search}%")
