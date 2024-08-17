@@ -27,6 +27,7 @@ class CarouselResource extends Resource
             ->schema([
                 FileUpload::make('image_path')
                     ->label('Image')
+                    ->multiple()
                     ->image()
                     ->required(),
                 TextInput::make('caption')
