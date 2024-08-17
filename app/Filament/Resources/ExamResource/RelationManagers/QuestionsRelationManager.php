@@ -120,7 +120,8 @@ class QuestionsRelationManager extends RelationManager
                 Action::make('Attach')
                     ->form([
                         Select::make('search-question')
-                            ->label('Search Question')
+                            ->label('Search Questions')
+                            ->searchable()
                     ])
             ])
             ->actions([
