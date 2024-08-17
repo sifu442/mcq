@@ -87,8 +87,7 @@ class QuestionsRelationManager extends RelationManager
                 ->defaultItems(4)
                 ->maxItems(4)
                 ->schema([
-                    CKEditor::make('options')
-                    ,
+                    CKEditor::make('options'),
                     Checkbox::make('is_correct')
                         ->fixIndistinctState()
                         ->name('Correct Answer'),
@@ -118,6 +117,7 @@ class QuestionsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
+                
                 // AttachAction::make()
                 //     ->preloadRecordSelect(),
                 //     CreateAction::make(),
@@ -134,75 +134,75 @@ class QuestionsRelationManager extends RelationManager
             ]);
     }
 
-    protected function getQuestionAttachAction(): Action
-    {
-        return Action::make('questionAttach')
-            ->label('Attach Question')
-            ->form([
-                Select::make('question_id')
-                    ->label('Search Question')
-                    ->relationship('questions', 'title')
-                    ->searchable()
-                    ->preload()
-                    ->native(false)
-                    ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
-                    ->live()
-                    ->afterStateUpdated(fn ($state, callable $set, callable $get) => $this->handleQuestionSelection($state, $set, $get)),
-                Forms\Components\Group::make([
-                    Select::make('subject_id')
-                        ->relationship('subject', 'name')
-                        ->required(),
-                        TextInput::make('exam_name'),
-                        TextInput::make('post'),
-                        DatePicker::make('date'),
-                        CKEditor::make('title')
-                        ->required(),
+    // protected function getQuestionAttachAction(): Action
+    // {
+    //     return Action::make('questionAttach')
+    //         ->label('Attach Question')
+    //         ->form([
+    //             Select::make('question_id')
+    //                 ->label('Search Question')
+    //                 ->relationship('questions', 'title')
+    //                 ->searchable()
+    //                 ->preload()
+    //                 ->native(false)
+    //                 ->getSearchResultsUsing(fn (string $query) => Question::where('title', 'like', "%{$query}%")->pluck('title', 'id'))
+    //                 ->live()
+    //                 ->afterStateUpdated(fn ($state, callable $set, callable $get) => $this->handleQuestionSelection($state, $set, $get)),
+    //             Forms\Components\Group::make([
+    //                 Select::make('subject_id')
+    //                     ->relationship('subject', 'name')
+    //                     ->required(),
+    //                     TextInput::make('exam_name'),
+    //                     TextInput::make('post'),
+    //                     DatePicker::make('date'),
+    //                     CKEditor::make('title')
+    //                     ->required(),
 
-                    Repeater::make('options')
-                        ->required()
-                        ->deletable(false)
-                        ->defaultItems(4)
-                        ->maxItems(4)
-                        ->schema([
-                            TextInput::make('options'),
-                            Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
-                        ]),
-                    CKEditor::make('explanation')
-                ])->hidden(fn (callable $get) => $get('showAdditionalFields'))
-            ])
-            ->action(function (array $data) {
-                $this->handleFormSubmit($data);
-            });
-    }
+    //                 Repeater::make('options')
+    //                     ->required()
+    //                     ->deletable(false)
+    //                     ->defaultItems(4)
+    //                     ->maxItems(4)
+    //                     ->schema([
+    //                         TextInput::make('options'),
+    //                         Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
+    //                     ]),
+    //                 CKEditor::make('explanation')
+    //             ])->hidden(fn (callable $get) => $get('showAdditionalFields'))
+    //         ])
+    //         ->action(function (array $data) {
+    //             $this->handleFormSubmit($data);
+    //         });
+    // }
 
-    protected function handleQuestionSelection($state, callable $set, callable $get)
-    {
-        // Set visibility for additional fields
-        $set('showAdditionalFields', !$state);
+    // protected function handleQuestionSelection($state, callable $set, callable $get)
+    // {
+    //     // Set visibility for additional fields
+    //     $set('showAdditionalFields', !$state);
 
-        // Populate the title field with the search query if no question is selected
-        if (!$state) {
-            $searchQuery = $get('question_id');
-            $set('title', $searchQuery);
-        }
-    }
+    //     // Populate the title field with the search query if no question is selected
+    //     if (!$state) {
+    //         $searchQuery = $get('question_id');
+    //         $set('title', $searchQuery);
+    //     }
+    // }
 
-    protected function handleFormSubmit(array $data)
-    {
-        if (isset($data['question_id'])) {
-            // Attach existing question to exam
-            $this->ownerRecord->questions()->attach($data['question_id']);
-        } else {
-            // Create new question and attach to exam
-            $question = Question::create([
-                'title' => $data['title'],
-                'subject_id' => $data['subject_id'],
-                'options' => $data['options'],
-                'explanation' => $data['explanation'],
-            ]);
+    // protected function handleFormSubmit(array $data)
+    // {
+    //     if (isset($data['question_id'])) {
+    //         // Attach existing question to exam
+    //         $this->ownerRecord->questions()->attach($data['question_id']);
+    //     } else {
+    //         // Create new question and attach to exam
+    //         $question = Question::create([
+    //             'title' => $data['title'],
+    //             'subject_id' => $data['subject_id'],
+    //             'options' => $data['options'],
+    //             'explanation' => $data['explanation'],
+    //         ]);
 
-            $this->ownerRecord->questions()->attach($question->id);
-        }
+    //         $this->ownerRecord->questions()->attach($question->id);
+    //     }
 
-    }
+    // }
 }
