@@ -28,6 +28,7 @@ class CarouselResource extends Resource
                 FileUpload::make('image_path')
                     ->label('Image')
                     ->multiple()
+                    ->disk('local')
                     ->directory('images')
                     ->image()
                     ->required(),
