@@ -80,7 +80,6 @@ class QuestionsRelationManager extends RelationManager
                 ->native(false),
             CKEditor::make('title')
                 ->columnSpanFull()
-
                 ->required(),
             Repeater::make('options')
                 ->required()
