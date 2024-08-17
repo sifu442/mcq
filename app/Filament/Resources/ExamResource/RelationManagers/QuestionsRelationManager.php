@@ -148,7 +148,7 @@ class QuestionsRelationManager extends RelationManager
                                     ->toArray()
                             )
                             ->afterStateUpdated(function (callable $set) {
-                                $set('title', '');
+                                $set('title', '%{$search}%');
                             })
                             ->getOptionLabelUsing(fn ($value): ?string => Question::find($value)?->title)
                             ->live(onBlur: true),
