@@ -118,6 +118,9 @@ class QuestionsRelationManager extends RelationManager
             ])
             ->headerActions([
                 Action::make('Attach')
+                    ->action(function (array $data): void {
+                        $this->ownerRecord->questions()->attach($data['search-question']);
+                    })
                     ->form([
                         Select::make('search-question')
                             ->label('Search Questions')
