@@ -9,6 +9,8 @@ use Filament\Tables\Table;
 use App\Forms\Components\CKEditor;
 use Illuminate\Support\HtmlString;
 use Filament\Tables\Actions\Action;
+use App\Http\Livewire\LoadQuestions;
+use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
@@ -117,12 +119,19 @@ class QuestionsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Action::make('create')
-                    ->label('Create Question')
-                    ->form([
-                        CKEditor::make('title')
-                            ->columnSpanFull()
-                    ]),
+                Action::make('Create Question')
+    ->label('Create Question')
+    ->form([
+        CKEditor::make('title')
+            ->columnSpanFull()
+            ->reactive()
+            ->afterStateUpdated(function ($state, callable $get) {
+                $this->emit('updateSearch', $state);
+            }),
+        Field::make('questions')
+            ->label('Matching Questions')
+            ->component(LoadQuestions::class)
+    ])
                 //     ->preloadRecordSelect(),
                 //     CreateAction::make(),
                 // $this->getQuestionAttachAction(),
