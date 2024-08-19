@@ -136,7 +136,7 @@ class QuestionsRelationManager extends RelationManager
                             ->required()
                             ->live(onBlur: false, debounce: 500)
                             ->afterStateUpdated(function (?string $state, $set) {
-                                if(strlen($state) >= 1) {
+                                if (strlen($state) >= 3) {
                                     $searchResults = static::searchQuestions($state);
                                     $set('search_results', $searchResults);
                                 } else {
@@ -146,12 +146,18 @@ class QuestionsRelationManager extends RelationManager
                         Placeholder::make('search_results')
                         ->label("Select Questions")
                         ->content(function ($get) {
-                            $html = "<ul>";
                             $questions = $get('search_results') ?? [];
-                            foreach ($questions as $question) {
-                                $html .= "<li>{$question['title']}</li>";
+                            $html = '<ul>';
+
+                            if (empty($questions)) {
+                                $html .= '<li>' . __('No matching questions found.') . '</li>';
+                            } else {
+                                foreach ($questions as $question) {
+                                    $html .= '<li>' . htmlspecialchars($question['title']) . '</li>';
+                                }
                             }
-                            $html .= "</ul>";
+
+                            $html .= '</ul>';
                             return new HtmlString($html);
                         })
                         ->columnSpanFull(),
@@ -182,17 +188,15 @@ class QuestionsRelationManager extends RelationManager
                 ]),
             ]);
     }
-
     public static function searchQuestions(?string $searchTerm): array
-{
-    if (blank($searchTerm)) {
-        return [];
-    }
+    {
+        if (blank($searchTerm)) {
+            return [];
+        }
 
-    // Perform the search in the `questions` table
-    return Question::where('title', 'like', '%' . $searchTerm . '%')
-        ->limit(10)
-        ->get(['id', 'title'])
-        ->toArray();
-}
+        return Question::where('title', 'like', '%' . $searchTerm . '%')
+            ->limit(10)
+            ->get(['id', 'title'])
+            ->toArray();
+    }
 }
