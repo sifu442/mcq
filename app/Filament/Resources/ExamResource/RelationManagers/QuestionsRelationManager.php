@@ -127,20 +127,14 @@ class QuestionsRelationManager extends RelationManager
                                 $html .= '<li>' . __('No matching questions found.') . '</li>';
                             } else {
                                 foreach ($questions as $question) {
-                                    $html .=
-                                        '<li>
-                                        <button
-                                            type="button"
-                                            onclick="window.livewire.emit(\'fillQuestionData\', ' .
-                                        $question['id'] .
-                                        ')"
-                                            class="text-left w-full"
-                                        >
-                                            ' .
-                                        htmlspecialchars($question['title']) .
-                                        '
-                                        </button>
-                                    </li>';
+                                    $html .= '<button
+    type="button"
+    onclick="window.livewire.emit(\'fillQuestionData\', ' . $question['id'] . ')"
+    class="text-left w-full"
+>
+    ' . htmlspecialchars($question['title']) . '
+</button>';
+
                                 }
                             }
 
@@ -175,24 +169,22 @@ class QuestionsRelationManager extends RelationManager
 
     public function fillQuestionData($questionId)
 {
-    // Check if this method is being called
-    dd('fillQuestionData method called with ID: ' . $questionId);
-
     $question = Question::find($questionId);
 
     if ($question) {
-        $this->form->fill([
-            'subject_id' => $question->subject_id,
-            'previous_exam' => $question->previous_exam,
-            'post' => $question->post,
-            'date' => $question->date,
-            'title' => $question->title,
-            'options' => $question->options, // Assuming options is an array or similar format
-            'explanation' => $question->explanation,
-        ]);
+        // Manually set each field
+        $this->form->getState()['subject_id'] = $question->subject_id;
+        $this->form->getState()['previous_exam'] = $question->previous_exam;
+        $this->form->getState()['post'] = $question->post;
+        $this->form->getState()['date'] = $question->date;
+        $this->form->getState()['title'] = $question->title;
+        $this->form->getState()['options'] = $question->options;
+        $this->form->getState()['explanation'] = $question->explanation;
 
-        $this->search_results = null; // Clear search results after selection
+        // Clear search results after selection
+        $this->search_results = null;
     }
 }
+
 
 }
