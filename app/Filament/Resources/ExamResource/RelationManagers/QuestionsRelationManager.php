@@ -136,7 +136,7 @@ class QuestionsRelationManager extends RelationManager
                             ->required()
                             ->live(onBlur: false, debounce: 500)
                             ->afterStateUpdated(function (?string $state, $set) {
-                                if (strlen($state) >= 3) {
+                                if (strlen($state) >= 1) {
                                     $searchResults = static::searchQuestions($state);
                                     $set('search_results', $searchResults);
                                 } else {
