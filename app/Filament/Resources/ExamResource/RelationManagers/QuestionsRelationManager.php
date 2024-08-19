@@ -22,7 +22,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
-    
+
 
     public function form(Form $form): Form
     {
@@ -101,7 +101,7 @@ class QuestionsRelationManager extends RelationManager
                         ->required(),
                     TextInput::make('previous_exam')->label('Exam Name'),
                     TextInput::make('post'),
-                    DatePicker::make('date')->native(false)->default($this->date),
+                    DatePicker::make('date')->native(false),
                     TextInput::make('title')
                         ->columnSpanFull()
                         ->required()
@@ -165,5 +165,28 @@ class QuestionsRelationManager extends RelationManager
             ->get(['id', 'title'])
             ->toArray();
     }
+
+    public function fillQuestionData(int $questionId): void
+{
+    $question = Question::find($questionId);
+
+    if ($question) {
+        $this->form->fill([
+            'subject_id' => $question->subject_id,
+            'previous_exam' => $question->previous_exam,
+            'post' => $question->post,
+            'date' => $question->date,
+            'title' => $question->title,
+            'options' => $question->options->map(function ($option) {
+                return [
+                    'options' => $option->options,
+                    'is_correct' => $option->is_correct,
+                ];
+            })->toArray(),
+            'explanation' => $question->explanation,
+        ]);
+    }
+}
+
 
 }
