@@ -101,8 +101,7 @@ class QuestionsRelationManager extends RelationManager
                 $html .= "</ul>";
                 return new HtmlString($html);
             })
-            ->columnSpanFull()
-            ->visible(fn ($get) => count($get('search_results')) > 0),
+            ->columnSpanFull(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
