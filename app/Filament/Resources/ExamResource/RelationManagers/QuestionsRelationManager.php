@@ -168,26 +168,20 @@ class QuestionsRelationManager extends RelationManager
     }
 
     public function fillQuestionData(int $questionId): void
-{
-    $question = Question::find($questionId);
+    {
+        $question = Question::find($questionId);
 
-    if ($question) {
-        $this->form->fill([
-            'subject_id' => $question->subject_id,
-            'previous_exam' => $question->previous_exam,
-            'post' => $question->post,
-            'date' => $question->date,
-            'title' => $question->title,
-            'options' => $question->options->map(function ($option) {
-                return [
-                    'options' => $option->options,
-                    'is_correct' => $option->is_correct,
-                ];
-            })->toArray(),
-            'explanation' => $question->explanation,
-        ]);
+        if ($question) {
+            $this->form->state = [
+                'subject_id' => $question->subject_id,
+                'previous_exam' => $question->previous_exam,
+                'post' => $question->post,
+                'date' => $question->date,
+                'title' => $question->title,
+                'options' => $question->options,
+                'explanation' => $question->explanation,
+            ];
+        }
     }
-}
-
 
 }
