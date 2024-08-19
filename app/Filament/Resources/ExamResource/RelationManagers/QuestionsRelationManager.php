@@ -23,17 +23,6 @@ class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
 
-    protected $listeners = ['fillQuestionData'];
-
-    public $search_results = [];
-
-    public $subject_id;
-    public $previous_exam;
-    public $post;
-    public $date;
-    public $title;
-    public $options = [];
-    public $explanation;
 
     public function form(Form $form): Form
     {
@@ -176,25 +165,5 @@ class QuestionsRelationManager extends RelationManager
             ->get(['id', 'title'])
             ->toArray();
     }
-
-    public function fillQuestionData($questionId)
-{
-    $question = Question::find($questionId);
-
-    if ($question) {
-        $this->subject_id = $question->subject_id;
-        $this->previous_exam = $question->previous_exam;
-        $this->post = $question->post;
-        $this->date = $question->date;
-        $this->title = $question->title;
-        $this->options = $question->options; // Ensure $question->options is in the correct format
-        $this->explanation = $question->explanation;
-
-        // Clear search results after selection
-        $this->search_results = null;
-    }
-}
-
-
 
 }
