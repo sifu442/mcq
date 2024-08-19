@@ -79,7 +79,7 @@ class QuestionsRelationManager extends RelationManager
                 ->native(false),
             CKEditor::make('title')
                 ->columnSpanFull()
-                
+
                 ->required(),
             Repeater::make('options')
                 ->required()
@@ -118,37 +118,7 @@ class QuestionsRelationManager extends RelationManager
             ])
             ->headerActions([
                 Action::make('Attach')
-                    ->action(function (array $data): void {
-                        if ($data['search-question']) {
-                            // Attach the selected question to the Exam model
-                            $this->ownerRecord->questions()->attach($data['search-question']);
-                        } else {
-                            // Create a new question and attach it to the Exam model
-                            $newQuestion = Question::create([
-                                'subject_id' => $data['subject_id'],
-                                'previous_exam' => $data['previous_exam'],
-                                'post' => $data['post'],
-                                'date' => $data['date'],
-                                'title' => $data['title'],
-                                'options' => $data['options'],
-                                'explanation' => $data['explanation'],
-                            ]);
-                            $this->ownerRecord->questions()->attach($newQuestion->id);
-                        }
-                    })
                     ->form([
-                        Select::make('search-question')
-                            ->label('Search Questions')
-                            ->native(false)
-                            ->searchable()
-                            ->getSearchResultsUsing(fn (string $search): array =>
-                                Question::where('title', 'like', "%{$search}%")
-                                    ->limit(50)
-                                    ->pluck('title', 'id')
-                                    ->toArray()
-                            )
-                            ->getOptionLabelUsing(fn ($value): ?string => Question::find($value)?->title)
-                            ->live(),
                         Select::make('subject_id')
                         ->native(false)
                         ->relationship('subject', 'name')
