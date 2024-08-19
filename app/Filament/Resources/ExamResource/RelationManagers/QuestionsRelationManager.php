@@ -23,79 +23,59 @@ class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
 
+    protected $listeners = ['fillQuestionData'];
+
+    public $search_results = [];
+
     public function form(Form $form): Form
     {
         $latestExam = Question::latest()->first();
 
-        if(is_null($latestExam)) {
+        if (is_null($latestExam)) {
             return $form->schema([
                 Select::make('subject_id')
                     ->relationship('subject', 'name')
-                    ->createOptionForm([
-                        TextInput::make('name')->required()
-                    ])
+                    ->createOptionForm([TextInput::make('name')->required()])
                     ->preload()
                     ->required(),
-                TextInput::make('previous_exam')
-                    ->label('Exam Name'),
+                TextInput::make('previous_exam')->label('Exam Name'),
                 TextInput::make('post'),
-                DatePicker::make('date')
-                    ->native(false),
-                CKEditor::make('title')
-                    ->required()
-                    ->columnSpanFull(),
+                DatePicker::make('date')->native(false),
+                CKEditor::make('title')->required()->columnSpanFull(),
                 Repeater::make('options')
                     ->required()
                     ->deletable(false)
                     ->defaultItems(4)
                     ->maxItems(4)
-                    ->schema([
-                        CKEditor::make('options'),
-                        Checkbox::make('is_correct')
-                            ->fixIndistinctState()
-                            ->name('Correct Answer'),
-                    ])
+                    ->schema([CKEditor::make('options'), Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')])
                     ->columnSpanFull(),
-                CKEditor::make('explanation')
-                    ->columnSpanFull()
+                CKEditor::make('explanation')->columnSpanFull(),
             ]);
         }
 
         return $form->schema([
             Select::make('subject_id')
                 ->relationship('subject', 'name')
-                ->createOptionForm([
-                    TextInput::make('name')->required()
-                ])
+                ->createOptionForm([TextInput::make('name')->required()])
                 ->default($latestExam->subject_id)
                 ->preload()
                 ->required(),
             TextInput::make('previous_exam')
                 ->label('Exam Name')
                 ->default($latestExam->previous_exam),
-            TextInput::make('post')
-                ->default($latestExam->post),
+            TextInput::make('post')->default($latestExam->post),
             DatePicker::make('date')
                 ->default($latestExam->date)
                 ->native(false),
-            CKEditor::make('title')
-                ->columnSpanFull()
-                ->required(),
+            CKEditor::make('title')->columnSpanFull()->required(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
                 ->defaultItems(4)
                 ->maxItems(4)
-                ->schema([
-                    CKEditor::make('options')
-                    ,
-                    Checkbox::make('is_correct')
-                        ->fixIndistinctState()
-                        ->name('Correct Answer'),
-                ])
+                ->schema([CKEditor::make('options'), Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')])
                 ->columnSpanFull(),
-            CKEditor::make('explanation')
-                ->columnSpanFull()
+            CKEditor::make('explanation')->columnSpanFull(),
         ]);
     }
 
@@ -110,42 +90,36 @@ class QuestionsRelationManager extends RelationManager
                         $currentPage = method_exists($livewire, 'currentPage') ? $livewire->currentPage() : 1;
                         return (string) ($rowLoop->iteration + $livewire->tableRecordsPerPage * ($currentPage - 1));
                     }),
-                TextColumn::make('title')
-                    ->formatStateUsing(fn (string $state): HtmlString => new HtmlString($state)),
+                TextColumn::make('title')->formatStateUsing(fn(string $state): HtmlString => new HtmlString($state)),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Action::make('Attach')
-                    ->form([
-                        Select::make('subject_id')
+                Action::make('Attach')->form([
+                    Select::make('subject_id')
                         ->native(false)
                         ->relationship('subject', 'name')
-                        ->createOptionForm([
-                            TextInput::make('name')->required()
-                        ])
+                        ->createOptionForm([TextInput::make('name')->required()])
                         ->required(),
-                        TextInput::make('previous_exam')
-                            ->label('Exam Name'),
-                        TextInput::make('post'),
-                        DatePicker::make('date')
-                            ->native(false),
-                        TextInput::make('title')
-                            ->columnSpanFull()
-                            ->required()
-                            ->live(onBlur: false, debounce: 500)
-                            ->afterStateUpdated(function (?string $state, $set) {
-                                if (strlen($state) >= 3) {
-                                    $searchResults = static::searchQuestions($state);
-                                    $set('search_results', $searchResults);
-                                } else {
-                                    $set('search_results', []);
-                                }
-                            }),
-                        Placeholder::make('search_results')
-                        ->label("Select Questions")
-                        ->content(function ($get, \Livewire\Component $livewire) {
+                    TextInput::make('previous_exam')->label('Exam Name'),
+                    TextInput::make('post'),
+                    DatePicker::make('date')->native(false),
+                    TextInput::make('title')
+                        ->columnSpanFull()
+                        ->required()
+                        ->live(onBlur: false, debounce: 500)
+                        ->afterStateUpdated(function (?string $state, $set) {
+                            if (strlen($state) >= 3) {
+                                $searchResults = static::searchQuestions($state);
+                                $set('search_results', $searchResults);
+                            } else {
+                                $set('search_results', []);
+                            }
+                        }),
+                    Placeholder::make('search_results')
+                        ->label('Select Questions')
+                        ->content(function ($get, $set) {
                             $questions = $get('search_results') ?? [];
                             $html = '<ul>';
 
@@ -153,7 +127,20 @@ class QuestionsRelationManager extends RelationManager
                                 $html .= '<li>' . __('No matching questions found.') . '</li>';
                             } else {
                                 foreach ($questions as $question) {
-                                    $html .= '<li>' . htmlspecialchars($question['title']) . '</li>';
+                                    $html .=
+                                        '<li>
+                                        <button
+                                            type="button"
+                                            onclick="window.livewire.emit(\'fillQuestionData\', ' .
+                                        $question['id'] .
+                                        ')"
+                                            class="text-left w-full"
+                                        >
+                                            ' .
+                                        htmlspecialchars($question['title']) .
+                                        '
+                                        </button>
+                                    </li>';
                                 }
                             }
 
@@ -161,32 +148,18 @@ class QuestionsRelationManager extends RelationManager
                             return new HtmlString($html);
                         })
                         ->columnSpanFull(),
-                        Repeater::make('options')
-                            ->required()
-                            ->deletable(false)
-                            ->defaultItems(4)
-                            ->maxItems(4)
-                            ->schema([
-                                CKEditor::make('options'),
-                                Checkbox::make('is_correct')
-                                    ->fixIndistinctState()
-                                    ->name('Correct Answer'),
-                            ])
-                            ->columnSpanFull(),
-                        CKEditor::make('explanation')
-                            ->columnSpanFull(),
-
-                    ])
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Repeater::make('options')
+                        ->required()
+                        ->deletable(false)
+                        ->defaultItems(4)
+                        ->maxItems(4)
+                        ->schema([CKEditor::make('options'), Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')])
+                        ->columnSpanFull(),
+                    CKEditor::make('explanation')->columnSpanFull(),
                 ]),
-            ]);
+            ])
+            ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
+            ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
     public static function searchQuestions(?string $searchTerm): array
     {
@@ -200,6 +173,22 @@ class QuestionsRelationManager extends RelationManager
             ->toArray();
     }
 
+    public function fillQuestionData($questionId)
+    {
+        $question = Question::find($questionId);
 
+        if ($question) {
+            $this->form->fill([
+                'subject_id' => $question->subject_id,
+                'previous_exam' => $question->previous_exam,
+                'post' => $question->post,
+                'date' => $question->date,
+                'title' => $question->title,
+                'options' => $question->options, // Assuming options is an array or similar format
+                'explanation' => $question->explanation,
+            ]);
 
+            $this->search_results = null; // Clear search results after selection
+        }
+    }
 }
