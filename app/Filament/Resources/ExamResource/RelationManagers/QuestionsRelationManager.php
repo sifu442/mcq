@@ -167,21 +167,22 @@ class QuestionsRelationManager extends RelationManager
             ->toArray();
     }
 
-    public function fillQuestionData(int $questionId): void
-    {
-        $question = Question::find($questionId);
+    public function fillQuestionData($questionId)
+{
+    $question = Question::find($questionId);
 
-        if ($question) {
-            $this->form->state = [
-                'subject_id' => $question->subject_id,
-                'previous_exam' => $question->previous_exam,
-                'post' => $question->post,
-                'date' => $question->date,
-                'title' => $question->title,
-                'options' => $question->options,
-                'explanation' => $question->explanation,
-            ];
-        }
+    if ($question) {
+        $this->form->model->fill([
+            'subject_id' => $question->subject_id,
+            'previous_exam' => $question->previous_exam,
+            'post' => $question->post,
+            'date' => $question->date,
+            'title' => $question->title,
+            'options' => $question->options, // Assuming 'options' is an array
+            'explanation' => $question->explanation,
+        ]);
     }
+}
+
 
 }
