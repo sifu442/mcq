@@ -125,20 +125,15 @@ class QuestionsRelationManager extends RelationManager
                         ->createOptionForm([
                             TextInput::make('name')->required()
                         ])
-                        ->required()
-                        ->visible(fn ($get) => !$get('search-question')),
+                        ->required(),
                         TextInput::make('previous_exam')
-                            ->label('Exam Name')
-                            ->visible(fn ($get) => !$get('search-question')),
-                        TextInput::make('post')
-                            ->visible(fn ($get) => !$get('search-question')),
+                            ->label('Exam Name'),
+                        TextInput::make('post'),
                         DatePicker::make('date')
-                            ->native(false)
-                            ->visible(fn ($get) => !$get('search-question')),
+                            ->native(false),
                         CKEditor::make('title')
                             ->columnSpanFull()
-                            ->required()
-                            ->visible(fn ($get) => !$get('search-question')),
+                            ->required(),
                         Repeater::make('options')
                             ->required()
                             ->deletable(false)
@@ -150,11 +145,9 @@ class QuestionsRelationManager extends RelationManager
                                     ->fixIndistinctState()
                                     ->name('Correct Answer'),
                             ])
-                            ->columnSpanFull()
-                            ->visible(fn ($get) => !$get('search-question')),
+                            ->columnSpanFull(),
                         CKEditor::make('explanation')
-                            ->columnSpanFull()
-                            ->visible(fn ($get) => !$get('search-question')),
+                            ->columnSpanFull(),
 
                     ])
             ])
