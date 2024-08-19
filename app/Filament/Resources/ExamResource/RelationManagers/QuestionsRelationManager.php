@@ -131,7 +131,7 @@ class QuestionsRelationManager extends RelationManager
                         TextInput::make('post'),
                         DatePicker::make('date')
                             ->native(false),
-                        CKEditor::make('title')
+                        TextInput::make('title')
                             ->columnSpanFull()
                             ->required()
                             ->live(onBlur: false, debounce: 500)
