@@ -203,21 +203,6 @@ class QuestionsRelationManager extends RelationManager
             ->toArray();
     }
 
-    public function fillFieldsWithQuestion(int $questionId)
-    {
-    $question = Question::find($questionId);
-
-    if ($question) {
-        $this->form->fill([
-            'subject_id' => $question->subject_id,
-            'previous_exam' => $question->previous_exam,
-            'post' => $question->post,
-            'date' => $question->date,
-            'title' => $question->title,
-            'options' => $question->options, // Assuming options is an array or a format that Repeater can handle
-            'explanation' => $question->explanation,
-            ]);
-        }
-    }
+    
 
 }
