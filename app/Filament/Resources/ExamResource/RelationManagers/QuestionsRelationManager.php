@@ -27,6 +27,14 @@ class QuestionsRelationManager extends RelationManager
 
     public $search_results = [];
 
+    public $subject_id;
+    public $previous_exam;
+    public $post;
+    public $date;
+    public $title;
+    public $options = [];
+    public $explanation;
+
     public function form(Form $form): Form
     {
         $latestExam = Question::latest()->first();
