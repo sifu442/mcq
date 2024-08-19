@@ -127,14 +127,20 @@ class QuestionsRelationManager extends RelationManager
                                 $html .= '<li>' . __('No matching questions found.') . '</li>';
                             } else {
                                 foreach ($questions as $question) {
-                                    $html .= '<button
-    type="button"
-    onclick="window.livewire.emit(\'fillQuestionData\', ' . $question['id'] . ')"
-    class="text-left w-full"
->
-    ' . htmlspecialchars($question['title']) . '
-</button>';
-
+                                    $html .=
+                                        '<li>
+                                        <button
+                                            type="button"
+                                            onclick="window.livewire.emit(\'fillQuestionData\', ' .
+                                        $question['id'] .
+                                        ')"
+                                            class="text-left w-full"
+                                        >
+                                            ' .
+                                        htmlspecialchars($question['title']) .
+                                        '
+                                        </button>
+                                    </li>';
                                 }
                             }
 
