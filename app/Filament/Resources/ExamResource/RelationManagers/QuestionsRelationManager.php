@@ -80,28 +80,7 @@ class QuestionsRelationManager extends RelationManager
                 ->native(false),
             CKEditor::make('title')
                 ->columnSpanFull()
-                ->required()
-                ->live()
-                ->afterStateUpdated(function (?string $state, $set, $livewire) {
-                    if(strlen($state) >= 3) {
-                        $searchResults = static::searchQuestions($state);
-                        $set('search_results', $searchResults);
-                    } else {
-                        $set('search_results', []);
-                    }
-                }),
-            Placeholder::make('search_results')
-            ->label("Select Questions")
-            ->content(function ($get) {
-                $html = "<ul>";
-                $questions = $get('search_results') ?? [];
-                foreach ($questions as $question) {
-                    $html .= "<li>{$question['title']}</li>";
-                }
-                $html .= "</ul>";
-                return new HtmlString($html);
-            })
-            ->columnSpanFull(),
+                ->required(),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
@@ -154,7 +133,28 @@ class QuestionsRelationManager extends RelationManager
                             ->native(false),
                         CKEditor::make('title')
                             ->columnSpanFull()
-                            ->required(),
+                            ->required()
+                            ->live(onBlur: false, debounce: 500)
+                            ->afterStateUpdated(function (?string $state, $set) {
+                                if(strlen($state) >= 1) {
+                                    $searchResults = static::searchQuestions($state);
+                                    $set('search_results', $searchResults);
+                                } else {
+                                    $set('search_results', []);
+                                }
+                            }),
+                        Placeholder::make('search_results')
+                        ->label("Select Questions")
+                        ->content(function ($get) {
+                            $html = "<ul>";
+                            $questions = $get('search_results') ?? [];
+                            foreach ($questions as $question) {
+                                $html .= "<li>{$question['title']}</li>";
+                            }
+                            $html .= "</ul>";
+                            return new HtmlString($html);
+                        })
+                        ->columnSpanFull(),
                         Repeater::make('options')
                             ->required()
                             ->deletable(false)
