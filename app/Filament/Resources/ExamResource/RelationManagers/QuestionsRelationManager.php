@@ -153,10 +153,7 @@ class QuestionsRelationManager extends RelationManager
                                 $html .= '<li>' . __('No matching questions found.') . '</li>';
                             } else {
                                 foreach ($questions as $question) {
-                                    $html .= '<li>
-                                        <a href="#" wire:click.prevent="fillFieldsWithQuestion(' . $question['id'] . ')">'
-                                        . htmlspecialchars($question['title']) .
-                                        '</a></li>';
+                                    $html .= '<li>' . htmlspecialchars($question['title']) . '</li>';
                                 }
                             }
 
@@ -203,6 +200,6 @@ class QuestionsRelationManager extends RelationManager
             ->toArray();
     }
 
-    
+
 
 }
