@@ -81,7 +81,7 @@ class QuestionsRelationManager extends RelationManager
             CKEditor::make('title')
                 ->columnSpanFull()
                 ->required()
-                ->live(onBlur: false, debounce: 500)
+                ->live()
                 ->afterStateUpdated(function (?string $state, $set, $livewire) {
                     if(strlen($state) >= 3) {
                         $searchResults = static::searchQuestions($state);
