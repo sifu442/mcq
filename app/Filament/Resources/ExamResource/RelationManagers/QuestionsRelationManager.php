@@ -23,7 +23,6 @@ class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
 
-
     public function form(Form $form): Form
     {
         $latestExam = Question::latest()->first();
