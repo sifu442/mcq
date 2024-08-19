@@ -23,6 +23,7 @@ class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
 
+    public $search_results = [];
 
     public function form(Form $form): Form
     {
