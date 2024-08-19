@@ -16,6 +16,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Placeholder;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class QuestionsRelationManager extends RelationManager
@@ -79,8 +80,29 @@ class QuestionsRelationManager extends RelationManager
                 ->native(false),
             CKEditor::make('title')
                 ->columnSpanFull()
-
-                ->required(),
+                ->required()
+                ->live(onBlur: false, debounce: 500)
+                ->afterStateUpdated(function (?string $state, $set, $livewire) {
+                    if(strlen($state) >= 3) {
+                        $searchResults = static::searchQuestions($state);
+                        $set('search_results', $searchResults);
+                    } else {
+                        $set('search_results', []);
+                    }
+                }),
+            Placeholder::make('search_results')
+            ->label("Select Questions")
+            ->content(function ($get) {
+                $html = "<ul>";
+                $questions = $get('search_results') ?? [];
+                foreach ($questions as $question) {
+                    $html .= "<li>{$question['title']}</li>";
+                }
+                $html .= "</ul>";
+                return new HtmlString($html);
+            })
+            ->columnSpanFull()
+            ->visible(fn ($get) => count($get('search_results')) > 0),
             Repeater::make('options')
                 ->required()
                 ->deletable(false)
