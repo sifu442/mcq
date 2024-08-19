@@ -174,21 +174,25 @@ class QuestionsRelationManager extends RelationManager
     }
 
     public function fillQuestionData($questionId)
-    {
-        $question = Question::find($questionId);
+{
+    // Check if this method is being called
+    dd('fillQuestionData method called with ID: ' . $questionId);
 
-        if ($question) {
-            $this->form->fill([
-                'subject_id' => $question->subject_id,
-                'previous_exam' => $question->previous_exam,
-                'post' => $question->post,
-                'date' => $question->date,
-                'title' => $question->title,
-                'options' => $question->options, // Assuming options is an array or similar format
-                'explanation' => $question->explanation,
-            ]);
+    $question = Question::find($questionId);
 
-            $this->search_results = null; // Clear search results after selection
-        }
+    if ($question) {
+        $this->form->fill([
+            'subject_id' => $question->subject_id,
+            'previous_exam' => $question->previous_exam,
+            'post' => $question->post,
+            'date' => $question->date,
+            'title' => $question->title,
+            'options' => $question->options, // Assuming options is an array or similar format
+            'explanation' => $question->explanation,
+        ]);
+
+        $this->search_results = null; // Clear search results after selection
     }
+}
+
 }
