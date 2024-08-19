@@ -23,7 +23,29 @@ class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
 
+    public $subject_id;
+    public $previous_exam;
+    public $post;
+    public $date;
+    public $title;
+    public $options = [];
+    public $explanation;
     public $search_results = [];
+
+    public function fillQuestionData($questionId)
+    {
+        $question = Question::find($questionId);
+
+        if ($question) {
+            $this->subject_id = $question->subject_id;
+            $this->previous_exam = $question->previous_exam;
+            $this->post = $question->post;
+            $this->date = $question->date;
+            $this->title = $question->title;
+            $this->options = $question->options; // Adjust if needed
+            $this->explanation = $question->explanation;
+        }
+    }
 
     public function form(Form $form): Form
     {
