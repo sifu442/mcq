@@ -136,7 +136,7 @@ class QuestionsRelationManager extends RelationManager
                             ->required()
                             ->live(onBlur: false, debounce: 500)
                             ->afterStateUpdated(function (?string $state, $set) {
-                                if (strlen($state) >= 1) {
+                                if (strlen($state) >= 3) {
                                     $searchResults = static::searchQuestions($state);
                                     $set('search_results', $searchResults);
                                 } else {
@@ -145,7 +145,7 @@ class QuestionsRelationManager extends RelationManager
                             }),
                         Placeholder::make('search_results')
                         ->label("Select Questions")
-                        ->content(function ($get) {
+                        ->content(function ($get, \Livewire\Component $livewire) {
                             $questions = $get('search_results') ?? [];
                             $html = '<ul>';
 
@@ -153,7 +153,10 @@ class QuestionsRelationManager extends RelationManager
                                 $html .= '<li>' . __('No matching questions found.') . '</li>';
                             } else {
                                 foreach ($questions as $question) {
-                                    $html .= '<li>' . htmlspecialchars($question['title']) . '</li>';
+                                    $html .= '<li>
+                                        <a href="#" wire:click.prevent="fillFieldsWithQuestion(' . $question['id'] . ')">'
+                                        . htmlspecialchars($question['title']) .
+                                        '</a></li>';
                                 }
                             }
 
@@ -199,4 +202,22 @@ class QuestionsRelationManager extends RelationManager
             ->get(['id', 'title'])
             ->toArray();
     }
+
+    public function fillFieldsWithQuestion(int $questionId)
+{
+    $question = Question::find($questionId);
+
+    if ($question) {
+        $this->form->fill([
+            'subject_id' => $question->subject_id,
+            'previous_exam' => $question->previous_exam,
+            'post' => $question->post,
+            'date' => $question->date,
+            'title' => $question->title,
+            'options' => $question->options,
+            'explanation' => $question->explanation,
+        ]);
+    }
+}
+
 }
