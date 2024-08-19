@@ -204,7 +204,7 @@ class QuestionsRelationManager extends RelationManager
     }
 
     public function fillFieldsWithQuestion(int $questionId)
-{
+    {
     $question = Question::find($questionId);
 
     if ($question) {
@@ -214,10 +214,10 @@ class QuestionsRelationManager extends RelationManager
             'post' => $question->post,
             'date' => $question->date,
             'title' => $question->title,
-            'options' => $question->options,
+            'options' => $question->options, // Assuming options is an array or a format that Repeater can handle
             'explanation' => $question->explanation,
-        ]);
+            ]);
+        }
     }
-}
 
 }
