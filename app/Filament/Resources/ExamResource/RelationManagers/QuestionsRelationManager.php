@@ -112,7 +112,7 @@ class QuestionsRelationManager extends RelationManager
                         ->required(),
                     TextInput::make('previous_exam')->label('Exam Name'),
                     TextInput::make('post'),
-                    DatePicker::make('date')->native(false),
+                    DatePicker::make('date')->native(false)->default($this->date),
                     TextInput::make('title')
                         ->columnSpanFull()
                         ->required()
@@ -182,19 +182,19 @@ class QuestionsRelationManager extends RelationManager
     $question = Question::find($questionId);
 
     if ($question) {
-        // Manually set each field
-        $this->form->getState()['subject_id'] = $question->subject_id;
-        $this->form->getState()['previous_exam'] = $question->previous_exam;
-        $this->form->getState()['post'] = $question->post;
-        $this->form->getState()['date'] = $question->date;
-        $this->form->getState()['title'] = $question->title;
-        $this->form->getState()['options'] = $question->options;
-        $this->form->getState()['explanation'] = $question->explanation;
+        $this->subject_id = $question->subject_id;
+        $this->previous_exam = $question->previous_exam;
+        $this->post = $question->post;
+        $this->date = $question->date;
+        $this->title = $question->title;
+        $this->options = $question->options; // Ensure $question->options is in the correct format
+        $this->explanation = $question->explanation;
 
         // Clear search results after selection
         $this->search_results = null;
     }
 }
+
 
 
 }
