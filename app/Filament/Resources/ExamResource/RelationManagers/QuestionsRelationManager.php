@@ -117,8 +117,8 @@ class QuestionsRelationManager extends RelationManager
                                 $set('search_results', []);
                             }
                         }),
-                    Placeholder::make('search_results')
-                        ->label('Select Questions')
+                        Placeholder::make('search_results')
+                        ->label('')
                         ->content(function ($get, $set) {
                             $questions = $get('search_results') ?? [];
                             $html = '<ul>';
@@ -127,18 +127,13 @@ class QuestionsRelationManager extends RelationManager
                                 $html .= '<li>' . __('No matching questions found.') . '</li>';
                             } else {
                                 foreach ($questions as $question) {
-                                    $html .=
-                                        '<li>
+                                    $html .= '<li>
                                         <button
                                             type="button"
-                                            onclick="window.livewire.emit(\'fillQuestionData\', ' .
-                                        $question['id'] .
-                                        ')"
+                                            wire:click="fillQuestionData(' . $question['id'] . ')"
                                             class="text-left w-full"
                                         >
-                                            ' .
-                                        htmlspecialchars($question['title']) .
-                                        '
+                                            ' . htmlspecialchars($question['title']) . '
                                         </button>
                                     </li>';
                                 }
@@ -147,6 +142,7 @@ class QuestionsRelationManager extends RelationManager
                             $html .= '</ul>';
                             return new HtmlString($html);
                         })
+                        ->columnSpanFull()
                         ->columnSpanFull(),
                     Repeater::make('options')
                         ->required()
