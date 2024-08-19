@@ -182,4 +182,17 @@ class QuestionsRelationManager extends RelationManager
                 ]),
             ]);
     }
+
+    public static function searchQuestions(?string $searchTerm): array
+{
+    if (blank($searchTerm)) {
+        return [];
+    }
+
+    // Perform the search in the `questions` table
+    return Question::where('title', 'like', '%' . $searchTerm . '%')
+        ->limit(10)
+        ->get(['id', 'title'])
+        ->toArray();
+}
 }
