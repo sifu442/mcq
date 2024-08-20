@@ -16,21 +16,8 @@ class CustomSearch extends Field
         // Custom dehydrate logic if needed
     }
 
-    public function search(callable $callback): self
+    public function searchResults($results): static
     {
-        $this->extraAttributes['searchCallback'] = $callback;
-
-        return $this;
-    }
-
-    public function getSearchResults(): Collection
-    {
-        $callback = $this->extraAttributes['searchCallback'] ?? null;
-
-        if ($callback) {
-            return $callback($this->getState());
-        }
-
-        return collect();
+        return $this->viewData(['searchResults' => $results]);
     }
 }

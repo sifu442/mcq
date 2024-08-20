@@ -1,18 +1,17 @@
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
     <div wire:ignore x-data="{
         state: $wire.entangle('{{ $getStatePath() }}'),
-        searchResults: [],
+        searchResults: @json($searchResults ?? []),
+        editor: null,
         initEditor() {
             ClassicEditor
                 .create($refs.content)
                 .then(editor => {
                     this.editor = editor;
-
-                    // Listen to changes in the editor
                     editor.model.document.on('change:data', () => {
                         $refs.content.value = editor.getData();
-                        this.state = editor.getData(); // Update state with editor data
-                        this.search(); // Perform search on data change
+                        this.state = editor.getData();
+                        this.search();
                     });
                 })
                 .catch(error => {
@@ -20,7 +19,7 @@
                 });
         },
         search() {
-            @this.call('getSearchResults').then(results => {
+            @this.call('search').then(results => {
                 this.searchResults = results;
             });
         }

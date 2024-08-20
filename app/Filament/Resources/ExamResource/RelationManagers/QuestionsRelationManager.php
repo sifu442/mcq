@@ -24,8 +24,10 @@ class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
 
-    public $search_results = [];
-
+    public function search($query)
+{
+    return Question::where('content', 'like', '%'.$query.'%')->get(['id', 'title', 'content']);
+}
 
     public function form(Form $form): Form
     {
@@ -83,10 +85,9 @@ class QuestionsRelationManager extends RelationManager
                         TextInput::make('post'),
                         DatePicker::make('date')->native(false),
                         CustomSearch::make('title-serach')
-                        ->search(function ($query) {
-                            return Question::where('content', 'like', "%{$query}%")
-                                ->get(['id', 'title', 'content']);
-                        }),
+                        ->searchResults(
+                            $this->search($this->form->getState()['content'] ?? '')
+                        ),
                         Repeater::make('options')
                             ->required()
                             ->deletable(false)
@@ -103,18 +104,4 @@ class QuestionsRelationManager extends RelationManager
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
-
-    public static function searchQuestions(?string $searchTerm): array
-    {
-        if (blank($searchTerm)) {
-            return [];
-        }
-
-        return Question::where('title', 'like', '%' . $searchTerm . '%')
-            ->limit(10)
-            ->get(['id', 'title'])
-            ->toArray();
-    }
-
-
 }
