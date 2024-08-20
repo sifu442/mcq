@@ -95,7 +95,7 @@ class QuestionsRelationManager extends RelationManager
                             }),
                         Placeholder::make('search_results')
                             ->label('')
-                            ->content(function ($get, $set) {
+                            ->content(function ($get, Set $set) {
                                 $questions = $get('search_results') ?? [];
                                 $html = '<ul>';
 
@@ -148,32 +148,18 @@ class QuestionsRelationManager extends RelationManager
             ->toArray();
     }
 
-    public function fillQuestionData($questionId)
+    public function fillQuestionData($questionId, Set $set)
     {
         $question = Question::find($questionId);
 
         if ($question) {
-            $this->emit('fillFormData', [
-                'subject_id' => $question->subject_id,
-                'previous_exam' => $question->previous_exam,
-                'post' => $question->post,
-                'date' => $question->date,
-                'title' => $question->title,
-                'options' => $question->options,
-                'explanation' => $question->explanation,
-            ]);
+            $set('subject_id', $question->subject_id);
+            $set('previous_exam', $question->previous_exam);
+            $set('post', $question->post);
+            $set('date', $question->date);
+            $set('title', $question->title);
+            $set('options', $question->options);
+            $set('explanation', $question->explanation);
         }
-    }
-
-    protected function getListeners(): array
-    {
-        return [
-            'fillFormData' => 'updateFormData',
-        ];
-    }
-
-    public function updateFormData($data)
-    {
-        $this->form->fill($data);
     }
 }
