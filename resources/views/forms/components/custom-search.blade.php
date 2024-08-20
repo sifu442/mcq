@@ -20,10 +20,10 @@
             console.error(error);
         });">
         <textarea wire:ignore x-ref="content" x-bind:value="state"></textarea>
-        <div class="search-results">
+        <div class="search-results mt-2">
             <ul>
                 <template x-for="result in searchResults" :key="result.id">
-                    <li @click="state = result.content" x-text="result.title"></li>
+                    <li @click="state = result.content" x-text="result.title" class="cursor-pointer hover:bg-gray-200"></li>
                 </template>
             </ul>
         </div>

@@ -8,6 +8,7 @@ use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Forms\Components\CKEditor;
+use App\Forms\Components\CustomSearch;
 use Illuminate\Support\HtmlString;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
@@ -81,44 +82,11 @@ class QuestionsRelationManager extends RelationManager
                         TextInput::make('previous_exam')->label('Exam Name'),
                         TextInput::make('post'),
                         DatePicker::make('date')->native(false),
-                        TextInput::make('title')
-                            ->columnSpanFull()
-                            ->required()
-                            ->live(onBlur: false, debounce: 500)
-                            ->afterStateUpdated(function (?string $state, $set) {
-                                if (strlen($state) >= 3) {
-                                    $searchResults = static::searchQuestions($state);
-                                    $set('search_results', $searchResults);
-                                } else {
-                                    $set('search_results', []);
-                                }
-                            }),
-                        Placeholder::make('search_results')
-                            ->label('')
-                            ->content(function ($get, Set $set) {
-                                $questions = $get('search_results') ?? [];
-                                $html = '<ul>';
-
-                                if (empty($questions)) {
-                                    $html .= '<li>' . __('No matching questions found.') . '</li>';
-                                } else {
-                                    foreach ($questions as $question) {
-                                        $html .= '<li>
-                                            <button
-                                                type="button"
-                                                wire:click="fillQuestionData(' . $question['id'] . ')"
-                                                class="text-left w-full"
-                                            >
-                                                ' . htmlspecialchars($question['title']) . '
-                                            </button>
-                                        </li>';
-                                    }
-                                }
-
-                                $html .= '</ul>';
-                                return new HtmlString($html);
-                            })
-                            ->columnSpanFull(),
+                        CustomSearch::make('title-serach')
+                        ->search(function ($query) {
+                            return Question::where('content', 'like', "%{$query}%")
+                                ->get(['id', 'title', 'content']);
+                        }),
                         Repeater::make('options')
                             ->required()
                             ->deletable(false)
@@ -148,5 +116,5 @@ class QuestionsRelationManager extends RelationManager
             ->toArray();
     }
 
-    
+
 }
