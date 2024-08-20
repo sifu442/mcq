@@ -7,11 +7,12 @@ use Filament\Forms\Set;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Livewire\SearchQuestion;
 use App\Forms\Components\CKEditor;
-use App\Forms\Components\CustomSearch;
 use Illuminate\Support\HtmlString;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
+use App\Forms\Components\CustomSearch;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
@@ -82,11 +83,7 @@ class QuestionsRelationManager extends RelationManager
                         TextInput::make('previous_exam')->label('Exam Name'),
                         TextInput::make('post'),
                         DatePicker::make('date')->native(false),
-                        CustomSearch::make('title-serach')
-                        ->search(function ($query) {
-                            return Question::where('content', 'like', "%{$query}%")
-                                ->get(['id', 'title', 'content']);
-                        }),
+                        SearchQuestion::make('content'),
                         Repeater::make('options')
                             ->required()
                             ->deletable(false)
