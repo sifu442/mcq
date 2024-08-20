@@ -153,7 +153,7 @@ class QuestionsRelationManager extends RelationManager
         $question = Question::find($questionId);
 
         if ($question) {
-            $this->form->fill([
+            $this->emit('fillFormData', [
                 'subject_id' => $question->subject_id,
                 'previous_exam' => $question->previous_exam,
                 'post' => $question->post,
@@ -163,5 +163,17 @@ class QuestionsRelationManager extends RelationManager
                 'explanation' => $question->explanation,
             ]);
         }
+    }
+
+    protected function getListeners(): array
+    {
+        return [
+            'fillFormData' => 'updateFormData',
+        ];
+    }
+
+    public function updateFormData($data)
+    {
+        $this->form->fill($data);
     }
 }
