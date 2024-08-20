@@ -148,18 +148,5 @@ class QuestionsRelationManager extends RelationManager
             ->toArray();
     }
 
-    public function fillQuestionData($questionId, Set $set)
-    {
-        $question = Question::find($questionId);
-
-        if ($question) {
-            $set('subject_id', $question->subject_id);
-            $set('previous_exam', $question->previous_exam);
-            $set('post', $question->post);
-            $set('date', $question->date);
-            $set('title', $question->title);
-            $set('options', $question->options);
-            $set('explanation', $question->explanation);
-        }
-    }
+    
 }
