@@ -22,7 +22,7 @@
     </div>
 
     @if($field->searchEnabled)
-        @livewire('c-k-editor-search')
+        @livewire('ck-editor-search')
     @endif
 
     <script src="{{ asset('vendor/ckeditor5/build/ckeditor.js') }}"></script>
