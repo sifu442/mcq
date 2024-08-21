@@ -75,6 +75,7 @@ class QuestionsRelationManager extends RelationManager
             ->filters([])
             ->headerActions([
                 Action::make('create-and-attach')
+                    ->modalContent()
                 ,
                 Action::make('Attach')
                     ->form([
