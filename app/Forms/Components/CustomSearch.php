@@ -13,4 +13,20 @@ class CustomSearch extends Field
     {
         parent::setUp();
     }
+
+    public function options(callable $callback)
+    {
+        $this->configureOptionCallback($callback);
+        return $this;
+    }
+
+    protected function configureOptionCallback(callable $callback): void
+    {
+        $this->data['options'] = $callback();
+    }
+
+    public function getOptions()
+    {
+        return $this->data['options'] ?? [];
+    }
 }
