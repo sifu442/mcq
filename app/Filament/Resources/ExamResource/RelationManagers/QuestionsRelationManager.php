@@ -24,11 +24,6 @@ class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
 
-    public function search($query)
-{
-    return Question::where('content', 'like', '%'.$query.'%')->get(['id', 'title', 'content']);
-}
-
     public function form(Form $form): Form
     {
         $latestExam = Question::latest()->first();
@@ -74,31 +69,7 @@ class QuestionsRelationManager extends RelationManager
             ])
             ->filters([])
             ->headerActions([
-                Action::make('create-and-attach')
-                    ->modalContent(view('filament.pages.'))
-                ,
-                Action::make('Attach')
-                    ->form([
-                        Select::make('subject_id')
-                            ->native(false)
-                            ->relationship('subject', 'name')
-                            ->createOptionForm([TextInput::make('name')->required()])
-                            ->required(),
-                        TextInput::make('previous_exam')->label('Exam Name'),
-                        TextInput::make('post'),
-                        DatePicker::make('date')->native(false),
-                        Repeater::make('options')
-                            ->required()
-                            ->deletable(false)
-                            ->defaultItems(4)
-                            ->maxItems(4)
-                            ->schema([
-                                CKEditor::make('options'),
-                                Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
-                            ])
-                            ->columnSpanFull(),
-                        CKEditor::make('explanation')->columnSpanFull(),
-                    ]),
+
             ])
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
