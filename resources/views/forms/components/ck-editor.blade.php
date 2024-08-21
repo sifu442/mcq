@@ -6,7 +6,9 @@
                 $refs.content.value = editor.getData();
                 state = editor.getData();
 
-                @this.set('query', state); // Trigger search using CKEditor content
+                @if($field->getSearchEnabled())
+                    @this.set('query', state); // Trigger search using CKEditor content
+                @endif
             });
 
             @this.on('fillEditor', content => {
@@ -19,8 +21,9 @@
         <textarea wire:ignore x-ref="content" x-bind:value="state"></textarea>
     </div>
 
-    <!-- Include the Livewire search component -->
-    @livewire('c-k-editor-search')
+    @if($field->getSearchEnabled())
+        @livewire('c-k-editor-search')
+    @endif
 
     <script src="{{ asset('vendor/ckeditor5/build/ckeditor.js') }}"></script>
 </x-dynamic-component>

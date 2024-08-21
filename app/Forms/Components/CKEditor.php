@@ -9,6 +9,7 @@ class CKEditor extends Field
     protected string $view = 'forms.components.ck-editor';
 
     public ?string $state = null;
+    protected bool $searchEnabled = false;
 
     public function setUp(): void
     {
@@ -17,5 +18,11 @@ class CKEditor extends Field
         $this->dehydrateStateUsing(static function (?string $state): string {
             return trim($state ?? '');
         });
+    }
+
+    public function searchEnabled(bool $enabled = true): static
+    {
+        $this->searchEnabled = $enabled;
+        return $this;
     }
 }
