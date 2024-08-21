@@ -75,7 +75,7 @@ class QuestionsRelationManager extends RelationManager
             ->filters([])
             ->headerActions([
                 Action::make('create-and-attach')
-                    ->modalContent()
+                    ->modalContent(view('filament.pages.'))
                 ,
                 Action::make('Attach')
                     ->form([
