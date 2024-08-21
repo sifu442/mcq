@@ -8,25 +8,25 @@ use App\Models\Question;
 class CKEditorSearch extends Component
 {
     public $query;
-    public $results = [];
+    public $searchResults = [];
 
-    protected $listeners = ['searchQueryUpdated'];
-
-    public function searchQueryUpdated($query)
+    public function updatedQuery()
     {
-        $this->query = $query;
-        $this->search();
+        if (strlen($this->query) > 2) {
+            $this->searchResults = Question::where('title', 'like', '%' . $this->query . '%')->get()->toArray();
+        } else {
+            $this->searchResults = [];
+        }
     }
 
-    public function search()
+    public function selectResult($result)
     {
-        $this->results = Question::where('title', 'like', "%{$this->query}%")->get();
+        $this->emit('fillEditor', $result);
+        $this->searchResults = [];
     }
 
     public function render()
     {
-        return view('livewire.ck-editor-search', [
-            'results' => $this->results,
-        ]);
+        return view('livewire.ck-editor-search');
     }
 }

@@ -5,10 +5,10 @@
             editor.model.document.on('change:data', () => {
                 $refs.content.value = editor.getData();
                 state = editor.getData();
+            });
 
-                if (@json($searchEnabled)) {
-                    @this.search(state);
-                }
+            @this.on('fillEditor', content => {
+                editor.setData(content);
             });
         })
         .catch(error => {
@@ -17,13 +17,8 @@
         <textarea wire:ignore x-ref="content" x-bind:value="state"></textarea>
     </div>
 
-    @if($searchEnabled && !empty($searchResults))
-        <ul class="search-results">
-            @foreach($searchResults as $result)
-                <li wire:click="selectResult('{{ $result['title'] }}')">{{ $result['title'] }}</li>
-            @endforeach
-        </ul>
-    @endif
+    <!-- Include the Livewire search component -->
+    @livewire('c-k-editor-search')
 
     <script src="{{ asset('vendor/ckeditor5/build/ckeditor.js') }}"></script>
 </x-dynamic-component>

@@ -9,8 +9,6 @@ class CKEditor extends Field
     protected string $view = 'forms.components.ck-editor';
 
     public ?string $state = null;
-    public array $searchResults = [];
-    protected bool $searchEnabled = false;
 
     public function setUp(): void
     {
@@ -20,34 +18,12 @@ class CKEditor extends Field
             return trim($state ?? '');
         });
 
-        if ($this->searchEnabled) {
-            $this->afterStateUpdated(function (?string $state) {
-                if ($this->searchEnabled && strlen($state) > 2) {
-                    $this->search($state);
-                }
-            });
-        }
+        // Listen for the fillEditor event to update the CKEditor content
+        $this->listeners(['fillEditor' => 'fillEditor']);
     }
 
-    public function searchEnabled(bool $enabled = true): static
+    public function fillEditor($content)
     {
-        $this->searchEnabled = $enabled;
-        return $this;
-    }
-
-    public function search(?string $query): void
-    {
-        if ($query) {
-            // Example search logic
-            $this->searchResults = Question::where('title', 'like', '%' . $query . '%')->get()->toArray();
-        } else {
-            $this->searchResults = [];
-        }
-    }
-
-    public function selectResult(string $result): void
-    {
-        $this->state = $result;
-        $this->searchResults = [];
+        $this->state = $content;
     }
 }
