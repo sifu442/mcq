@@ -16,8 +16,9 @@ class CustomSearch extends Field
         // Custom dehydrate logic if needed
     }
 
-    public function searchResults($results): static
+    public function __construct(string $name, ?string $label = null)
     {
-        return $this->viewData(['searchResults' => $results]);
+        parent::__construct($name, $label);
+        $this->dehydrated(false);
     }
 }
