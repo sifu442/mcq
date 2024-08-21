@@ -8,7 +8,7 @@ class CustomModal extends Component
 {
     public function render()
     {
-        return view('livewire.custom-modal');
+        return view('livewire.attach');
     }
 
 }
