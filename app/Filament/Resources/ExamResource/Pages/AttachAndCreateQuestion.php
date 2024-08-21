@@ -26,10 +26,6 @@ class AttachAndCreateQuestion extends Page
                     $this->searchResults = Question::where('title', 'like', "%$state%")->get();
                     $set('searchResults', $this->searchResults);
                 }),
-            Repeater::make('searchResults')
-                ->schema([
-                    
-                ]),
         ];
     }
 
