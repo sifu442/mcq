@@ -6,7 +6,7 @@
                 $refs.content.value = editor.getData();
                 state = editor.getData();
 
-                @if($field->getSearchEnabled())
+                @if($field->searchEnabled)
                     @this.set('query', state); // Trigger search using CKEditor content
                 @endif
             });
@@ -21,7 +21,7 @@
         <textarea wire:ignore x-ref="content" x-bind:value="state"></textarea>
     </div>
 
-    @if($field->getSearchEnabled())
+    @if($field->searchEnabled)
         @livewire('c-k-editor-search')
     @endif
 
