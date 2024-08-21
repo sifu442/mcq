@@ -9,9 +9,8 @@ class CKEditor extends Field
     protected string $view = 'forms.components.ck-editor';
 
     public ?string $state = null;
-    public ?string $searchQuery = null;
     public array $searchResults = [];
-    protected bool $searchEnabled = false; // Track if search is enabled
+    protected bool $searchEnabled = false;
 
     public function setUp(): void
     {
@@ -21,21 +20,26 @@ class CKEditor extends Field
             return trim($state ?? '');
         });
 
-        // Set up search if enabled
         if ($this->searchEnabled) {
             $this->afterStateUpdated(function (?string $state) {
                 if ($this->searchEnabled && strlen($state) > 2) {
-                    $this->search();
+                    $this->search($state);
                 }
             });
         }
     }
 
-    public function search(): void
+    public function searchEnabled(bool $enabled = true): static
     {
-        if ($this->searchQuery) {
-            // Replace with your logic to search related records
-            $this->searchResults = Question::where('title', 'like', '%' . $this->searchQuery . '%')->get()->toArray();
+        $this->searchEnabled = $enabled;
+        return $this;
+    }
+
+    public function search(?string $query): void
+    {
+        if ($query) {
+            // Example search logic
+            $this->searchResults = Question::where('title', 'like', '%' . $query . '%')->get()->toArray();
         } else {
             $this->searchResults = [];
         }
@@ -45,13 +49,5 @@ class CKEditor extends Field
     {
         $this->state = $result;
         $this->searchResults = [];
-    }
-
-    // Method to enable search
-    public function searchEnabled(bool $enabled = true): static
-    {
-        $this->searchEnabled = $enabled;
-
-        return $this;
     }
 }

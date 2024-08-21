@@ -6,11 +6,9 @@
                 $refs.content.value = editor.getData();
                 state = editor.getData();
 
-                @if($searchEnabled)
-                    if (state.length > 2) {
-                        $wire.search();
-                    }
-                @endif
+                if (@json($searchEnabled)) {
+                    @this.search(state);
+                }
             });
         })
         .catch(error => {
