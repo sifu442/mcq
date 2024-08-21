@@ -5,6 +5,8 @@
             editor.model.document.on('change:data', () => {
                 $refs.content.value = editor.getData();
                 state = editor.getData();
+
+                @this.set('query', state); // Trigger search using CKEditor content
             });
 
             @this.on('fillEditor', content => {
@@ -18,7 +20,7 @@
     </div>
 
     <!-- Include the Livewire search component -->
-    @livewire('ck-editor-search')
+    @livewire('c-k-editor-search')
 
     <script src="{{ asset('vendor/ckeditor5/build/ckeditor.js') }}"></script>
 </x-dynamic-component>
