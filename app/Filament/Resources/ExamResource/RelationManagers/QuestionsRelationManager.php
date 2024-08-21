@@ -77,7 +77,7 @@ class QuestionsRelationManager extends RelationManager
             ->filters([])
             ->headerActions([
                 Action::make('advance')
-                ->modalContent(view(''))
+                ->modalContent(view('livewire.custom-modal'))
             ])
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
