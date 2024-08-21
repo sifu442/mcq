@@ -84,10 +84,6 @@ class QuestionsRelationManager extends RelationManager
                         TextInput::make('previous_exam')->label('Exam Name'),
                         TextInput::make('post'),
                         DatePicker::make('date')->native(false),
-                        CustomSearch::make('title-serach')
-                        ->searchResults(
-                            $this->search($this->form->getState()['content'] ?? '')
-                        ),
                         Repeater::make('options')
                             ->required()
                             ->deletable(false)
