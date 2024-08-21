@@ -1,5 +1,3 @@
-<x-filament-panels::page>
-
     @if(count($this->searchResults) > 0)
         <div class="mt-4">
             <h3 class="text-lg font-medium">Search Results:</h3>
@@ -11,4 +9,4 @@
         </div>
     @endif
 
-</x-filament-panels::page>
+
