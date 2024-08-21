@@ -5,7 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Question;
 
-class CustomModal extends Component
+class Attach extends Component
 {
     public $search = '';
     public $selectedQuestion = null;
