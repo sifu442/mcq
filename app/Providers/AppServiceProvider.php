@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Livewire\Livewire;
-use App\Http\Livewire\CkEditorSearch;
+use App\Livewire\CkEditorSearch;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
