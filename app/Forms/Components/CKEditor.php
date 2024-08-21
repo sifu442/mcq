@@ -8,8 +8,7 @@ class CKEditor extends Field
 {
     protected string $view = 'forms.components.ck-editor';
 
-    public ?string $state = null;
-    protected bool $searchEnabled = false;
+    public bool $searchEnabled = false;
 
     public function setUp(): void
     {

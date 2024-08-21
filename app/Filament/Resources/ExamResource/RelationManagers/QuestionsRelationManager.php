@@ -79,7 +79,7 @@ class QuestionsRelationManager extends RelationManager
                 Action::make('advance')
                 ->form([
                     CKEditor::make('question')
-                    ->searchEnabled()
+                    ->searchEnabled(true)
                 ])
             ])
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
