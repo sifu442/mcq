@@ -24,6 +24,13 @@ class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
 
+    public $searchResults = [];
+
+    public function performSearch($title)
+    {
+        $this->searchResults = Question::where('title', 'like', "%{$title}%")->pluck('title')->toArray();
+    }
+
     public function form(Form $form): Form
     {
         $latestExam = Question::latest()->first();
