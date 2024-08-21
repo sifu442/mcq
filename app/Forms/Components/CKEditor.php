@@ -11,6 +11,7 @@ class CKEditor extends Field
     public ?string $state = null;
     public ?string $searchQuery = null;
     public array $searchResults = [];
+    protected bool $searchEnabled = false; // Track if search is enabled
 
     public function setUp(): void
     {
@@ -19,6 +20,15 @@ class CKEditor extends Field
         $this->dehydrateStateUsing(static function (?string $state): string {
             return trim($state ?? '');
         });
+
+        // Set up search if enabled
+        if ($this->searchEnabled) {
+            $this->afterStateUpdated(function (?string $state) {
+                if ($this->searchEnabled && strlen($state) > 2) {
+                    $this->search();
+                }
+            });
+        }
     }
 
     public function search(): void
@@ -35,5 +45,13 @@ class CKEditor extends Field
     {
         $this->state = $result;
         $this->searchResults = [];
+    }
+
+    // Method to enable search
+    public function searchEnabled(bool $enabled = true): static
+    {
+        $this->searchEnabled = $enabled;
+
+        return $this;
     }
 }

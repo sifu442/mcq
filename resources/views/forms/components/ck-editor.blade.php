@@ -6,10 +6,11 @@
                 $refs.content.value = editor.getData();
                 state = editor.getData();
 
-                // Trigger search on data change if needed
-                if ($refs.content.value.length > 2) {
-                    $wire.search();
-                }
+                @if($searchEnabled)
+                    if (state.length > 2) {
+                        $wire.search();
+                    }
+                @endif
             });
         })
         .catch(error => {
@@ -18,8 +19,7 @@
         <textarea wire:ignore x-ref="content" x-bind:value="state"></textarea>
     </div>
 
-    <!-- Render Search Results -->
-    @if(!empty($searchResults))
+    @if($searchEnabled && !empty($searchResults))
         <ul class="search-results">
             @foreach($searchResults as $result)
                 <li wire:click="selectResult('{{ $result['title'] }}')">{{ $result['title'] }}</li>
