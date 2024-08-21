@@ -78,11 +78,8 @@ class QuestionsRelationManager extends RelationManager
             ->headerActions([
                 Action::make('advance')
                 ->form([
-                    CustomSearch::make('question')
-                    ->options(function () {
-                        // Fetch dynamic options here
-                        return Question::all()->pluck('name', 'id')->toArray();
-                    })
+                    CKEditor::make('question')
+                    ->search()
                 ])
             ])
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
