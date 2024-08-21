@@ -1,5 +1,4 @@
 <x-filament-panels::page>
-    {{ $this->form }}
 
     @if(count($this->searchResults) > 0)
         <div class="mt-4">
