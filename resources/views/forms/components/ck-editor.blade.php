@@ -18,7 +18,7 @@
     </div>
 
     <!-- Include the Livewire search component -->
-    @livewire('c-k-editor-search')
+    @livewire('ck-editor-search')
 
     <script src="{{ asset('vendor/ckeditor5/build/ckeditor.js') }}"></script>
 </x-dynamic-component>

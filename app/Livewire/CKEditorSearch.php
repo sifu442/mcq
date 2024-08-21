@@ -7,7 +7,7 @@ use App\Models\Question;
 
 class CKEditorSearch extends Component
 {
-    public $query;
+    public $query = '';
     public $searchResults = [];
 
     public function updatedQuery()

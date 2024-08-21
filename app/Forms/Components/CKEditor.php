@@ -17,13 +17,5 @@ class CKEditor extends Field
         $this->dehydrateStateUsing(static function (?string $state): string {
             return trim($state ?? '');
         });
-
-        // Listen for the fillEditor event to update the CKEditor content
-        $this->listeners(['fillEditor' => 'fillEditor']);
-    }
-
-    public function fillEditor($content)
-    {
-        $this->state = $content;
     }
 }
