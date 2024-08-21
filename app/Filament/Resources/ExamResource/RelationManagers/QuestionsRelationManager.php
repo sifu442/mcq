@@ -74,6 +74,8 @@ class QuestionsRelationManager extends RelationManager
             ])
             ->filters([])
             ->headerActions([
+                Action::make('create-and-attach')
+                ,
                 Action::make('Attach')
                     ->form([
                         Select::make('subject_id')
