@@ -77,7 +77,9 @@ class QuestionsRelationManager extends RelationManager
             ->filters([])
             ->headerActions([
                 Action::make('advance')
-                ->modalContent(view('filament.pages.search-questions'))
+                ->form([
+                    CustomSearch::make('que')
+                ])
             ])
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);

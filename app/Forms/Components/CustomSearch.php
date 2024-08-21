@@ -12,13 +12,5 @@ class CustomSearch extends Field
     public function setUp(): void
     {
         parent::setUp();
-
-        // Custom dehydrate logic if needed
-    }
-
-    public function __construct(string $name, ?string $label = null)
-    {
-        parent::__construct($name, $label);
-        $this->dehydrated(false);
     }
 }
