@@ -82,20 +82,9 @@ class QuestionsRelationManager extends RelationManager
             ->headerActions([
                 Action::make('advance')
                 ->form([
-                    TextInput::make('step_field_name')
-    ->label('Field Name')
-    ->live(onBlur: true)
-    ->afterStateUpdated(function (?string $state, \Livewire\Component $livewire) {
-        array_push($livewire->field_names, $state);
-    }),
-
-Select::make('step_conditional_field_option')
-    ->options(fn (\Livewire\Component $livewire): array => $livewire->field_names)
-    ->label('Select Field')
-    ->live() // Ensures the component reacts to changes
-    ->afterStateUpdated(function ($state, \Livewire\Component $livewire) {
-        $livewire->set('step_field_name', $state); // Update the TextInput field with the selected value
-    })
+                    Select::make('question')
+                        ->searchable()
+                        ->live()
                 ])
             ])
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
