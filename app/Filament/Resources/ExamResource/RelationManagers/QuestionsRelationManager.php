@@ -84,6 +84,7 @@ class QuestionsRelationManager extends RelationManager
                 ->form([
                     Select::make('question')
                         ->searchable()
+                        ->live()
                 ])
             ])
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
