@@ -8,8 +8,6 @@ class CKEditor extends Field
 {
     protected string $view = 'forms.components.ck-editor';
 
-    public bool $searchEnabled = false;
-
     public function setUp(): void
     {
         parent::setUp();
@@ -19,9 +17,4 @@ class CKEditor extends Field
         });
     }
 
-    public function searchEnabled(bool $enabled = true): static
-    {
-        $this->searchEnabled = $enabled;
-        return $this;
-    }
 }
