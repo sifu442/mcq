@@ -1,23 +1,27 @@
 <?php
 namespace App\Filament\Resources\ExamResource\RelationManagers;
 
+use Closure;
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Forms\Get;
 use Filament\Forms\Set;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Forms\Components\CKEditor;
-use App\Forms\Components\CustomSearch;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
+use App\Forms\Components\CustomSearch;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Placeholder;
+use App\Forms\Components\QuestionSearchList;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class QuestionsRelationManager extends RelationManager
@@ -78,10 +82,40 @@ class QuestionsRelationManager extends RelationManager
             ->headerActions([
                 Action::make('advance')
                 ->form([
-                    TextInput::make('question')
+                    TextInput::make('title')
+                    ->afterStateUpdated(function (Closure $set, $state) {
+                        $questions = DB::table('questions')
+                            ->where('title', 'like', '%' . $state . '%')
+                            ->get(['id', 'title'])
+                            ->toArray();
+
+                        $set('questionSearchResults', $questions);
+                    }),
+                QuestionSearchList::make('questionSearchResults')
+                    ->label('Search Results')
+                    ->questions([]),
                 ])
             ])
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
+    }
+
+    protected function getListeners(): array
+    {
+        return [
+            'questionSelected' => 'fillTitle',
+            'searchQuestions' => 'searchQuestions',
+        ];
+    }
+
+    public function fillTitle($questionId)
+    {
+        $question = DB::table('questions')->find($questionId);
+        $this->form->fill(['title' => $question->title]);
+    }
+
+    public function searchQuestions($search)
+    {
+        // Logic to dynamically update the QuestionSearchList based on the search
     }
 }
