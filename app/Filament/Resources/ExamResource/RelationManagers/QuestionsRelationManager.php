@@ -82,9 +82,7 @@ class QuestionsRelationManager extends RelationManager
             ->headerActions([
                 Action::make('advance')
                 ->form([
-                    Select::make('question')
-                        ->searchable()
-                        ->live()
+
                 ])
             ])
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
