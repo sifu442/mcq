@@ -82,18 +82,7 @@ class QuestionsRelationManager extends RelationManager
             ->headerActions([
                 Action::make('advance')
                 ->form([
-                    TextInput::make('title')
-                    ->afterStateUpdated(function (Closure $set, $state) {
-                        $questions = DB::table('questions')
-                            ->where('title', 'like', '%' . $state . '%')
-                            ->get(['id', 'title'])
-                            ->toArray();
-
-                        $set('questionSearchResults', $questions);
-                    }),
-                QuestionSearchList::make('questionSearchResults')
-                    ->label('Search Results')
-                    ->questions([]),
+                    
                 ])
             ])
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
