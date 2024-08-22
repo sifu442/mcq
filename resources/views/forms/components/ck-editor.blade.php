@@ -5,14 +5,6 @@
             editor.model.document.on('change:data', () => {
                 $refs.content.value = editor.getData();
                 state = editor.getData();
-
-                @if($field->searchEnabled)
-                    @this.set('query', state); // Trigger search using CKEditor content
-                @endif
-            });
-
-            @this.on('fillEditor', content => {
-                editor.setData(content);
             });
         })
         .catch(error => {
@@ -20,10 +12,5 @@
         });">
         <textarea wire:ignore x-ref="content" x-bind:value="state"></textarea>
     </div>
-
-    @if($field->searchEnabled)
-        @livewire('ck-editor-search')
-    @endif
-
     <script src="{{ asset('vendor/ckeditor5/build/ckeditor.js') }}"></script>
 </x-dynamic-component>
