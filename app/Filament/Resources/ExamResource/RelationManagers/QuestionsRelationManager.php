@@ -78,8 +78,7 @@ class QuestionsRelationManager extends RelationManager
             ->headerActions([
                 Action::make('advance')
                 ->form([
-                    CKEditor::make('question')
-                    ->searchEnabled(true)
+                    TextInput::make('question')
                 ])
             ])
             ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
