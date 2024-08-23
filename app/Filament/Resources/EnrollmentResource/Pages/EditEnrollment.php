@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Filament\Actions;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\EnrollmentResource;
@@ -20,6 +21,9 @@ class EditEnrollment extends EditRecord
             Actions\Action::make('Apply Days')
                 ->label('Apply Days to Routine')
                 ->action('applyDaysToRoutine')
+                ->form([
+                    
+                ])
                 ->requiresConfirmation()
                 ->color('primary'),
             Actions\DeleteAction::make(),
@@ -65,8 +69,16 @@ class EditEnrollment extends EditRecord
 
             // Save the updated state
             $this->save();
+
+            Notification::make()
+                ->title('Days Applied Successfully')
+                ->success()
+                ->send();
         } else {
-            $this->notify('warning', 'Please enter a valid number of days.');
+            Notification::make()
+                ->title('Please enter a valid number of days.')
+                ->warning()
+                ->send();
         }
     }
 }
