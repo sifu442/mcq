@@ -13,7 +13,14 @@ class EditEnrollment extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('Apply Days')
+                ->label('Apply Days to Routine')
+                ->action('applyDaysToRoutine')
+                ->requiresConfirmation()
+                ->color('primary'),
             Actions\DeleteAction::make(),
         ];
     }
+
+    
 }
