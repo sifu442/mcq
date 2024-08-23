@@ -55,25 +55,7 @@ class EditEnrollment extends EditRecord
 
                 // Refresh the form to reflect the changes
                 $this->fillForm();
-
-                Notification::make()
-                    ->title('Success')
-                    ->body('Dates have been adjusted successfully.')
-                    ->success()
-                    ->send();
-            } else {
-                Notification::make()
-                    ->title('Warning')
-                    ->body('Please enter a valid number of days.')
-                    ->warning()
-                    ->send();
             }
-        } else {
-            Notification::make()
-                ->title('Error')
-                ->body('The "days" input is missing.')
-                ->danger()
-                ->send();
         }
     }
 }
