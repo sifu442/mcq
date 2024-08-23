@@ -32,10 +32,8 @@ class EditEnrollment extends EditRecord
 
     public function adjustDates()
     {
-        // Retrieve the form state
         $data = $this->form->getState();
 
-        // Check if 'days' exists in the data
         if (isset($data['days'])) {
             $days = (int) $data['days'];
 
@@ -46,7 +44,7 @@ class EditEnrollment extends EditRecord
                     $newStartTime = Carbon::parse($routine->start_time)->addDays($days);
                     $newEndTime = Carbon::parse($routine->end_time)->addDays($days);
 
-                    // Directly update the database
+                    // Update the database
                     $routine->update([
                         'start_time' => $newStartTime,
                         'end_time' => $newEndTime,
