@@ -31,31 +31,36 @@ class EditEnrollment extends EditRecord
 
     public function adjustDates()
     {
-        // Retrieve the form state directly
+        // Retrieve the form state
         $data = $this->form->getState();
 
-        $days = (int) $data['days'];
+        // Check if 'days' exists in the data
+        if (isset($data['days'])) {
+            $days = (int) $data['days'];
 
-        if ($days > 0) {
-            $enrollment = $this->record;
+            if ($days > 0) {
+                $enrollment = $this->record;
 
-            foreach ($enrollment->routine as $routine) {
-                $newStartTime = Carbon::parse($routine->start_time)->addDays($days);
-                $newEndTime = Carbon::parse($routine->end_time)->addDays($days);
+                foreach ($enrollment->routine as $routine) {
+                    $newStartTime = Carbon::parse($routine->start_time)->addDays($days);
+                    $newEndTime = Carbon::parse($routine->end_time)->addDays($days);
 
-                // Directly update the database
-                $routine->update([
-                    'start_time' => $newStartTime,
-                    'end_time' => $newEndTime,
-                ]);
+                    // Directly update the database
+                    $routine->update([
+                        'start_time' => $newStartTime,
+                        'end_time' => $newEndTime,
+                    ]);
+                }
+
+                // Refresh the form to reflect the changes
+                $this->fillForm();
+
+                $this->notify('success', 'Dates have been adjusted successfully.');
+            } else {
+                $this->notify('warning', 'Please enter a valid number of days.');
             }
-
-            // Refresh the form to reflect the changes
-            $this->fillForm();
-
-            $this->notify('success', 'Dates have been adjusted successfully.');
         } else {
-            $this->notify('warning', 'Please enter a valid number of days.');
+            $this->notify('danger', 'The "days" input is missing.');
         }
     }
 }
