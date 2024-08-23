@@ -54,7 +54,7 @@ class UserResource extends Resource
                     return (string) ($rowLoop->iteration + $livewire->tableRecordsPerPage * ($currentPage - 1));
                 }),
                 Tables\Columns\TextColumn::make('name')->searchable(),
-                Tables\Columns\TextColumn::make('email')->searchable(),
+                Tables\Columns\TextColumn::make('mobile_phone')->searchable(),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('roles.name')->searchable(),
