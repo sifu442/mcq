@@ -34,6 +34,9 @@ class EditEnrollment extends EditRecord
                     })->toArray();
 
                     $this->record->save();
+                    $this->refreshFormData([
+                        'status',
+                    ]);
                 }),
             DeleteAction::make(),
         ];
