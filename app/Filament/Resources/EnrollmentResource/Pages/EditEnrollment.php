@@ -5,6 +5,7 @@ namespace App\Filament\Resources\EnrollmentResource\Pages;
 use Carbon\Carbon;
 use Filament\Actions;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\Resources\EnrollmentResource;
 
@@ -55,12 +56,24 @@ class EditEnrollment extends EditRecord
                 // Refresh the form to reflect the changes
                 $this->fillForm();
 
-                $this->notify('success', 'Dates have been adjusted successfully.');
+                Notification::make()
+                    ->title('Success')
+                    ->body('Dates have been adjusted successfully.')
+                    ->success()
+                    ->send();
             } else {
-                $this->notify('warning', 'Please enter a valid number of days.');
+                Notification::make()
+                    ->title('Warning')
+                    ->body('Please enter a valid number of days.')
+                    ->warning()
+                    ->send();
             }
         } else {
-            $this->notify('danger', 'The "days" input is missing.');
+            Notification::make()
+                ->title('Error')
+                ->body('The "days" input is missing.')
+                ->danger()
+                ->send();
         }
     }
 }
