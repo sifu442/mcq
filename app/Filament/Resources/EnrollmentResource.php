@@ -76,11 +76,7 @@ class EnrollmentResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->form([
-                        TextInput::make('increase-days')
-                            ->numeric()
-                    ]),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
