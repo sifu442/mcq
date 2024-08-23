@@ -24,38 +24,33 @@ class EditEnrollment extends EditRecord
                         ->numeric()
                         ->required(),
                 ])
-                //->action('adjustDates')
+                ->action(function () {
+                    $data = $this->form->getState();
+
+                    if (isset($data['days'])) {
+                        $days = (int) $data['days'];
+
+                        if ($days > 0) {
+                            $enrollment = $this->record;
+
+                            foreach ($enrollment->routine as $routine) {
+                                $newStartTime = Carbon::parse($routine->start_time)->addDays($days);
+                                $newEndTime = Carbon::parse($routine->end_time)->addDays($days);
+
+                                // Update the database
+                                $routine->update([
+                                    'start_time' => $newStartTime,
+                                    'end_time' => $newEndTime,
+                                ]);
+                            }
+
+                            // Refresh the form
+                            $this->fillForm();
+                        }
+                    }
+                })
                 ->color('primary'),
             Actions\DeleteAction::make(),
         ];
     }
-
-    public function adjustDates()
-    {
-        // Ensure the form state is fetched properly
-        $data = $this->form->getState();
-
-        if (isset($data['days'])) {
-            $days = (int) $data['days'];
-
-            if ($days > 0) {
-                $enrollment = $this->record;
-
-                foreach ($enrollment->routine as $routine) {
-                    $newStartTime = Carbon::parse($routine->start_time)->addDays($days);
-                    $newEndTime = Carbon::parse($routine->end_time)->addDays($days);
-
-                    // Update the database
-                    $routine->update([
-                        'start_time' => $newStartTime,
-                        'end_time' => $newEndTime,
-                    ]);
-                }
-
-                // Refresh the form
-                $this->fillForm();
-            }
-        }
-    }
-
 }
