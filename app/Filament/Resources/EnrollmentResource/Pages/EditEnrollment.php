@@ -34,9 +34,10 @@ class EditEnrollment extends EditRecord
                     })->toArray();
 
                     $this->record->save();
-                    $this->refreshFormData([
-                        'status',
-                    ]);
+
+                })
+                ->after(function () {
+                    $this->redirect($this->getResource()::getUrl('edit', ['record' => $this->record->getKey()]));
                 }),
             DeleteAction::make(),
         ];
