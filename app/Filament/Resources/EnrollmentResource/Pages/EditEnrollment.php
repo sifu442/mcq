@@ -27,6 +27,9 @@ class EditEnrollment extends EditRecord
         ];
     }
 
-    
+    protected function getFormActions(): array
+{
+    return [];
+}
 
 }
