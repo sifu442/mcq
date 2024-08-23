@@ -29,18 +29,29 @@ class EditEnrollment extends EditRecord
         ];
     }
 
-    public function adjustDates(array $data)
+    public function adjustDates()
     {
+        // Retrieve the form state directly
+        $data = $this->form->getState();
+
         $days = (int) $data['days'];
 
         if ($days > 0) {
             $enrollment = $this->record;
 
             foreach ($enrollment->routine as $routine) {
-                $routine->start_time = Carbon::parse($routine->start_time)->addDays($days);
-                $routine->end_time = Carbon::parse($routine->end_time)->addDays($days);
-                $routine->save();
+                $newStartTime = Carbon::parse($routine->start_time)->addDays($days);
+                $newEndTime = Carbon::parse($routine->end_time)->addDays($days);
+
+                // Directly update the database
+                $routine->update([
+                    'start_time' => $newStartTime,
+                    'end_time' => $newEndTime,
+                ]);
             }
+
+            // Refresh the form to reflect the changes
+            $this->fillForm();
 
             $this->notify('success', 'Dates have been adjusted successfully.');
         } else {
