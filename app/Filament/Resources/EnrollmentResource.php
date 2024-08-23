@@ -15,6 +15,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\EnrollmentResource\Pages;
+use Filament\Forms\Components\TextInput;
 
 class EnrollmentResource extends Resource
 {
@@ -75,7 +76,11 @@ class EnrollmentResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->form([
+                        TextInput::make('increase-days')
+                            ->numeric()
+                    ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
