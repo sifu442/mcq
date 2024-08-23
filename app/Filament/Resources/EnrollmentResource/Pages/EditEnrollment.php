@@ -20,12 +20,27 @@ class EditEnrollment extends EditRecord
             Actions\Action::make('Apply Days')
                 ->label('Apply Days to Routine')
                 ->action('applyDaysToRoutine')
-                ->form([
-                    
-                ])
                 ->requiresConfirmation()
                 ->color('primary'),
             Actions\DeleteAction::make(),
+        ];
+    }
+
+    protected function getFormSchema(): array
+    {
+        return [
+            TextInput::make('day_number')
+                ->label('Number of Days')
+                ->numeric(),
+            Repeater::make('routine')
+                ->schema([
+                    DatePicker::make('start_time')
+                        ->label('Start Time'),
+                    DatePicker::make('end_time')
+                        ->label('End Time'),
+                ])
+                ->columns(2)
+                ->columnSpanFull(),
         ];
     }
 
