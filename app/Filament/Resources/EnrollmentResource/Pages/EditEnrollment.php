@@ -24,7 +24,37 @@ class EditEnrollment extends EditRecord
                         ->numeric()
                         ->required(),
                 ])
-                ->action('adjustDates')
+                ->action(function () {
+                    $data = $this->form->getState();
+
+                    if (isset($data['days'])) {
+                        $days = (int) $data['days'];
+
+                        if ($days > 0) {
+                            $enrollment = $this->record;
+
+                            foreach ($enrollment->routine as $routineData) {
+                                $routine = json_decode($routineData, true); // Convert JSON to array
+
+                                $startTime = Carbon::parse($routine['start_time']);
+                                $endTime = Carbon::parse($routine['end_time']);
+
+                                $newStartTime = $startTime->addDays($days);
+                                $newEndTime = $endTime->addDays($days);
+
+                                // Update the routine in the database
+                                // Assuming you have a method to update the routine, otherwise, you may need to handle this based on your model's setup
+                                $routine->update([
+                                    'start_time' => $newStartTime,
+                                    'end_time' => $newEndTime,
+                                ]);
+                            }
+
+                            // Refresh the form
+                            $this->fillForm();
+                        }
+                    }
+                })
                 ->color('primary')
                 ->modalHeading('Adjust Dates by Days')
                 ->requiresConfirmation(),
@@ -51,39 +81,5 @@ class EditEnrollment extends EditRecord
         }
 
         return $data;
-    }
-
-    public function adjustDates()
-    {
-        $data = $this->form->getState();
-
-        if (isset($data['days'])) {
-            $days = (int) $data['days'];
-
-            if ($days > 0) {
-                $enrollment = $this->record;
-
-                // Load routines if necessary
-                $enrollment->load('routine');
-
-                // Iterate over routines and update dates
-                foreach ($enrollment->routine as $routine) {
-                    $startTime = Carbon::parse($routine->start_time);
-                    $endTime = Carbon::parse($routine->end_time);
-
-                    $newStartTime = $startTime->addDays($days);
-                    $newEndTime = $endTime->addDays($days);
-
-                    // Update the routine in the database
-                    $routine->update([
-                        'start_time' => $newStartTime,
-                        'end_time' => $newEndTime,
-                    ]);
-                }
-
-                // Refresh the form to reflect changes
-                $this->fillForm();
-            }
-        }
     }
 }
