@@ -49,7 +49,9 @@ class EditEnrollment extends EditRecord
                         }
                     }
                 })
-                ->color('primary'),
+                ->color('primary')
+                ->modalHeading('Adjust Dates by Days')
+                ->requiresConfirmation(),
             Actions\DeleteAction::make(),
         ];
     }
