@@ -23,8 +23,28 @@ class EditEnrollment extends EditRecord
                         ->numeric()
                         ->required(),
                 ])
+                ->action('adjustDates')
                 ->color('primary'),
             Actions\DeleteAction::make(),
         ];
+    }
+
+    public function adjustDates(array $data)
+    {
+        $days = (int) $data['days'];
+
+        if ($days > 0) {
+            $enrollment = $this->record;
+
+            foreach ($enrollment->routine as $routine) {
+                $routine->start_time = Carbon::parse($routine->start_time)->addDays($days);
+                $routine->end_time = Carbon::parse($routine->end_time)->addDays($days);
+                $routine->save();
+            }
+
+            $this->notify('success', 'Dates have been adjusted successfully.');
+        } else {
+            $this->notify('warning', 'Please enter a valid number of days.');
+        }
     }
 }
