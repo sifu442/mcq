@@ -62,24 +62,4 @@ class EditEnrollment extends EditRecord
         ];
     }
 
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-        // If `days` is present in the form data, adjust the dates
-        if (isset($data['days']) && is_numeric($data['days'])) {
-            $days = (int) $data['days'];
-
-            // Adjust `routine` dates
-            if (isset($data['routine']) && is_array($data['routine'])) {
-                foreach ($data['routine'] as &$routine) {
-                    $startTime = Carbon::parse($routine['start_time']);
-                    $endTime = Carbon::parse($routine['end_time']);
-
-                    $routine['start_time'] = $startTime->addDays($days)->toDateTimeString();
-                    $routine['end_time'] = $endTime->addDays($days)->toDateTimeString();
-                }
-            }
-        }
-
-        return $data;
-    }
 }
