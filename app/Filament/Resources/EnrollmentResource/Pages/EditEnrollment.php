@@ -24,7 +24,7 @@ class EditEnrollment extends EditRecord
                         ->numeric()
                         ->required(),
                 ])
-                ->action('adjustDates')
+                //->action('adjustDates')
                 ->color('primary'),
             Actions\DeleteAction::make(),
         ];
@@ -32,6 +32,7 @@ class EditEnrollment extends EditRecord
 
     public function adjustDates()
     {
+        // Ensure the form state is fetched properly
         $data = $this->form->getState();
 
         if (isset($data['days'])) {
@@ -51,7 +52,7 @@ class EditEnrollment extends EditRecord
                     ]);
                 }
 
-                // Refresh the form to reflect the changes
+                // Refresh the form
                 $this->fillForm();
             }
         }
