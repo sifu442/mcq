@@ -33,11 +33,17 @@ class EditEnrollment extends EditRecord
                         if ($days > 0) {
                             $enrollment = $this->record;
 
-                            foreach ($enrollment->routine as $routine) {
-                                $newStartTime = Carbon::parse($routine->start_time)->addDays($days);
-                                $newEndTime = Carbon::parse($routine->end_time)->addDays($days);
+                            foreach ($enrollment->routine as $routineData) {
+                                $routine = json_decode($routineData, true); // Convert JSON to array
 
-                                // Update the database
+                                $startTime = Carbon::parse($routine['start_time']);
+                                $endTime = Carbon::parse($routine['end_time']);
+
+                                $newStartTime = $startTime->addDays($days);
+                                $newEndTime = $endTime->addDays($days);
+
+                                // Update the routine in the database
+                                // Assuming you have a method to update the routine, otherwise, you may need to handle this based on your model's setup
                                 $routine->update([
                                     'start_time' => $newStartTime,
                                     'end_time' => $newEndTime,
