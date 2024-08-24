@@ -150,4 +150,15 @@
             },
         }
     }
+
+    window.addEventListener('beforeunload', function (e) {
+        // Custom message for the confirmation dialog
+        const confirmationMessage = 'Are you sure you want to leave? Any unsaved changes will be lost.';
+
+        // Standard message for browsers that don't support custom messages
+        e.returnValue = confirmationMessage;
+
+        // For older browsers
+        return confirmationMessage;
+    });
 </script>
