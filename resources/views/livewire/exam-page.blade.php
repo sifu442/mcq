@@ -65,7 +65,7 @@
     </div>
 
     <!-- Floating Top for Mobile/Tablets -->
-    <div class="lg:hidden fixed top-0 left-0 right-0 bg-blue-50 dark:bg-gray-800 p-4 shadow-lg flex items-center justify-between z-50" style="margin-top: 4rem;">
+    <div class="lg:hidden fixed inset-x-0 top-0 bg-blue-50 dark:bg-gray-800 p-4 shadow-lg flex items-center justify-between z-50" style="margin-top: 0;">
         <!-- Timer -->
         <div class="text-center">
             <span class="text-lg font-bold">Time Left</span>
