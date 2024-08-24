@@ -1,12 +1,13 @@
 <?php
 namespace App\Livewire;
 
+use Log;
+use Carbon\Carbon;
 use App\Models\Exam;
+use Livewire\Component;
 use App\Models\Enrollment;
 use App\Models\ExamResponse;
-use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class ExamPage extends Component
 {
@@ -59,56 +60,62 @@ class ExamPage extends Component
     }
 
     public function submitExam()
-    {
-        if ($this->examSubmitted) {
-            return;
-        }
+{
+    if ($this->examSubmitted) {
+        return;
+    }
 
-        $user = Auth::user();
+    $user = Auth::user();
+
+    if ($this->exam) {
         $responseData = [];
+        $totalScore = 0;
 
         foreach ($this->exam->questions as $question) {
-            $correctAnswer = collect($question->options)->where('is_correct', true)->pluck('options')->first();
-            $userAnswer = $this->answers[$question->id] ?? null;
-            $isCorrect = $userAnswer === $correctAnswer;
+            // Check if the question object and its options exist
+            if ($question && $question->options) {
+                $correctAnswer = collect($question->options)->where('is_correct', true)->pluck('options')->first();
+                $userAnswer = $this->answers[$question->id] ?? null;
+                $isCorrect = $userAnswer === $correctAnswer;
 
-            $options = collect($question->options)->pluck('options')->toArray();
+                $options = collect($question->options)->pluck('options')->toArray();
 
-            $responseData[] = [
-                'question' => $question->title,
-                'options' => $options,
-                'user_input' => $userAnswer,
-                'correct_answer' => $correctAnswer,
-            ];
+                $responseData[] = [
+                    'question' => $question->title,
+                    'options' => $options,
+                    'user_input' => $userAnswer,
+                    'correct_answer' => $correctAnswer,
+                ];
 
-            if ($isCorrect) {
-                $this->correctCount++;
-                $this->totalScore += $this->exam->score;
-            } elseif ($userAnswer !== null) {
-                $this->wrongCount++;
-                $this->lostPoints += $this->exam->penalty;
-                $this->totalScore -= $this->exam->penalty;
+                if ($isCorrect) {
+                    $totalScore += $this->exam->score;
+                } elseif ($userAnswer !== null) {
+                    $totalScore -= $this->exam->penalty;
+                }
+            } else {
+                // Log or handle cases where the question or options are null
+                Log::warning('Question or options are null for question ID: ' . $question->id);
             }
         }
-
-        $this->unansweredCount = $this->exam->questions->count() - $this->correctCount - $this->wrongCount;
 
         ExamResponse::create([
             'user_id' => $user->id,
             'exam_id' => $this->exam->id,
             'response_data' => $responseData,
-            'total_score' => $this->totalScore,
-            'correct_count' => $this->correctCount,
-            'wrong_count' => $this->wrongCount,
-            'unanswered_count' => $this->unansweredCount,
-            'lost_points' => $this->lostPoints,
+            'total_score' => $totalScore,
+            'answered_correctly' => $this->calculateAnsweredCorrectly(),
+            'answered_wrong' => $this->calculateAnsweredWrong(),
+            'unanswered' => $this->calculateUnanswered(),
+            'lost_points' => $this->calculateLostPoints(),
         ]);
-
-        $this->examSubmitted = true;
-        $this->reset(['answers']);
-
-        return redirect()->route('exam-results', ['examId' => $this->examId]);
     }
+
+    $this->examSubmitted = true;
+    $this->reset(['answers']);
+
+    return redirect()->route('exam-results', ['examId' => $this->examId]);
+}
+
 
     public function render()
     {
