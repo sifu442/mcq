@@ -149,10 +149,4 @@
             },
         }
     }
-
-    window.addEventListener('beforeunload', function (e) {
-        const confirmationMessage = 'Are you sure you want to leave? Any unsaved changes will be lost.';
-        e.returnValue = confirmationMessage;
-        return confirmationMessage;
-    });
 </script>

@@ -18,10 +18,10 @@ return new class extends Migration
             $table->json('response_data'); // JSON column to store user responses
             $table->decimal('total_score');
             $table->boolean('can_retake')->default(false);
-            $table->unsignedInteger('correct_count')->default(0);
-            $table->unsignedInteger('wrong_count')->default(0);
-            $table->unsignedInteger('unanswered_count')->default(0);
-            $table->unsignedInteger('lost_points')->default(0);
+            $table->decimal('correct_count')->default(0);
+            $table->decimal('wrong_count')->default(0);
+            $table->decimal('unanswered_count')->default(0);
+            $table->decimal('lost_points')->default(0);
             $table->timestamps();
         });
     }

@@ -68,54 +68,131 @@ class ExamPage extends Component
     $user = Auth::user();
 
     if ($this->exam) {
+        $correctCount = 0;
+        $wrongCount = 0;
+        $unansweredCount = 0;
         $responseData = [];
-        $totalScore = 0;
 
         foreach ($this->exam->questions as $question) {
-            // Check if the question object and its options exist
             if ($question && $question->options) {
                 $correctAnswer = collect($question->options)->where('is_correct', true)->pluck('options')->first();
                 $userAnswer = $this->answers[$question->id] ?? null;
-                $isCorrect = $userAnswer === $correctAnswer;
-
-                $options = collect($question->options)->pluck('options')->toArray();
 
                 $responseData[] = [
                     'question' => $question->title,
-                    'options' => $options,
+                    'options' => collect($question->options)->pluck('options')->toArray(),
                     'user_input' => $userAnswer,
                     'correct_answer' => $correctAnswer,
                 ];
 
-                if ($isCorrect) {
-                    $totalScore += $this->exam->score;
-                } elseif ($userAnswer !== null) {
-                    $totalScore -= $this->exam->penalty;
+                if ($userAnswer === null) {
+                    $unansweredCount++;
+                } elseif ($userAnswer === $correctAnswer) {
+                    $correctCount++;
+                    $this->totalScore += $this->exam->score;
+                } else {
+                    $wrongCount++;
+                    $this->totalScore -= $this->exam->penalty;
                 }
-            } else {
-                // Log or handle cases where the question or options are null
-                Log::warning('Question or options are null for question ID: ' . $question->id);
             }
         }
 
+        $totalScore = $this->totalScore;
+
+        // Save the response data
         ExamResponse::create([
             'user_id' => $user->id,
             'exam_id' => $this->exam->id,
             'response_data' => $responseData,
             'total_score' => $totalScore,
-            'answered_correctly' => $this->calculateAnsweredCorrectly(),
-            'answered_wrong' => $this->calculateAnsweredWrong(),
-            'unanswered' => $this->calculateUnanswered(),
-            'lost_points' => $this->calculateLostPoints(),
+            'answered_correctly' => $correctCount,
+            'answered_wrong' => $wrongCount,
+            'unanswered' => $unansweredCount,
+            'lost_points' => $wrongCount * $this->exam->penalty, // Lost points due to incorrect answers
         ]);
     }
 
     $this->examSubmitted = true;
     $this->reset(['answers']);
 
+    // Redirect to the exam results page
     return redirect()->route('exam-results', ['examId' => $this->examId]);
 }
 
+
+    public function calculateAnsweredCorrectly()
+    {
+        $correctlyAnswered = 0;
+
+        foreach ($this->exam->questions as $question) {
+            if ($question && $question->options) {
+                $correctAnswer = collect($question->options)
+                    ->where('is_correct', true)
+                    ->pluck('options')
+                    ->first();
+                $userAnswer = $this->answers[$question->id] ?? null;
+                if ($userAnswer === $correctAnswer) {
+                    $correctlyAnswered++;
+                }
+            }
+        }
+
+        return $correctlyAnswered;
+    }
+
+    public function calculateAnsweredWrong()
+    {
+        $wronglyAnswered = 0;
+
+        foreach ($this->exam->questions as $question) {
+            if ($question && $question->options) {
+                $correctAnswer = collect($question->options)
+                    ->where('is_correct', true)
+                    ->pluck('options')
+                    ->first();
+                $userAnswer = $this->answers[$question->id] ?? null;
+                if ($userAnswer !== null && $userAnswer !== $correctAnswer) {
+                    $wronglyAnswered++;
+                }
+            }
+        }
+
+        return $wronglyAnswered;
+    }
+
+    public function calculateUnanswered()
+    {
+        $unanswered = 0;
+
+        foreach ($this->exam->questions as $question) {
+            $userAnswer = $this->answers[$question->id] ?? null;
+            if ($userAnswer === null) {
+                $unanswered++;
+            }
+        }
+
+        return $unanswered;
+    }
+
+    public function calculateLostPoints()
+    {
+        $lostPoints = 0;
+
+        foreach ($this->exam->questions as $question) {
+            if ($question && $question->options) {
+                $correctAnswer = collect($question->options)
+                    ->where('is_correct', true)
+                    ->pluck('options')
+                    ->first();
+                $userAnswer = $this->answers[$question->id] ?? null;
+                if ($userAnswer !== null && $userAnswer !== $correctAnswer) {
+                    $lostPoints += $this->exam->penalty;
+                }
+            }
+        }
+
+        return $lostPoints;
+    }
 
     public function render()
     {
