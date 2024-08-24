@@ -6,7 +6,7 @@
                 <ol class="list-decimal list-inside">
                     @foreach ($exam->questions as $question)
                         <li class="p-2.5 md:p-5">
-                            <span x-html="sanitizeHtml(`{!! $question->title !!}`)"></span>
+                            <span  class="text-bold" x-html="sanitizeHtml(`{!! $question->title !!}`)"></span>
                             <ul>
                                 @foreach ($question->options as $index => $option)
                                     <li>
@@ -33,7 +33,7 @@
                         </li>
                     @endforeach
                 </ol>
-                <div class="flex justify-center mt-4">
+                <div class="flex lg:justify-start ml-5 justify-center mt-4">
                     <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
                 </div>
             </form>
