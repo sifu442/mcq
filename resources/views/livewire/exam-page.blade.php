@@ -64,8 +64,8 @@
         </div>
     </div>
 
-    <!-- Floating Bottom for Mobile/Tablets -->
-    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-blue-50 dark:bg-gray-800 p-4 shadow-lg flex items-center justify-between">
+    <!-- Floating Top for Mobile/Tablets -->
+    <div class="lg:hidden fixed top-0 left-0 right-0 bg-blue-50 dark:bg-gray-800 p-4 shadow-lg flex items-center justify-between z-50" style="margin-top: 4rem;">
         <!-- Timer -->
         <div class="text-center">
             <span class="text-lg font-bold">Time Left</span>
@@ -150,14 +150,4 @@
             },
         }
     }
-    window.addEventListener('beforeunload', function (e) {
-        // Custom message for the confirmation dialog
-        const confirmationMessage = 'Are you sure you want to leave? Any unsaved changes will be lost.';
-
-        // Standard message for browsers that don't support custom messages
-        e.returnValue = confirmationMessage;
-
-        // For older browsers
-        return confirmationMessage;
-    });
 </script>
