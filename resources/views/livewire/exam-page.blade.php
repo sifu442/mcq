@@ -1,4 +1,28 @@
 <div x-data="examComponent()" class="flex flex-col lg:flex-row">
+    <!-- Sidebar Contents for Mobile/Tablets -->
+    <div class="lg:hidden p-4 bg-blue-50 dark:bg-gray-800 mb-4">
+        <!-- Timer -->
+        <div class="text-center mb-4">
+            <span class="text-lg font-bold">Time Left</span>
+            <div x-data="countdownTimer({{ $duration * 60 }}, '@lang('messages.minutes')', '@lang('messages.seconds')', '@lang('messages.times_up')')" x-init="startTimer()">
+                <span x-text="timeDisplay" class="block text-2xl font-bold"></span>
+            </div>
+        </div>
+
+        <!-- Exam Details -->
+        <div class="text-lg font-bold text-blue-700 dark:text-gray-200 mb-4">Exam Details</div>
+        <ul class="text-sm text-gray-700 dark:text-gray-300">
+            <li><strong>Total Questions:</strong> {{ $exam->questions->count() }}</li>
+            <li><strong>Answered:</strong> <span x-text="answeredCount"></span></li>
+            <li><strong>Unanswered:</strong> <span x-text="unansweredCount"></span></li>
+        </ul>
+
+        <!-- Exam Name -->
+        <div class="text-center mt-8 text-lg font-bold text-blue-700 dark:text-gray-200">
+            {{ $exam->name }}
+        </div>
+    </div>
+
     <!-- Main Content -->
     <div class="flex-grow">
         <form wire:submit.prevent="submitExam">
