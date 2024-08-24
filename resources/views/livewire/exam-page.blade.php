@@ -6,7 +6,7 @@
                 <ol class="list-decimal list-inside">
                     @foreach ($exam->questions as $question)
                         <li class="p-2.5 md:p-5 text-xl">
-                            <span  class="font-bold" x-html="sanitizeHtml(`{!! $question->title !!}`)"></span>
+                            <span class="font-bold" x-html="sanitizeHtml(`{!! $question->title !!}`)"></span>
                             <ul>
                                 @foreach ($question->options as $index => $option)
                                     <li>
@@ -136,7 +136,6 @@
                 if (this.remainingSeconds <= 0) {
                     clearInterval(this.interval);
                     this.timeDisplay = timesUpMessage;
-                    // Automatically submit the exam if the countdown reaches zero
                     this.autoSubmitExam();
                 } else {
                     this.timeDisplay =
@@ -146,19 +145,8 @@
             },
 
             autoSubmitExam() {
-                @this.call('submitExam'); // Ensure the context is the current component instance
+                @this.call('submitExam');
             },
         }
     }
-
-    window.addEventListener('beforeunload', function (e) {
-        // Custom message for the confirmation dialog
-        const confirmationMessage = 'Are you sure you want to leave? Any unsaved changes will be lost.';
-
-        // Standard message for browsers that don't support custom messages
-        e.returnValue = confirmationMessage;
-
-        // For older browsers
-        return confirmationMessage;
-    });
 </script>
