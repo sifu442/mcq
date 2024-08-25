@@ -1,4 +1,4 @@
-<div x-data="examComponent()">
+<div x-data="examComponent()" x-init="init()">
     <div class="text-center">
         <span class="text-lg font-bold">Time Left</span>
         <div x-data="countdownTimer({{ $duration * 60 }}, '@lang('messages.minutes')', '@lang('messages.seconds')', '@lang('messages.times_up')')" x-init="startTimer()">
@@ -13,16 +13,17 @@
         <ol class="list-decimal list-inside">
             @foreach ($exam->questions as $question)
                 <li class="p-2.5 md:p-5">
-                    <span x-html="sanitizeHtml({!! $question->title !!})"></span>
+                    <span x-html="sanitizeHtml('{!! $question->title !!}')"></span>
                     <ul>
                         @foreach ($question->options as $index => $option)
-                            <li>
-                                <div class="flex items-center ps-4 border bg-white border-gray-200 rounded-md dark:border-gray-700 py-2 my-2 drop-shadow-lg">
-                                    <input type="checkbox"
+                            <li class="relative flex items-center">
+                                <div class="flex items-center ps-4 border bg-white border-gray-200 rounded-md dark:border-gray-700 py-2 my-2 drop-shadow-lg w-full">
+                                    <input type="radio"
                                            value="{{ $option['options'] }}"
+                                           name="question{{ $question->id }}"
                                            id="option{{ $question->id }}_{{ $index }}"
                                            class="hidden peer"
-                                           x-on:change="toggleSelection($event, {{ $question->id }}, '{{ $option['options'] }}')"
+                                           x-on:change="debouncedToggleSelection($event, {{ $question->id }}, '{{ $option['options'] }}')"
                                            x-bind:checked="answers[{{ $question->id }}] === '{{ $option['options'] }}'">
                                     <label for="option{{ $question->id }}_{{ $index }}"
                                            class="flex items-center justify-center w-8 h-8 rounded-full border border-gray-300 text-gray-600 peer-checked:bg-blue-600 peer-checked:text-white cursor-pointer">
@@ -32,6 +33,12 @@
                                            class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                         {{ strip_tags($option['options']) }}
                                     </label>
+                                    <button type="button"
+                                            x-show="answers[{{ $question->id }}] === '{{ $option['options'] }}'"
+                                            x-on:click="removeSelection({{ $question->id }})"
+                                            class="absolute top-1/2 right-2 transform -translate-y-1/2 text-red-500 hover:text-red-700 flex items-center justify-center w-8 h-8 rounded-full border border-gray-300">
+                                        <span class="text-xl">&times;</span>
+                                    </button>
                                 </div>
                             </li>
                         @endforeach
@@ -49,41 +56,57 @@
                 selectedCount: 0,
                 unansweredCount: @entangle('unansweredCount'),
                 answers: @entangle('answers'),
+                debounceTimeout: null,
 
                 init() {
-                    this.selectedCount = Object.keys(this.answers).length;
-                    this.unansweredCount = {{ $exam->questions->count() }} - this.selectedCount;
+                    this.updateCounts();
+                },
+
+                debouncedToggleSelection(event, questionId, option) {
+                    clearTimeout(this.debounceTimeout);
+                    this.debounceTimeout = setTimeout(() => {
+                        this.toggleSelection(event, questionId, option);
+                    }, 300); // 300ms debounce delay
                 },
 
                 toggleSelection(event, questionId, option) {
-                    let checkbox = event.target;
+                    let radio = event.target;
+                    let previouslySelected = this.answers[questionId];
 
-                    // Deselect other options for the same question
-                    document.querySelectorAll(`input[type="checkbox"][id^="option${questionId}_"]`).forEach(el => {
-                        if (el !== checkbox) {
-                            el.checked = false;
-                        }
-                    });
-
-                    // Update the answer model for Livewire
-                    if (checkbox.checked) {
-                        if (!this.answers[questionId]) {
+                    if (radio.checked) {
+                        if (previouslySelected === undefined) {
                             this.selectedCount++;
-                            this.unansweredCount--;
                         }
                         this.answers[questionId] = option;
+                        this.unansweredCount--;
                     } else {
-                        if (this.answers[questionId]) {
+                        if (previouslySelected === option) {
                             this.selectedCount--;
                             this.unansweredCount++;
                         }
                         delete this.answers[questionId];
                     }
 
-                    // Ensure that answers are properly updated
+                    this.updateLivewire();
+                },
+
+                removeSelection(questionId) {
+                    if (this.answers[questionId] !== undefined) {
+                        this.selectedCount--;
+                        this.unansweredCount++;
+                        delete this.answers[questionId];
+                        this.updateLivewire();
+                    }
+                },
+
+                updateLivewire() {
                     @this.set('answers', this.answers);
-                    @this.set('selectedCount', this.selectedCount);
                     @this.set('unansweredCount', this.unansweredCount);
+                },
+
+                updateCounts() {
+                    this.selectedCount = Object.keys(this.answers).length;
+                    this.unansweredCount = {{ $exam->questions->count() }} - this.selectedCount;
                 },
 
                 sanitizeHtml(input) {
@@ -117,21 +140,16 @@
                     let minutes = Math.floor(this.remainingSeconds / 60);
                     let seconds = this.remainingSeconds % 60;
 
+                    this.timeDisplay = `${minutes} ${minutesLabel} ${seconds} ${secondsLabel}`;
+
                     if (this.remainingSeconds <= 0) {
                         clearInterval(this.interval);
                         this.timeDisplay = timesUpMessage;
-                        // Automatically submit the exam if the countdown reaches zero
-                        this.autoSubmitExam();
                     } else {
-                        this.timeDisplay = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                         this.remainingSeconds--;
                     }
-                },
-
-                autoSubmitExam() {
-                    @this.call('submitExam'); // Ensure the context is the current component instance
-                },
-            }
+                }
+            };
         }
     </script>
 </div>
