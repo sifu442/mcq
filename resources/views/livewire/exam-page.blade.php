@@ -49,37 +49,43 @@
                 selectedCount: 0,
                 unansweredCount: @entangle('unansweredCount'),
                 answers: @entangle('answers'),
+
                 init() {
-                    this.unansweredCount = {{ $exam->questions->count() }} - Object.keys(this.answers).length;
+                    this.selectedCount = Object.keys(this.answers).length;
+                    this.unansweredCount = {{ $exam->questions->count() }} - this.selectedCount;
                 },
+
                 toggleSelection(event, questionId, option) {
-    let checkbox = event.target;
+                    let checkbox = event.target;
 
-    // Deselect other options for the same question
-    document.querySelectorAll(`input[type="checkbox"][id^="option${questionId}_"]`).forEach(el => {
-        if (el !== checkbox) {
-            el.checked = false;
-        }
-    });
+                    // Deselect other options for the same question
+                    document.querySelectorAll(`input[type="checkbox"][id^="option${questionId}_"]`).forEach(el => {
+                        if (el !== checkbox) {
+                            el.checked = false;
+                        }
+                    });
 
-    // Update the answer model for Livewire
-    if (checkbox.checked) {
-        if (!this.answers[questionId]) {
-            this.selectedCount++;
-            this.unansweredCount--;
-        }
-        this.answers[questionId] = option;
-    } else {
-        if (this.answers[questionId]) {
-            this.selectedCount--;
-            this.unansweredCount++;
-        }
-        delete this.answers[questionId];
-    }
+                    // Update the answer model for Livewire
+                    if (checkbox.checked) {
+                        if (!this.answers[questionId]) {
+                            this.selectedCount++;
+                            this.unansweredCount--;
+                        }
+                        this.answers[questionId] = option;
+                    } else {
+                        if (this.answers[questionId]) {
+                            this.selectedCount--;
+                            this.unansweredCount++;
+                        }
+                        delete this.answers[questionId];
+                    }
 
-    // Ensure that answers are properly updated
-    @this.set('answers', this.answers);
-},
+                    // Ensure that answers are properly updated
+                    @this.set('answers', this.answers);
+                    @this.set('selectedCount', this.selectedCount);
+                    @this.set('unansweredCount', this.unansweredCount);
+                },
+
                 sanitizeHtml(input) {
                     const allowedTags = ['b', 'i', 'strong', 'em'];
                     const doc = new DOMParser().parseFromString(input, 'text/html');
@@ -117,8 +123,7 @@
                         // Automatically submit the exam if the countdown reaches zero
                         this.autoSubmitExam();
                     } else {
-                        this.timeDisplay =
-                            ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')};
+                        this.timeDisplay = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                         this.remainingSeconds--;
                     }
                 },
