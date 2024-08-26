@@ -7,7 +7,7 @@ use App\Models\Course;
 use App\Models\Purchase;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Spatie\LaravelPdf\Facades\Pdf;
 
 class CourseController extends Controller
 {
