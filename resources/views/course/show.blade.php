@@ -33,7 +33,7 @@
                     <button type="button"
                         class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border   {{ $index === 0 ? 'rounded-t-xl' : '' }} border-gray-500 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
                         data-accordion-target="#accordion-collapse-body-{{ $index }}"
-                        aria-expanded="{{ $index === 0 ? 'true' : 'false' }}"
+                        aria-expanded="true"
                         aria-controls="accordion-collapse-body-{{ $index }}">
                         <span>{{ $course->exams[$index]->name }}</span>
                         <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
@@ -43,7 +43,7 @@
                         </svg>
                     </button>
                 </h2>
-                <div id="accordion-collapse-body-{{ $index }}" class="hidden"
+                <div id="accordion-collapse-body-{{ $index }}"
                     aria-labelledby="accordion-collapse-heading-{{ $index }}">
                     <div
                         class="p-5 border {{ $index === 0 ? 'border-b-0' : 'border-b-1' }}  border-gray-500 dark:border-gray-700 dark:bg-gray-900">
@@ -116,8 +116,8 @@
                     <span class="sr-only">Loading...</span>
                 </div>
                 <a href="#">
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white mt-5">How to
-                        Participate in the Exam?</h5>
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white mt-5">How to Download
+                        the Routine?</h5>
                 </a>
                 <a href="#"
                     class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
