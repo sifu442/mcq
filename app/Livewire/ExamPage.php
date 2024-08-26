@@ -35,8 +35,14 @@ class ExamPage extends Component
             abort(404, 'Exam not found');
         }
 
-        // Allow users to retake the exam even if they have submitted it before
-        // The check for existing submission is moved to submitExam to control score storage
+        if (
+            ExamResponse::where('user_id', $user->id)
+                ->where('exam_id', $this->examId)
+                ->exists()
+        ) {
+            abort(403, 'You have already submitted this exam.');
+        }
+
         $this->duration = $this->exam->duration;
     }
 
@@ -48,51 +54,45 @@ class ExamPage extends Component
 
         $user = Auth::user();
 
-        // Check if the user has already submitted the exam
-        $existingResponse = ExamResponse::where('user_id', $user->id)
-            ->where('exam_id', $this->exam->id)
-            ->first();
+        if ($this->exam) {
+            $correctCount = 0;
+            $wrongCount = 0;
+            $unansweredCount = 0;
+            $totalAnswered = 0;
+            $responseData = [];
 
-        $correctCount = 0;
-        $wrongCount = 0;
-        $unansweredCount = 0;
-        $totalAnswered = 0;
-        $responseData = [];
-
-        foreach ($this->exam->questions as $question) {
-            if ($question && $question->options) {
-                $correctAnswer = collect($question->options)
-                    ->where('is_correct', true)
-                    ->pluck('options')
-                    ->first();
-                $userAnswer = $this->answers[$question->id] ?? null;
-
-                $responseData[] = [
-                    'question' => $question->title,
-                    'options' => collect($question->options)
+            foreach ($this->exam->questions as $question) {
+                if ($question && $question->options) {
+                    $correctAnswer = collect($question->options)
+                        ->where('is_correct', true)
                         ->pluck('options')
-                        ->toArray(),
-                    'user_input' => $userAnswer,
-                    'correct_answer' => $correctAnswer,
-                ];
+                        ->first();
+                    $userAnswer = $this->answers[$question->id] ?? null;
 
-                if ($userAnswer === null) {
-                    $unansweredCount++;
-                } else {
-                    $totalAnswered++;
-                    if ($userAnswer === $correctAnswer) {
-                        $correctCount++;
-                        $this->totalScore += $this->exam->score;
+                    $responseData[] = [
+                        'question' => $question->title,
+                        'options' => collect($question->options)
+                            ->pluck('options')
+                            ->toArray(),
+                        'user_input' => $userAnswer,
+                        'correct_answer' => $correctAnswer,
+                    ];
+
+                    if ($userAnswer === null) {
+                        $unansweredCount++;
                     } else {
-                        $wrongCount++;
-                        $this->totalScore -= $this->exam->penalty;
+                        $totalAnswered++;
+                        if ($userAnswer === $correctAnswer) {
+                            $correctCount++;
+                            $this->totalScore += $this->exam->score;
+                        } else {
+                            $wrongCount++;
+                            $this->totalScore -= $this->exam->penalty;
+                        }
                     }
                 }
             }
-        }
 
-        if (!$existingResponse) {
-            // Store only the first attempt
             ExamResponse::create([
                 'user_id' => $user->id,
                 'exam_id' => $this->exam->id,

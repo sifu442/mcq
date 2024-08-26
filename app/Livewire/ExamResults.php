@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\Exam;
 use Livewire\Component;
 use App\Models\ExamResponse;
 
