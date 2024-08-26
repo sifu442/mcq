@@ -1,10 +1,8 @@
 <?php
-
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Exam;
-use App\Models\Enrollment;
+use Livewire\Component;
 use App\Models\ExamResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -60,6 +58,7 @@ class ExamPage extends Component
             $correctCount = 0;
             $wrongCount = 0;
             $unansweredCount = 0;
+            $totalAnswered = 0;
             $responseData = [];
 
             foreach ($this->exam->questions as $question) {
@@ -68,7 +67,6 @@ class ExamPage extends Component
                         ->where('is_correct', true)
                         ->pluck('options')
                         ->first();
-
                     $userAnswer = $this->answers[$question->id] ?? null;
 
                     $responseData[] = [
@@ -82,10 +80,15 @@ class ExamPage extends Component
 
                     if ($userAnswer === null) {
                         $unansweredCount++;
-                    } elseif ($userAnswer === $correctAnswer) {
-                        $correctCount++;
                     } else {
-                        $wrongCount++;
+                        $totalAnswered++;
+                        if ($userAnswer === $correctAnswer) {
+                            $correctCount++;
+                            $this->totalScore += $this->exam->score;
+                        } else {
+                            $wrongCount++;
+                            $this->totalScore -= $this->exam->penalty;
+                        }
                     }
                 }
             }
@@ -94,52 +97,19 @@ class ExamPage extends Component
                 'user_id' => $user->id,
                 'exam_id' => $this->exam->id,
                 'response_data' => $responseData,
-                'total_score' => $correctCount * $this->exam->score - $wrongCount * $this->exam->penalty,
-                'answered_correctly' => $correctCount,
-                'answered_wrong' => $wrongCount,
-                'unanswered' => $unansweredCount,
+                'total_score' => $this->totalScore,
+                'correct_count' => $correctCount,
+                'wrong_count' => $wrongCount,
+                'unanswered_count' => $unansweredCount,
                 'lost_points' => $wrongCount * $this->exam->penalty,
+                'total_answered' => $totalAnswered,
             ]);
-
-            $this->correctCount = $correctCount;
-            $this->wrongCount = $wrongCount;
-            $this->unansweredCount = $unansweredCount;
         }
 
         $this->examSubmitted = true;
+        $this->reset(['answers']);
 
-        // Redirect to the exam results page
         return redirect()->route('exam-results', ['examId' => $this->examId]);
-    }
-
-    public function updatedAnswers($value, $questionId)
-    {
-        // Reset counts before recalculating
-        $this->correctCount = 0;
-        $this->wrongCount = 0;
-        $this->unansweredCount = 0;
-
-        foreach ($this->exam->questions as $question) {
-            if ($question && $question->options) {
-                $correctAnswer = collect($question->options)
-                    ->where('is_correct', true)
-                    ->pluck('options')
-                    ->first();
-                $userAnswer = $this->answers[$question->id] ?? null;
-
-                if ($userAnswer === null) {
-                    $this->unansweredCount++;
-                } elseif ($userAnswer === $correctAnswer) {
-                    $this->correctCount++;
-                } else {
-                    $this->wrongCount++;
-                }
-            }
-        }
-
-        // Update the selected and unanswered counts for UI
-        $this->selectedCount = count(array_filter($this->answers));
-        $this->unansweredCount = $this->exam->questions->count() - $this->selectedCount;
     }
 
     public function render()

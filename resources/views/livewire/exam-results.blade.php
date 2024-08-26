@@ -4,6 +4,12 @@
         <div class="mb-8">
             <h2 class="text-2xl font-semibold text-center mb-4">{{ $response->user->name }}'s Response:</h2>
             <p class="text-lg text-center mb-4">Total Score: <span class="font-bold">{{ $response->total_score }}</span></p>
+            <p class="text-lg text-center mb-4">Number of questions answered: <span class="font-bold">{{ $response->total_answered }}</span></p>
+            <p class="text-lg text-center mb-4">Number of questions answered correctly: <span class="font-bold">{{ $response->correct_count }}</span></p>
+            <p class="text-lg text-center mb-4">Number of questions answered wrong: <span class="font-bold">{{ $response->wrong_count }}</span></p>
+            <p class="text-lg text-center mb-4">Number of questions answered wrong: <span class="font-bold">{{ $response->wrong_count }}</span></p>
+            <p class="text-lg text-center mb-4">Number of questions not answered: <span class="font-bold">{{ $response->unanswered_count }}</span></p>
+            <p class="text-lg text-center mb-4">Deducted: <span class="font-bold">{{ $response->lost_points }}</span></p>
             @foreach ($response->response_data as $questionData)
                 <div class="mb-6">
                     <h3 class="text-xl font-semibold mb-2">{{ $questionData['question'] }}</h3>

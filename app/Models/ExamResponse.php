@@ -9,7 +9,7 @@ class ExamResponse extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'exam_id', 'response_data', 'total_score', 'correct_count', 'wrong_count', 'unanswered_count', 'lost_points'];
+    protected $fillable = ['user_id', 'exam_id', 'response_data', 'total_score', 'correct_count', 'wrong_count', 'unanswered_count', 'lost_points', 'total_answered'];
 
     protected $casts = [
         'response_data' => 'array',
