@@ -7,7 +7,7 @@ use App\Models\Course;
 use App\Models\Purchase;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Spatie\LaravelPdf\Facades\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CourseController extends Controller
 {
@@ -54,7 +54,12 @@ class CourseController extends Controller
     {
         $data = $this->courseinfo($course);
 
-        $pdf = Pdf::view('course.routine_pdf', $data);
+        $pdf = Pdf::loadView('course.routine_pdf', $data)
+            ->setOption([
+                'fontDir' => public_path('/fonts'),
+                'fontCache' => public_path('/fonts'),
+                'defaultFont' => 'Noto Sans Bengali'
+        ]);
 
         $fileName = Str::slug($course->title) . '-routine.pdf';
 
