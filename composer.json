@@ -17,6 +17,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.0",
+        "spatie/laravel-pdf": "*",
         "spatie/laravel-permission": "^6.7",
         "webbingbrasil/filament-copyactions": "^3.0"
     },
