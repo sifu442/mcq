@@ -27,7 +27,7 @@
             Fee: {{ $course->price }} Taka
         </div>
 
-        <div id="accordion-collapse" data-accordion="collapse">
+        <div id="accordion-collapse" data-accordion="open">
             @foreach ($examInfo as $index => $examDate)
                 <h2 id="accordion-collapse-heading-{{ $index }}">
                     <button type="button"
