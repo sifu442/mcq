@@ -54,12 +54,7 @@ class CourseController extends Controller
     {
         $data = $this->courseinfo($course);
 
-        $pdf = Pdf::loadView('course.routine_pdf', $data)
-            ->setOption([
-                'fontDir' => public_path('/fonts'),
-                'fontCache' => public_path('/fonts'),
-                'defaultFont' => 'Noto Sans Bengali'
-        ]);
+        $pdf = Pdf::view('course.routine_pdf', $data);
 
         $fileName = Str::slug($course->title) . '-routine.pdf';
 
