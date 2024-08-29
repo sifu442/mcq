@@ -59,7 +59,7 @@ class EnrollmentResource extends Resource
 
                         Repeater::make('routine')
                             ->schema([
-                                Select::make('exam_id')
+                                Select::make('routine.exam_id')
                                     ->disabled()
                                     ->options($examsForRoutine)
                                     ->native(false),
