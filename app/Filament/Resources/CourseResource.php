@@ -51,6 +51,7 @@ class CourseResource extends Resource
             TextInput::make('slug')
                 ->required()
                 ->unique(ignoreRecord: true)
+                ->disabledOn('edit')
                 ->maxLength(255),
             TextInput::make('time_span')
                 ->required()
