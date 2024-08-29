@@ -47,12 +47,14 @@ class EnrollmentResource extends Resource
                         Select::make('course_id')
                             ->relationship('course', 'title')
                             ->disabled(),
-                            Select::make('starts_from')
-                            ->options($exams)
-                            ->native(false),
                         DatePicker::make('enrolled_at')
                             ->disabled(),
+                        Select::make('starts_from')
+                            ->options($exams)
+                            ->native(false)
+                            ->columnSpanFull(),
                             ]),
+
                         Repeater::make('routine')
                             ->schema([
                                 Select::make('exam_id')
