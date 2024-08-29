@@ -5,6 +5,7 @@ namespace App\Filament\Resources\EnrollmentResource\Pages;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\Resources\EnrollmentResource;
@@ -45,27 +46,26 @@ class EditEnrollment extends EditRecord
 
     protected function mutateFormDataBeforeFill(array $data): array
     {
-        // Prevent updating the 'exam_id' inside the repeater when filling the form.
-        if (isset($data['routine'])) {
-            foreach ($data['routine'] as &$routine) {
-                // Assuming you want to retain the existing exam_id, do not modify it here
-                $routine['exam_id'] = $routine['exam_id'] ?? null;
+        return $data;
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if (isset($this->record->routine)) {
+            $existingRoutine = json_decode($this->record->routine, true);
+            foreach ($existingRoutine as $index => $existingEntry) {
+                if (isset($data['routine'][$index])) {
+                    $data['routine'][$index]['exam_id'] = $existingEntry['exam_id'];
+                }
             }
         }
 
         return $data;
     }
 
-    protected function mutateFormDataBeforeSave(array $data): array
+    protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        // Ensure that the routine field is saved correctly.
-        if (isset($data['routine'])) {
-            foreach ($data['routine'] as &$routine) {
-                // This is where you could make additional adjustments if needed before saving.
-                // For example, ensuring the 'exam_id' is properly saved.
-            }
-        }
-
-        return $data;
+        $record->update($data);
+        return $record;
     }
 }
