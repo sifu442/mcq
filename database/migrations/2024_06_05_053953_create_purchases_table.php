@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->string('payment_method');
             $table->string('phone_number');
-            $table->string('status')->default('pending');
+            $table->enum('status', ['pending', 'approved', 'rejected']);
             $table->decimal('amount', 8, 2);
             $table->timestamps();
         });
