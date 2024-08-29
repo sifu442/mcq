@@ -54,7 +54,8 @@ class EnrollmentResource extends Resource
                         Select::make('starts_from')
                             ->options($examsForStartsFrom)
                             ->native(false)
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->nullable(),
                             ]),
 
                         Repeater::make('routine')
