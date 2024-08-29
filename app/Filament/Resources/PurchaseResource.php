@@ -64,10 +64,7 @@ class PurchaseResource extends Resource
 
                             $currentStartTime = $startTime;
                         }
-
-                        // Log the exam routines to verify the content
-                        Log::info('Exam Routines', ['exam_routines' => $examRoutines]);
-
+                        
                         Enrollment::create([
                             'user_id' => $userId,
                             'course_id' => $courseId,
