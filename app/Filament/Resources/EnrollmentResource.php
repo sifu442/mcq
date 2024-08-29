@@ -69,6 +69,7 @@ class EnrollmentResource extends Resource
                             ->live()
                             ->addable(false)
                             ->columns(3)
+                            ->deletable(false)
                             ->columnSpanFull()
             ]);
     }
