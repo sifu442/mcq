@@ -3,20 +3,19 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
-use App\Models\Exam;
 use Filament\Tables;
+use App\Models\Exam;
 use Filament\Forms\Form;
 use App\Models\Enrollment;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
-use Illuminate\Support\Facades\Schema;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\EnrollmentResource\Pages;
+use Filament\Forms\Components\TextInput;
 
 class EnrollmentResource extends Resource
 {
@@ -36,13 +35,10 @@ class EnrollmentResource extends Resource
     public static function form(Form $form): Form
     {
         $enrollmentId = request()->route('record'); // Get the enrollment record ID from the URL
-    $enrollment = Enrollment::find($enrollmentId); // Find the enrollment record
+        $enrollment = Enrollment::find($enrollmentId); // Find the enrollment record
 
-    // Check if the course_id exists and adjust query based on your actual table schema
-    $exams = [];
-    if ($enrollment && Schema::hasColumn('exams', 'course_id')) { // Check if course_id exists in exams
-        $exams = Exam::where('course_id', $enrollment->course_id)->pluck('name', 'id')->toArray();
-    }
+        // Fetch the exams related to the specific course ID
+        $exams = $enrollment ? Exam::where('course_id', $enrollment->course_id)->pluck('name', 'id')->toArray() : [];
         return $form
             ->schema([
                 Section::make()
