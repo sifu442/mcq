@@ -68,6 +68,7 @@ class EnrollmentResource extends Resource
                                 DatePicker::make('end_time'),
                             ])
                             ->live()
+                            ->dehyrdrated(false)
                             ->addable(false)
                             ->columns(3)
                             ->deletable(false)
