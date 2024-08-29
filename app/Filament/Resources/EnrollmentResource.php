@@ -60,7 +60,7 @@ class EnrollmentResource extends Resource
                                 Select::make('exam_id')
                                     ->options($exams)
                                     ->native(false)
-                                    ->disabled(),
+                                    ->readOnly(),
                                 DatePicker::make('start_time'),
                                 DatePicker::make('end_time'),
                             ])
