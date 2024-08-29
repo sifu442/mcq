@@ -57,7 +57,8 @@ class EnrollmentResource extends Resource
                                     // Get all exams related to the course
                                     $exams = Course::find($courseId)
                                         ->exams()
-                                        ->pluck('name', 'id')
+                                        ->select('exams.id', 'exams.name') // Specify the table to avoid ambiguity
+                                    ->pluck('name', 'id')
                                         ->toArray();
 
                                     return $exams;
