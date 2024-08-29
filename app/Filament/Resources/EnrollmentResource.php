@@ -62,13 +62,13 @@ class EnrollmentResource extends Resource
                                 Select::make('exam_id')
                                     ->label('Exam Name')
                                     ->disabled()
+                                    ->extraInputAttributes(['readonly' => true])
                                     ->options($examsForRoutine)
                                     ->native(false),
                                 DatePicker::make('start_time'),
                                 DatePicker::make('end_time'),
                             ])
                             ->live()
-                            ->dehyrdrated(false)
                             ->addable(false)
                             ->columns(3)
                             ->deletable(false)
