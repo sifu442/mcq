@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
 use App\Models\Exam;
 use Filament\Tables;
 use App\Models\Course;
@@ -14,7 +13,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\EnrollmentResource\Pages;
 
@@ -57,8 +55,8 @@ class EnrollmentResource extends Resource
                                     // Get all exams related to the course
                                     $exams = Course::find($courseId)
                                         ->exams()
-                                        ->select('exams.id', 'exams.name') // Specify the table to avoid ambiguity
-                                    ->pluck('name', 'id')
+                                        ->select('exams.id', 'exams.name')
+                                        ->pluck('name', 'id')
                                         ->toArray();
 
                                     return $exams;
