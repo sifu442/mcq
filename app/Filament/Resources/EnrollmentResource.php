@@ -3,8 +3,9 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
-use Filament\Tables;
 use App\Models\Exam;
+use Filament\Tables;
+use App\Models\Course;
 use Filament\Forms\Form;
 use App\Models\Enrollment;
 use Filament\Tables\Table;
@@ -13,9 +14,9 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\EnrollmentResource\Pages;
-use Filament\Forms\Components\TextInput;
 
 class EnrollmentResource extends Resource
 {
@@ -34,11 +35,6 @@ class EnrollmentResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $enrollmentId = request()->route('record'); // Get the enrollment record ID from the URL
-        $enrollment = Enrollment::find($enrollmentId); // Find the enrollment record
-
-        // Fetch the exams related to the specific course ID
-        $exams = $enrollment ? Exam::where('course_id', $enrollment->course_id)->pluck('name', 'id')->toArray() : [];
         return $form
             ->schema([
                 Section::make()
@@ -53,7 +49,22 @@ class EnrollmentResource extends Resource
                         DatePicker::make('enrolled_at')
                             ->disabled(),
                         Select::make('starts_from')
-                            ->options($exams)
+                            ->options(function (callable $get) {
+                                $courseId = $get('course_id');
+
+                                // Check if a course ID is available
+                                if ($courseId) {
+                                    // Get all exams related to the course
+                                    $exams = Course::find($courseId)
+                                        ->exams()
+                                        ->pluck('name', 'id')
+                                        ->toArray();
+
+                                    return $exams;
+                                }
+
+                                return [];
+                            })
                             ->native(false)
                             ->columnSpanFull()
                             ->nullable(),
