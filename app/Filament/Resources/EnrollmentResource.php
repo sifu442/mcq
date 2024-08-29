@@ -47,7 +47,6 @@ class EnrollmentResource extends Resource
                         Select::make('course_id')
                             ->relationship('course', 'title')
                             ->disabled(),
-                        Select::make(''),
                         DatePicker::make('enrolled_at')
                             ->disabled(),
                             ]),
