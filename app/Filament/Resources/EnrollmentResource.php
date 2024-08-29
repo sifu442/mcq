@@ -34,8 +34,6 @@ class EnrollmentResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $exams = Exam::pluck('name', 'id')->toArray();
-
         return $form
             ->schema([
                 Section::make()
@@ -50,7 +48,7 @@ class EnrollmentResource extends Resource
                         DatePicker::make('enrolled_at')
                             ->disabled(),
                         Select::make('starts_from')
-                            ->options($exams)
+                            ->options(Exam::pluck('name', 'id')->toArray())
                             ->native(false)
                             ->columnSpanFull(),
                             ]),
@@ -59,7 +57,7 @@ class EnrollmentResource extends Resource
                             ->schema([
                                 Select::make('exam_id')
                                     ->disabled()
-                                    ->options($exams)
+                                    ->options(Exam::pluck('name', 'id')->toArray())
                                     ->native(false),
                                 DatePicker::make('start_time'),
                                 DatePicker::make('end_time'),
