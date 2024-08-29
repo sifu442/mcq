@@ -34,6 +34,11 @@ class EnrollmentResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $enrollmentId = request()->route('record'); // Get the enrollment record ID from the URL
+        $enrollment = Enrollment::find($enrollmentId); // Find the enrollment record
+
+        // Fetch the exams related to the specific course ID
+        $exams = $enrollment ? Exam::where('course_id', $enrollment->course_id)->pluck('name', 'id')->toArray() : [];
         return $form
             ->schema([
                 Section::make()
@@ -48,7 +53,7 @@ class EnrollmentResource extends Resource
                         DatePicker::make('enrolled_at')
                             ->disabled(),
                         Select::make('starts_from')
-                            ->options(Exam::pluck('name', 'id')->toArray())
+                            ->options($exams)
                             ->native(false)
                             ->columnSpanFull()
                             ->nullable(),
