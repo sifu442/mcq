@@ -27,7 +27,6 @@ class DashboardController extends Controller
         $user = Auth::user();
         $now = Carbon::now();
 
-        // Retrieve exams related to the logged-in user's enrollments
         $enrollments = Enrollment::with(['course', 'course.exams'])
             ->where('user_id', $user->id)
             ->get();
@@ -37,9 +36,8 @@ class DashboardController extends Controller
         $previousExams = [];
 
         foreach ($enrollments as $enrollment) {
-            $routine = $enrollment->routine; // Assuming routine is already an array
+            $routine = $enrollment->routine;
 
-            // Ensure $routine is an array
             if (is_string($routine)) {
                 $routine = json_decode($routine, true);
             }
