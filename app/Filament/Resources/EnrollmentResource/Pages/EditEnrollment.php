@@ -51,9 +51,12 @@ class EditEnrollment extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        if (isset($this->record->routine)) {
-            $existingRoutine = json_decode($this->record->routine, true);
+        // Check if the routine exists in the current record
+        if (isset($this->record->routine) && is_array($this->record->routine)) {
+            $existingRoutine = $this->record->routine; // Use as array directly
+
             foreach ($existingRoutine as $index => $existingEntry) {
+                // Preserve the existing 'exam_id' if the index exists in the incoming data
                 if (isset($data['routine'][$index])) {
                     $data['routine'][$index]['exam_id'] = $existingEntry['exam_id'];
                 }
