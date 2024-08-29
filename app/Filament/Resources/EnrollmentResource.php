@@ -70,6 +70,7 @@ class EnrollmentResource extends Resource
                             ->addable(false)
                             ->columns(3)
                             ->deletable(false)
+                            ->reorderable(false)
                             ->columnSpanFull()
             ]);
     }
