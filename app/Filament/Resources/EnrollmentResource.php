@@ -57,7 +57,6 @@ class EnrollmentResource extends Resource
                             ->columnSpanFull()
                             ->nullable(),
                             ]),
-
                         Repeater::make('routine')
                             ->schema([
                                 Select::make('exam_id')
