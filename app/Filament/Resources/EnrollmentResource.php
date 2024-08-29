@@ -42,27 +42,28 @@ class EnrollmentResource extends Resource
                     ->columns(3)
                     ->schema([
                         Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->disabled(),
-                Select::make('course_id')
-                    ->relationship('course', 'title')
-                    ->disabled(),
-                DatePicker::make('enrolled_at')
-                    ->disabled(),
-                    ]),
-                Repeater::make('routine')
-                    ->schema([
-                        Select::make('exam_id')
-                            ->options($exams)
-                            ->native(false)
+                        ->relationship('user', 'name')
+                        ->disabled(),
+                        Select::make('course_id')
+                            ->relationship('course', 'title')
                             ->disabled(),
-                        DatePicker::make('start_time'),
-                        DatePicker::make('end_time'),
-                    ])
-                    ->live()
-                    ->addable(false)
-                    ->columns(3)
-                    ->columnSpanFull()
+                        Select::make(''),
+                        DatePicker::make('enrolled_at')
+                            ->disabled(),
+                            ]),
+                        Repeater::make('routine')
+                            ->schema([
+                                Select::make('exam_id')
+                                    ->options($exams)
+                                    ->native(false)
+                                    ->disabled(),
+                                DatePicker::make('start_time'),
+                                DatePicker::make('end_time'),
+                            ])
+                            ->live()
+                            ->addable(false)
+                            ->columns(3)
+                            ->columnSpanFull()
             ]);
     }
 
