@@ -24,7 +24,7 @@ class EnrollmentResource extends Resource
 
     protected static ?string $pluralModelLabel ='Enrollments & Routines';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-c-user-plus';
 
     public static function canCreate(): bool
    {
