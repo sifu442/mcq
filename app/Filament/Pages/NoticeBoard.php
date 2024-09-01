@@ -7,11 +7,11 @@ use Filament\Pages\Page;
 use App\Forms\Components\CKEditor;
 use Filament\Forms\Concerns\InteractsWithForms;
 
-class EditNotice extends Page
+class NoticeBoard extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static string $view = 'filament.pages.edit-notice';
+    protected static string $view = 'filament.pages.notice-board';
 
     public ?array $data = [];
 
