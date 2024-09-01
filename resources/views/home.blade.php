@@ -110,8 +110,8 @@
                                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                                         {{ $course->title }}
                                     </h5>
-                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">মোট সময়: {{ $course->time_span }} দিন</p>
-                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">মোট পরীক্ষা:{{ $course->time_span }} টি</p>
+                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">মোট সময়: {{ $course->time_span }}</p>
+                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">মোট পরীক্ষা: {{ $course->total_exams }} টি</p>
                                     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">কোর্স ফি: <span class="line-through text-red-600">{{ $course->price }}</span> টাকা</p>
                                     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">অফার ফি: {{ $course->discounted_price }} টাকা</p>
                                     <div class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">

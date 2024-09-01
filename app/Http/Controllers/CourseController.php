@@ -11,6 +11,13 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class CourseController extends Controller
 {
+    private function convertToBengaliNumber($number) {
+        $englishNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        $bengaliNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+
+        return str_replace($englishNumbers, $bengaliNumbers, $number);
+    }
+    
     private function courseinfo(Course $course)
     {
         $subjects = collect();
@@ -49,22 +56,22 @@ class CourseController extends Controller
         return view('course.show', $data);
     }
 
-    // Generate and download the routine as PDF
-    public function downloadRoutine(Course $course)
-    {
-        $data = $this->courseinfo($course);
 
-        $pdf = Pdf::loadView('course.routine_pdf', $data)
-            ->setOption([
-                'fontDir' => public_path('/fonts'),
-                'fontCache' => public_path('/fonts'),
-                'defaultFont' => 'Noto Sans Bengali'
+    public function downloadRoutine(Course $course)
+{
+    $data = $this->courseinfo($course);
+
+    $pdf = Pdf::loadView('course.routine_pdf', $data)
+        ->setOption([
+            'fontDir' => public_path('/fonts'),
+            'fontCache' => public_path('/fonts'),
+            'defaultFont' => 'Noto Sans Bengali'
         ]);
 
-        $fileName = Str::slug($course->title) . '-routine.pdf';
+    $fileName = Str::slug($course->title) . '-routine.pdf';
 
-        return $pdf->stream($fileName);
-    }
+    return $pdf->stream($fileName);
+}
 
     public function buy($courseId)
     {

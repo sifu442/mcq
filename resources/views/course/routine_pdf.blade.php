@@ -30,44 +30,36 @@
             <li>{{ $subject->name }}</li>
         @endforeach
     </ul>
+
     <table class="w-full">
-        <tr>
-            <td class="w-half">
-                <img src="{{ asset('laraveldaily.png') }}" alt="laravel daily" width="200" />
-            </td>
-            <td class="w-half">
-                <h2>Invoice ID: 834847473</h2>
-            </td>
-        </tr>
+        
     </table>
 
     <div class="margin-top">
         <table class="products">
-            <tr>
-                <th>Exam Name</th>
-                <th>Date</th>
-                <th>Price</th>
-            </tr>
-            <tr class="items">
-                @foreach($data as $item)
-                    <td>
-                        {{ $exam['examName'] }}
-                    </td>
-                    <td>
-                        {{ $exam['date'] }} ({{ $exam['dayOfWeek'] }})
-                    </td>
-                    <td>
-                        {{ $exam['dayOfWeek'] }}
-                    </td>
+            <thead>
+                <tr>
+                    <th>Exam Name</th>
+                    <th>Date</th>
+                    <th>Day of Week</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($examInfo as $exam)
+                <tr class="items">
+                    <td>{{ $exam['examName'] }}</td>
+                    <td>{{ $exam['date'] }}</td>
+                    <td>{{ $exam['dayOfWeek'] }}</td>
+                </tr>
                 @endforeach
-            </tr>
+            </tbody>
         </table>
     </div>
-
 
     <div class="footer margin-top">
         <div>Thank you</div>
         <div>&copy; MCQ</div>
     </div>
 </body>
+
 </html>

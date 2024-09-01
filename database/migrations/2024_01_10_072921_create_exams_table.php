@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id()->from(5001);
             $table->string('name');
             $table->string('syllabus');
-            $table->string('topic');
             $table->integer('duration');
             $table->integer('gap');
             $table->integer('participation_time');

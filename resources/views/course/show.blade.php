@@ -24,7 +24,11 @@
         </div>
 
         <div class="py-3 text-text text-lg text-justify">
-            Fee: {{ $course->price }} Taka
+            Fee: <span class="line-through text-red-600">{{ $course->price }}</span> Taka
+        </div>
+
+        <div class="py-3 text-text text-lg text-justify">
+            Fee: {{ $course->discounted_price }} Taka
         </div>
 
         @if (Auth::check())
