@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use Filament\Forms\Form;
 use Filament\Pages\Page;
+use Filament\Actions\Action;
 use App\Forms\Components\CKEditor;
 use Filament\Forms\Concerns\InteractsWithForms;
 
@@ -30,6 +31,15 @@ class NoticeBoard extends Page
                     ->required(),
             ])
             ->statePath('data');
+    }
+
+    protected function getFormActions(): array
+    {
+        return [
+            Action::make('save')
+                ->label(__('filament-panels::resources/pages/notice-board.form.actions.save.label'))
+                ->submit('save'),
+        ];
     }
 
 }
