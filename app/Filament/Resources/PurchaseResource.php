@@ -18,7 +18,7 @@ class PurchaseResource extends Resource
 {
     protected static ?string $model = Purchase::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
     public static function table(Table $table): Table
     {
@@ -64,7 +64,7 @@ class PurchaseResource extends Resource
 
                             $currentStartTime = $startTime;
                         }
-                        
+
                         Enrollment::create([
                             'user_id' => $userId,
                             'course_id' => $courseId,
