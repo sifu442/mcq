@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->string('name');
             $table->string('syllabus');
             $table->integer('duration');
-            $table->integer('gap');
             $table->integer('participation_time');
             $table->decimal('score');
             $table->decimal('penalty');
