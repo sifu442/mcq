@@ -1,5 +1,5 @@
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
-    <div wire:ignore x-data="{ state: $wire.entangle('{{ $getStatePath() }}') }" x-init="ClassicEditor
+    <div wire:ignore x-data="{ state: $wire.{{ $applyStateBindingModifiers("\$entangle('{$getStatePath()}')") }} }" x-init="ClassicEditor
         .create($refs.content)
         .then(editor => {
             editor.model.document.on('change:data', () => {

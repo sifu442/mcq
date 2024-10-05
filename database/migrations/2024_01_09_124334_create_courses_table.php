@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->integer('time_span');
             $table->decimal('price', 8, 2);
+            $table->decimal('gap');
             $table->decimal('discounted_price', 8, 2)->nullable();
             $table->boolean('featured')->default(false);
             $table->boolean('hidden')->default(false);

@@ -87,10 +87,10 @@ class QuestionResource extends Resource
                 ->default($latestExam->post),
             DatePicker::make('date')
                 ->default($latestExam->date)
-                ->native(false),
+                ->native(false)
+                ->firstDayOfWeek(6),
             CKEditor::make('title')
                 ->columnSpanFull()
-
                 ->required(),
             Repeater::make('options')
                 ->required()

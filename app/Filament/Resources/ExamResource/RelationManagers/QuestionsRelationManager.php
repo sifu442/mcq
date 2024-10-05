@@ -1,18 +1,17 @@
 <?php
 namespace App\Filament\Resources\ExamResource\RelationManagers;
 
-use Closure;
-use Filament\Forms;
 use Filament\Tables;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Livewire\Attach;
 use App\Forms\Components\CKEditor;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Livewire;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -22,13 +21,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'questions';
-
-    public $searchResults = [];
-
-    public function performSearch($title)
-    {
-        $this->searchResults = Question::where('title', 'like', "%{$title}%")->pluck('title')->toArray();
-    }
 
     public function form(Form $form): Form
     {
@@ -41,9 +33,15 @@ class QuestionsRelationManager extends RelationManager
                 ->preload()
                 ->required()
                 ->default($latestExam->subject_id ?? null),
-            TextInput::make('previous_exam')->label('Exam Name')->default($latestExam->previous_exam ?? ''),
-            TextInput::make('post')->default($latestExam->post ?? ''),
-            DatePicker::make('date')->native(false)->default($latestExam->date ?? ''),
+            TextInput::make('previous_exam')
+                ->label('Exam Name')
+                ->default($latestExam->previous_exam ?? ''),
+            TextInput::make('post')
+                ->default($latestExam->post ?? ''),
+            DatePicker::make('date')
+                ->native(false)
+                ->default($latestExam->date ?? '')
+                ->firstDayOfWeek(6),
             CKEditor::make('title')->required()->columnSpanFull()->default($latestExam->title ?? ''),
             Repeater::make('options')
                 ->required()
@@ -75,31 +73,9 @@ class QuestionsRelationManager extends RelationManager
             ])
             ->filters([])
             ->headerActions([
-                Action::make('advance')
-                ->form([
-
-                ])
             ])
-            ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
+            ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DetachAction::make()])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
 
-    protected function getListeners(): array
-    {
-        return [
-            'questionSelected' => 'fillTitle',
-            'searchQuestions' => 'searchQuestions',
-        ];
-    }
-
-    public function fillTitle($questionId)
-    {
-        $question = DB::table('questions')->find($questionId);
-        $this->form->fill(['title' => $question->title]);
-    }
-
-    public function searchQuestions($search)
-    {
-        // Logic to dynamically update the QuestionSearchList based on the search
-    }
 }

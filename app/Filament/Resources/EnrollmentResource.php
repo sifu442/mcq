@@ -12,8 +12,10 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Actions\DeleteAction;
 use App\Filament\Resources\EnrollmentResource\Pages;
 
 class EnrollmentResource extends Resource
@@ -75,8 +77,18 @@ class EnrollmentResource extends Resource
                                     ->disabledOn('edit')
                                     ->options(Exam::pluck('name', 'id')->toArray())
                                     ->native(false),
-                                DatePicker::make('start_time'),
-                                DatePicker::make('end_time'),
+                                DatePicker::make('start_time')
+                                ->native(false)
+                                ->live()
+                                ->afterStateUpdated(function ($state, callable $set) {
+                                    if ($state) {
+                                        $nextDay = \Carbon\Carbon::parse($state)->addDay();
+                                        $set('end_time', $nextDay->format('Y-m-d'));
+                                    }
+                                }),
+                                DatePicker::make('end_time')
+                                ->live()
+                                ->native(false),
                             ])
                             ->live()
                             ->addable(false)
@@ -91,7 +103,12 @@ class EnrollmentResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')->label('Student Name'),
+                TextColumn::make('user.id')
+                    ->label('Roll')
+                    ->searchable(),
+                TextColumn::make('user.name')
+                    ->label('Student Name')
+                    ->searchable(),
                 TextColumn::make('course.title')->label('Course Title'),
                 TextColumn::make('enrolled_at')
                     ->date()
@@ -102,7 +119,9 @@ class EnrollmentResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
+                DeleteAction::make()
+                    ->requiresConfirmation()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

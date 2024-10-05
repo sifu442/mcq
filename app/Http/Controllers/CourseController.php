@@ -11,13 +11,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class CourseController extends Controller
 {
-    private function convertToBengaliNumber($number) {
-        $englishNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-        $bengaliNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-
-        return str_replace($englishNumbers, $bengaliNumbers, $number);
-    }
-    
     private function courseinfo(Course $course)
     {
         $subjects = collect();
@@ -31,7 +24,7 @@ class CourseController extends Controller
         // Calculate exam dates
         $currentDate = Carbon::now();
         $examInfo = [];
-        $delayDays = 3; // Initial delay days
+        $delayDays = 3;
         foreach ($course->exams as $exam) {
             $examInfo[] = [
                 'examName' => $exam->name,
@@ -85,7 +78,7 @@ class CourseController extends Controller
     {
         $request->validate([
             'payment_method' => 'required|string',
-            'phone_number' => 'required|string|max:15|regex:/^\d{11}$/',
+            'phone_number' => 'required|string|max:11|regex:/^\d{11}$/',
         ]);
 
         $course = Course::findOrFail($courseId);
@@ -96,7 +89,7 @@ class CourseController extends Controller
             'course_id' => $course->id,
             'payment_method' => $request->input('payment_method'),
             'phone_number' => $request->input('phone_number'),
-            'amount' => $course->price,
+            'amount' => $course->discounted_price,
         ]);
 
         return redirect()->route('home')->with('success', 'Purchase successful!');

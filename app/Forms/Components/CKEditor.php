@@ -12,9 +12,6 @@ class CKEditor extends Field
     {
         parent::setUp();
 
-        $this->dehydrateStateUsing(static function (?string $state): string {
-            return trim($state ?? '');
-        });
     }
 
 }
