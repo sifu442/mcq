@@ -74,6 +74,12 @@ class CourseResource extends Resource
                 ->numeric()
                 ->prefix('৳')
                 ->maxValue(42949672.95),
+            TextInput::make('gap')
+                ->required()
+                ->numeric()
+                ->suffix('Days')
+                ->translateLabel()
+                ->default(3),
             Toggle::make('featured')
                 ->onIcon('heroicon-m-bolt')
                 ->offIcon('heroicon-m-user'),

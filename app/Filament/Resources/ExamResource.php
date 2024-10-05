@@ -46,12 +46,6 @@ class ExamResource extends Resource
                 ->default(30)
                 ->suffix('Minutes')
                 ->translateLabel(),
-            TextInput::make('gap')
-                ->required()
-                ->numeric()
-                ->suffix('Days')
-                ->translateLabel()
-                ->default(3),
             TextInput::make('participation_time')
                 ->required()
                 ->numeric()
@@ -151,7 +145,6 @@ class ExamResource extends Resource
             'index' => Pages\ListExams::route('/'),
             'create' => Pages\CreateExam::route('/create'),
             'edit' => Pages\EditExam::route('/{record}/edit'),
-            'attach' => Pages\AttachRecords::route('/{record}/attach'),
         ];
     }
 }
