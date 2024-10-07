@@ -46,25 +46,33 @@ class PurchaseResource extends Resource
                         $courseId = $record->course_id;
                         $enrolledAt = Carbon::now();
 
+                        // Fetch the course with its related exams
+                        $course = $record->course;
                         $exams = DB::table('course_exam')->where('course_id', $courseId)->get();
                         $examRoutines = [];
                         $currentStartTime = $enrolledAt;
 
                         foreach ($exams as $index => $exam) {
-                            $gapDays = DB::table('exams')->where('id', $exam->exam_id)->value('gap');
+                            // Use the gap from the Course model
+                            $gapDays = $course->gap;
                             $participationHours = DB::table('exams')->where('id', $exam->exam_id)->value('participation_time');
+
+                            // Calculate start and end times based on gap and participation hours
                             $startTime = $currentStartTime->copy()->addDays($gapDays);
                             $endTime = $startTime->copy()->addHours($participationHours);
 
+                            // Store the calculated exam routine
                             $examRoutines[] = [
                                 'exam_id' => $exam->exam_id,
                                 'start_time' => $startTime->toDateTimeString(),
                                 'end_time' => $endTime->toDateTimeString(),
                             ];
 
+                            // Update currentStartTime for the next iteration
                             $currentStartTime = $startTime;
                         }
 
+                        // Create a new enrollment with the calculated routine
                         Enrollment::create([
                             'user_id' => $userId,
                             'course_id' => $courseId,
@@ -76,7 +84,7 @@ class PurchaseResource extends Resource
                     ->icon('heroicon-o-check')
                     ->requiresConfirmation()
                     ->visible(fn ($record) => $record->status === 'pending'),
-
+                    
                 Action::make('reject')
                     ->label('Reject')
                     ->action(function ($record) {

@@ -46,12 +46,6 @@ class ExamResource extends Resource
                 ->default(30)
                 ->suffix('Minutes')
                 ->translateLabel(),
-            TextInput::make('participation_time')
-                ->required()
-                ->numeric()
-                ->suffix('Hours')
-                ->default(24)
-                ->translateLabel(),
             Select::make('score')
                 ->native(false)
                 ->default('1')

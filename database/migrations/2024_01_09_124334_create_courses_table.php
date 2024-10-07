@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('time_span');
             $table->decimal('price', 8, 2);
             $table->decimal('gap');
+            $table->integer('participation_time');
             $table->decimal('discounted_price', 8, 2)->nullable();
             $table->boolean('featured')->default(false);
             $table->boolean('hidden')->default(false);

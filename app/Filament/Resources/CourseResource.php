@@ -80,6 +80,12 @@ class CourseResource extends Resource
                 ->suffix('Days')
                 ->translateLabel()
                 ->default(3),
+            TextInput::make('participation_time')
+                ->required()
+                ->numeric()
+                ->suffix('Hours')
+                ->default(24)
+                ->translateLabel(),
             Toggle::make('featured')
                 ->onIcon('heroicon-m-bolt')
                 ->offIcon('heroicon-m-user'),

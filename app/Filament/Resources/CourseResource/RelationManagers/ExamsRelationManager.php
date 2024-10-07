@@ -36,12 +36,6 @@ class ExamsRelationManager extends RelationManager
                 ->default(30)
                 ->suffix('Minutes')
                 ->translateLabel(),
-            TextInput::make('gap')
-                ->required()
-                ->numeric()
-                ->suffix('Days')
-                ->translateLabel()
-                ->default(3),
             TextInput::make('participation_time')
                 ->required()
                 ->numeric()

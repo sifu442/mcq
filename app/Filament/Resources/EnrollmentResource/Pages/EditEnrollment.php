@@ -18,30 +18,6 @@ class EditEnrollment extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('Adjust Routine Dates')
-                ->form([TextInput::make('days')->label('Increase/Decrease Days')->numeric()->required()])
-                ->action(function (array $data) {
-                    $days = $data['days'];
-
-                    $this->record->routine = collect($this->record->routine)
-                        ->map(function ($item, $index) use ($days) {
-                            if ($index > 0) {
-                                $item['start_time'] = Carbon::parse($item['start_time'])
-                                    ->addDays($days)
-                                    ->format('Y-m-d H:i:s');
-                                $item['end_time'] = Carbon::parse($item['end_time'])
-                                    ->addDays($days)
-                                    ->format('Y-m-d H:i:s');
-                            }
-                            return $item;
-                        })
-                        ->toArray();
-
-                    $this->record->save();
-                })
-                ->after(function () {
-                    $this->redirect($this->getResource()::getUrl('edit', ['record' => $this->record->getKey()]));
-                }),
             DeleteAction::make(),
         ];
     }
