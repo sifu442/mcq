@@ -32,30 +32,29 @@
         </div>
 
         @if (Auth::check())
-                <button onclick="location.href='{{ route('course.buy', ['course' => $course->id]) }}'"
-                    class="mt-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                    Buy
-                </button>
-            @else
-                <button onclick="location.href='{{ route('register') }}'"
-                    class="mt-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                    Buy
-                </button>
-            @endif
-            <button onclick="location.href='{{ route('course.downloadRoutine', $course->id) }}'"
+            <button onclick="location.href='{{ route('course.buy', ['course' => $course->id]) }}'"
                 class="mt-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                Download Routine
+                Buy
             </button>
+        @else
+            <button onclick="location.href='{{ route('register') }}'"
+                class="mt-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                Buy
+            </button>
+        @endif
+        <button onclick="location.href='{{ route('course.downloadRoutine', $course->id) }}'"
+            class="mt-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+            Download Routine
+        </button>
 
         <div id="accordion-collapse" data-accordion="open">
             @foreach ($examInfo as $index => $examDate)
                 <h2 id="accordion-collapse-heading-{{ $index }}">
                     <button type="button"
-                        class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border   {{ $index === 0 ? 'rounded-t-xl' : '' }} border-gray-500 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-                        data-accordion-target="#accordion-collapse-body-{{ $index }}"
-                        aria-expanded="true"
+                        class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border {{ $index === 0 ? 'rounded-t-xl' : '' }} border-gray-500 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
+                        data-accordion-target="#accordion-collapse-body-{{ $index }}" aria-expanded="true"
                         aria-controls="accordion-collapse-body-{{ $index }}">
-                        <span>{{ $course->exams[$index]->name }}</span>
+                        <span>{{ $examDate['examName'] }}</span>
                         <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -66,19 +65,16 @@
                 <div id="accordion-collapse-body-{{ $index }}"
                     aria-labelledby="accordion-collapse-heading-{{ $index }}">
                     <div
-                        class="p-5 border {{ $index === 0 ? 'border-b-0' : 'border-b-1' }}  border-gray-500 dark:border-gray-700 dark:bg-gray-900">
-                        <p class="mb-2 text-gray-500 dark:text-gray-400">Full Marks: 100 Time: {{ $course->exams[$index]->duration }}
-                            Minutes</p>
-                        <p class="mb-2 text-gray-500 dark:text-gray-400">Date: {{ $examDate['date'] }} ({{ $examDate['dayOfWeek'] }})
-                        </p>
-                        <pc class="text-bold">Syllabus:</p>
-                            <p class="mb-2 text-gray-500 dark:text-gray-400"> {!! $course->exams[$index]->syllabus !!}</p>
+                        class="p-5 border {{ $index === 0 ? 'border-b-0' : 'border-b-1' }} border-gray-500 dark:border-gray-700 dark:bg-gray-900">
+                        <p class="mb-2 text-gray-500 dark:text-gray-400">Full Marks: 100 Time:
+                            {{ $course->exams[$index]->duration }} Minutes</p>
+                        <p class="mb-2 text-gray-500 dark:text-gray-400">Date: {{ $examDate['date'] }}
+                            ({{ $examDate['dayOfWeek'] }})</p>
+                        <p class="text-bold">Syllabus:</p>
+                        <p class="mb-2 text-gray-500 dark:text-gray-400">{!! $course->exams[$index]->syllabus !!}</p>
                     </div>
                 </div>
             @endforeach
-
-
-
         </div>
 
         {{-- Help Section --}}
@@ -122,7 +118,8 @@
                     <span class="sr-only">Loading...</span>
                 </div>
                 <a href="#">
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white mt-5">How to Download
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white mt-5">How to
+                        Download
                         the Routine?</h5>
                 </a>
                 <a href="#"

@@ -12,7 +12,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\PurchaseResource\Pages;
-use Illuminate\Support\Facades\Log;
 
 class PurchaseResource extends Resource
 {
@@ -40,39 +39,40 @@ class PurchaseResource extends Resource
                 Action::make('approve')
                     ->label('Approve')
                     ->action(function ($record) {
+                        // Update the purchase status to approved
                         $record->update(['status' => 'approved']);
-
+                    
+                        // Get user and course details
                         $userId = $record->user_id;
                         $courseId = $record->course_id;
                         $enrolledAt = Carbon::now();
-
-                        // Fetch the course with its related exams
+                    
                         $course = $record->course;
                         $exams = DB::table('course_exam')->where('course_id', $courseId)->get();
+                    
                         $examRoutines = [];
                         $currentStartTime = $enrolledAt;
-
-                        foreach ($exams as $index => $exam) {
-                            // Use the gap from the Course model
+                    
+                        foreach ($exams as $exam) {
                             $gapDays = $course->gap;
-                            $participationHours = DB::table('exams')->where('id', $exam->exam_id)->value('participation_time');
-
-                            // Calculate start and end times based on gap and participation hours
-                            $startTime = $currentStartTime->copy()->addDays($gapDays);
-                            $endTime = $startTime->copy()->addHours($participationHours);
-
-                            // Store the calculated exam routine
+                            $participationHours = $course->participation_time;
+                        
+                            // Calculate start and end times for this exam
+                            $startTime = $currentStartTime->addDays($gapDays);  // Directly modify currentStartTime
+                            $endTime = $startTime->copy()->addHours($participationHours);  // end_time after participation time
+                        
+                            // Store the exam routine
                             $examRoutines[] = [
                                 'exam_id' => $exam->exam_id,
                                 'start_time' => $startTime->toDateTimeString(),
                                 'end_time' => $endTime->toDateTimeString(),
                             ];
-
-                            // Update currentStartTime for the next iteration
-                            $currentStartTime = $startTime;
+                        
+                            // Update the start time for the next exam to the current end_time
+                            $currentStartTime = $endTime;  // The next exam starts after this one ends
                         }
-
-                        // Create a new enrollment with the calculated routine
+                    
+                        // Create enrollment record with the generated exam routines
                         Enrollment::create([
                             'user_id' => $userId,
                             'course_id' => $courseId,
@@ -84,7 +84,8 @@ class PurchaseResource extends Resource
                     ->icon('heroicon-o-check')
                     ->requiresConfirmation()
                     ->visible(fn ($record) => $record->status === 'pending'),
-                    
+
+
                 Action::make('reject')
                     ->label('Reject')
                     ->action(function ($record) {

@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->integer('duration');
             $table->decimal('score');
             $table->decimal('penalty');
+            $table->integer('full_marks');
             $table->decimal('marks')->nullable();
             $table->timestamps();
         });

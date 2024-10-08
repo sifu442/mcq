@@ -13,15 +13,14 @@ class CourseController extends Controller
 {
     private function courseinfo(Course $course)
     {
-        $subjects = collect();
-        foreach ($course->exams as $exam) {
-            foreach ($exam->questions as $question) {
-                $subjects->push($question->subject);
-            }
-        }
-        $uniqueSubjects = $subjects->unique();
+        $course->load(['exams.questions.subject']);
 
-        // Calculate exam dates
+        $subjects = $course->exams
+            ->flatMap(function ($exam) {
+                return $exam->questions->pluck('subject');
+            })
+            ->unique();
+
         $currentDate = Carbon::now();
         $examInfo = [];
         $delayDays = 3;
@@ -36,12 +35,11 @@ class CourseController extends Controller
 
         return [
             'course' => $course,
-            'subjects' => $uniqueSubjects,
+            'subjects' => $subjects,
             'examInfo' => $examInfo,
         ];
     }
 
-    // Show the course with routine data
     public function show(Course $course)
     {
         $data = $this->courseinfo($course);
@@ -49,22 +47,20 @@ class CourseController extends Controller
         return view('course.show', $data);
     }
 
-
     public function downloadRoutine(Course $course)
-{
-    $data = $this->courseinfo($course);
+    {
+        $data = $this->courseinfo($course);
 
-    $pdf = Pdf::loadView('course.routine_pdf', $data)
-        ->setOption([
+        $pdf = Pdf::loadView('course.routine_pdf', $data)->setOption([
             'fontDir' => public_path('/fonts'),
             'fontCache' => public_path('/fonts'),
-            'defaultFont' => 'Noto Sans Bengali'
+            'defaultFont' => 'Noto Sans Bengali',
         ]);
 
-    $fileName = Str::slug($course->title) . '-routine.pdf';
+        $fileName = Str::slug($course->title) . '-routine.pdf';
 
-    return $pdf->stream($fileName);
-}
+        return $pdf->stream($fileName);
+    }
 
     public function buy($courseId)
     {
@@ -83,7 +79,6 @@ class CourseController extends Controller
 
         $course = Course::findOrFail($courseId);
 
-        // Create a new purchase record
         Purchase::create([
             'user_id' => auth()->id(),
             'course_id' => $course->id,
