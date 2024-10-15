@@ -9,8 +9,8 @@ use Filament\Forms\Form;
 use App\Models\Enrollment;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Illuminate\Support\Facades\Log;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -37,15 +37,9 @@ class EnrollmentResource extends Resource
     {
         return $form
             ->schema([
-                Section::make()
-                    ->columns(3)
-                    ->schema([
                         Select::make('user_id')
                         ->relationship('user', 'name')
                         ->disabled(),
-                        Select::make('course_id')
-                            ->relationship('course', 'title')
-                            ->disabled(),
                         DatePicker::make('enrolled_at')
                             ->disabled(),
                         Select::make('starts_from')
@@ -67,9 +61,10 @@ class EnrollmentResource extends Resource
                                 return [];
                             })
                             ->native(false)
-                            ->columnSpanFull()
                             ->nullable(),
-                            ]),
+                            Select::make('course_id')
+                            ->relationship('course', 'title')
+                            ->disabled(),
                         Repeater::make('routine')
                             ->schema([
                                 Select::make('exam_id')
@@ -80,15 +75,79 @@ class EnrollmentResource extends Resource
                                 DatePicker::make('start_time')
                                 ->native(false)
                                 ->live()
-                                ->afterStateUpdated(function ($state, callable $set) {
+                                ->afterStateUpdated(function ($state, callable $get, callable $set, $component) {
                                     if ($state) {
-                                        $nextDay = \Carbon\Carbon::parse($state)->addDay();
-                                        $set('end_time', $nextDay->format('Y-m-d'));
+                                        $courseId = $get('../../course_id');
+                                        $course = Course::find($courseId);
+                                        $gap = $course->gap;
+                                        $participation_time = $course->participation_time;
+
+                                        // Get the state of the entire repeater
+                                        $repeaterState = $get('../../routine');
+
+                                        // Ensure that the repeater state is an array
+                                        if (!is_array($repeaterState)) {
+                                            Log::error('Repeater state is not an array:', ['repeaterState' => $repeaterState]);
+                                            return;
+                                        }
+
+                                        // Convert the repeater state to have numeric indices if needed
+                                        $repeaterState = array_values($repeaterState);
+
+                                        // Log the repeater state to debug its structure
+                                        Log::info('Repeater state:', ['repeaterState' => $repeaterState]);
+
+                                        // Find the index of the current item by matching the state
+                                        $currentIndex = collect($repeaterState)->search(function ($item) use ($state) {
+                                            return isset($item['start_time']) && $item['start_time'] === $state;
+                                        });
+
+                                        // Check if current index was found
+                                        if ($currentIndex === false) {
+                                            Log::error('Current item index not found in the repeater state.');
+                                            return;
+                                        }
+
+                                        // Ensure that $currentIndex is an integer
+                                        $currentIndex = intval($currentIndex);
+
+                                        // Log the current repeater index
+                                        Log::info('Current repeater index:', ['index' => $currentIndex]);
+
+                                        // Calculate the new end_time for the current exam
+                                        $endTime = \Carbon\Carbon::parse($state)->addHours($participation_time);
+                                        $set('end_time', $endTime->format('Y-m-d'));
+
+                                        // Adjust subsequent exams' start_time based on the current updated start_time
+                                        $currentExamStartTime = \Carbon\Carbon::parse($state);
+                                        for ($i = $currentIndex + 1; $i < count($repeaterState); $i++) {
+                                            // Increment the start time for each subsequent exam
+                                            $nextExamStartTime = $currentExamStartTime->copy()->addDays($gap);
+                                            $repeaterState[$i]['start_time'] = $nextExamStartTime->format('Y-m-d');
+
+                                            // Optionally, adjust the end_time too
+                                            $nextExamEndTime = $nextExamStartTime->copy()->addHours($participation_time);
+                                            $repeaterState[$i]['end_time'] = $nextExamEndTime->format('Y-m-d');
+
+                                            // Log the updates for the next exam
+                                            Log::info('Updated subsequent exam:', [
+                                                'repeater_index' => $i,
+                                                'start_time' => $nextExamStartTime->format('Y-m-d'),
+                                                'end_time' => $nextExamEndTime->format('Y-m-d'),
+                                            ]);
+
+                                            // Update the currentExamStartTime for the next iteration
+                                            $currentExamStartTime = $nextExamStartTime;
+                                        }
+
+                                        // Set the updated state for the repeater
+                                        $component->state($repeaterState);
                                     }
                                 }),
                                 DatePicker::make('end_time')
                                 ->live()
                                 ->native(false),
+
                             ])
                             ->live()
                             ->addable(false)
