@@ -139,6 +139,7 @@ class ExamResource extends Resource
             'index' => Pages\ListExams::route('/'),
             'create' => Pages\CreateExam::route('/create'),
             'edit' => Pages\EditExam::route('/{record}/edit'),
+            'attach' => Pages\AttachQuestions::route('/{record}/attach'),
         ];
     }
 }
