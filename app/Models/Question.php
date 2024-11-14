@@ -9,7 +9,7 @@ class Question extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'options', 'subject_id', 'exam_id', 'last_appeared', 'previous_exam', 'post', 'date', 'explanation', 'topic'];
+    protected $fillable = ['title', 'subject_id', 'exam_id', 'last_appeared', 'previous_exam', 'post', 'date', 'explanation', 'topic', 'option_a', 'option_b', 'option_c', 'option_d'];
 
     protected $casts = ['options' => 'json'];
 

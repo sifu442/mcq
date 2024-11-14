@@ -5,14 +5,10 @@ use Filament\Tables;
 use App\Models\Question;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use App\Livewire\Attach;
 use App\Forms\Components\CKEditor;
 use Illuminate\Support\HtmlString;
-use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Livewire;
-use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
@@ -33,7 +29,7 @@ class QuestionsRelationManager extends RelationManager
                 ->preload()
                 ->required()
                 ->default($latestExam->subject_id ?? null),
-            TextInput::make('previous_exam')
+            TextInput::make('last_appeared')
                 ->label('Exam Name')
                 ->default($latestExam->previous_exam ?? ''),
             TextInput::make('post')
@@ -42,18 +38,23 @@ class QuestionsRelationManager extends RelationManager
                 ->native(false)
                 ->default($latestExam->date ?? '')
                 ->firstDayOfWeek(6),
+            TextInput::make('topic')
+                ->default($latestExam->topic ?? ''),
             CKEditor::make('title')->required()->columnSpanFull()->default($latestExam->title ?? ''),
-            Repeater::make('options')
-                ->required()
-                ->deletable(false)
-                ->defaultItems(4)
-                ->maxItems(4)
+            Section::make('Options')
                 ->schema([
-                    CKEditor::make('options'),
-                    Checkbox::make('is_correct')->fixIndistinctState()->name('Correct Answer')
-                ])
-                ->columnSpanFull()
-                ->default($latestExam->options ?? []),
+                    CKEditor::make('option_a')->required()->columnSpanFull()->default($latestExam->otpion_a ?? ''),
+                    CKEditor::make('option_b')->required()->columnSpanFull()->default($latestExam->otpion_b ?? ''),
+                    CKEditor::make('option_c')->required()->columnSpanFull()->default($latestExam->otpion_c ?? ''),
+                    CKEditor::make('option_d')->required()->columnSpanFull()->default($latestExam->otpion_d ?? ''),
+                    Select::make('right_answer')
+                        ->options([
+                        'A' => 'A',
+                        'B' => 'B',
+                        'C' => 'C',
+                        'D' => 'D',
+                    ]),
+                ]),
             CKEditor::make('explanation')->columnSpanFull()->default($latestExam->explanation ?? ''),
         ]);
     }
@@ -73,8 +74,14 @@ class QuestionsRelationManager extends RelationManager
             ])
             ->filters([])
             ->headerActions([
+                Tables\Actions\Action::make('attach')
+                    ->label('Attach or Create Question ')
+                    ->url(fn () => url("/admin/exams/{$this->ownerRecord->id}/attach"))
             ])
-            ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DetachAction::make()])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DetachAction::make()
+                ])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
 

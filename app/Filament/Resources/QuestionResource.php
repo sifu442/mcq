@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use App\Forms\Components\CKEditor;
 use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
@@ -20,6 +21,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\QuestionResource\Pages;
+
 
 class QuestionResource extends Resource
 {
@@ -33,81 +35,41 @@ class QuestionResource extends Resource
     {
         $latestExam = Question::latest()->first();
 
-        if(is_null($latestExam)) {
-            return $form->schema([
-                Select::make('subject_id')
-                    ->relationship('subject', 'name')
-                    ->createOptionForm([
-                        TextInput::make('name')->required()
-                    ])
-                    ->preload()
-                    ->required(),
-                TextInput::make('topic'),
-                TextInput::make('previous_exam')
-                    ->label('Exam Name'),
-                TextInput::make('post'),
-                DatePicker::make('date')
-                    ->native(false),
-                CKEditor::make('title')
-                    ->required()
-                    ->columnSpanFull(),
-                Repeater::make('options')
-                    ->required()
-                    ->deletable(false)
-                    ->defaultItems(4)
-                    ->maxItems(4)
-                    ->schema([
-                        CKEditor::make('options')
-                        ,
-                        Checkbox::make('is_correct')
-                            ->fixIndistinctState()
-                            ->name('Correct Answer'),
-                    ])
-                    ->columnSpanFull(),
-                CKEditor::make('explanation')
-
-                    ->columnSpanFull()
-            ]);
-
-        }
-
         return $form->schema([
             Select::make('subject_id')
                 ->relationship('subject', 'name')
-                ->createOptionForm([
-                    TextInput::make('name')->required()
-                ])
-                ->default($latestExam->subject_id)
+                ->createOptionForm([TextInput::make('name')->required()])
                 ->preload()
-                ->required(),
-            TextInput::make('previous_exam')
-                ->label('Exam Name')
-                ->default($latestExam->previous_exam),
-            TextInput::make('post')
-                ->default($latestExam->post),
-            DatePicker::make('date')
-                ->default($latestExam->date)
-                ->native(false)
-                ->firstDayOfWeek(6),
-            CKEditor::make('title')
-                ->columnSpanFull()
-                ->required(),
-            Repeater::make('options')
                 ->required()
-                ->deletable(false)
-                ->defaultItems(4)
-                ->maxItems(4)
+                ->native(false)
+                ->default($latestExam->subject_id ?? null),
+            TextInput::make('last_appeared')
+                ->label('Exam Name')
+                ->default($latestExam->previous_exam ?? ''),
+            TextInput::make('post')
+                ->default($latestExam->post ?? ''),
+            DatePicker::make('date')
+                ->native(false)
+                ->default($latestExam->date ?? '')
+                ->firstDayOfWeek(6),
+            TextInput::make('topic')
+                ->default($latestExam->topic ?? ''),
+            CKEditor::make('title')->required()->columnSpanFull()->default($latestExam->title ?? ''),
+            Section::make('Options')
                 ->schema([
-                    CKEditor::make('options')
-                    ,
-                    Checkbox::make('is_correct')
-                        ->fixIndistinctState()
-                        ->name('Correct Answer'),
-                ])
-                ->columnSpanFull(),
-            CKEditor::make('explanation')
-
-                ->columnSpanFull()
+                    CKEditor::make('option_a')->required()->columnSpanFull()->default($latestExam->otpion_a ?? ''),
+                    CKEditor::make('option_b')->required()->columnSpanFull()->default($latestExam->otpion_b ?? ''),
+                    CKEditor::make('option_c')->required()->columnSpanFull()->default($latestExam->otpion_c ?? ''),
+                    CKEditor::make('option_d')->required()->columnSpanFull()->default($latestExam->otpion_d ?? ''),
+                    Select::make('right_answer')
+                        ->options([
+                        'A' => 'A',
+                        'B' => 'B',
+                        'C' => 'C',
+                        'D' => 'D',
+                    ]),
+                ]),
+            CKEditor::make('explanation')->columnSpanFull()->default($latestExam->explanation ?? ''),
         ]);
     }
 
