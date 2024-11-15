@@ -15,29 +15,23 @@
                 <li class="p-2.5 md:p-5">
                     <span x-html="sanitizeHtml('{!! $question->title !!}')"></span>
                     <ul>
-                        @foreach ($question->options as $index => $option)
+                        @foreach (['A' => 'option_a', 'B' => 'option_b', 'C' => 'option_c', 'D' => 'option_d'] as $label => $optionField)
                             <li class="relative flex items-center">
                                 <div class="flex items-center ps-4 border bg-white border-gray-200 rounded-md dark:border-gray-700 py-2 my-2 drop-shadow-lg w-full">
-                                    <input type="radio" value="{{ $option['options'] }}"
+                                    <input type="radio" value="{{ $question->$optionField }}"
                                         name="question{{ $question->id }}"
-                                        id="option{{ $question->id }}_{{ $index }}" class="hidden peer"
-                                        x-on:change="debouncedToggleSelection($event, {{ $question->id }}, '{{ $option['options'] }}')"
-                                        x-bind:checked="answers[{{ $question->id }}] === '{{ $option['options'] }}'"
+                                        id="option{{ $question->id }}_{{ $label }}" class="hidden peer"
+                                        x-on:change="debouncedToggleSelection($event, {{ $question->id }}, '{{ $question->$optionField }}')"
+                                        x-bind:checked="answers[{{ $question->id }}] === '{{ $question->$optionField }}'"
                                         wire:model.lazy="answers.{{ $question->id }}">
-                                    <label for="option{{ $question->id }}_{{ $index }}"
+                                    <label for="option{{ $question->id }}_{{ $label }}"
                                         class="flex items-center justify-center w-8 h-8 rounded-full border border-gray-300 text-gray-600 peer-checked:bg-blue-600 peer-checked:text-white cursor-pointer">
-                                        {{ chr(65 + $index) }}
+                                        {{ $label }}
                                     </label>
-                                    <label for="option{{ $question->id }}_{{ $index }}"
+                                    <label for="option{{ $question->id }}_{{ $label }}"
                                         class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                        {{ strip_tags($option['options']) }}
+                                        {{ strip_tags($question->$optionField) }}
                                     </label>
-                                    <button type="button"
-                                        x-show="answers[{{ $question->id }}] === '{{ $option['options'] }}'"
-                                        x-on:click="removeSelection({{ $question->id }})"
-                                        class="absolute top-1/2 right-2 transform -translate-y-1/2 text-red-500 hover:text-red-700 flex items-center justify-center w-8 h-8 rounded-full border border-gray-300">
-                                        <span class="text-xl">&times;</span>
-                                    </button>
                                 </div>
                             </li>
                         @endforeach
@@ -45,6 +39,7 @@
                 </li>
             @endforeach
         </ol>
+
         <div class="flex justify-center mt-4">
             <button type="submit"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>

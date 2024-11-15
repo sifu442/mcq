@@ -73,7 +73,8 @@ class CourseResource extends Resource
                 ->translateLabel()
                 ->numeric()
                 ->prefix('৳')
-                ->maxValue(42949672.95),
+                ->maxValue(42949672.95)
+                ->required(),
             TextInput::make('gap')
                 ->required()
                 ->numeric()

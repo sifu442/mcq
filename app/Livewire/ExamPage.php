@@ -47,70 +47,69 @@ class ExamPage extends Component
     }
 
     public function submitExam()
-    {
-        if ($this->examSubmitted) {
-            return;
-        }
+{
+    if ($this->examSubmitted) {
+        return;
+    }
 
-        $user = Auth::user();
+    $user = Auth::user();
 
-        if ($this->exam) {
-            $correctCount = 0;
-            $wrongCount = 0;
-            $unansweredCount = 0;
-            $totalAnswered = 0;
-            $responseData = [];
+    if ($this->exam) {
+        $correctCount = 0;
+        $wrongCount = 0;
+        $unansweredCount = 0;
+        $totalAnswered = 0;
+        $responseData = [];
 
-            foreach ($this->exam->questions as $question) {
-                if ($question && $question->options) {
-                    $correctAnswer = collect($question->options)
-                        ->where('is_correct', true)
-                        ->pluck('options')
-                        ->first();
-                    $userAnswer = $this->answers[$question->id] ?? null;
+        foreach ($this->exam->questions as $question) {
+            $userAnswer = $this->answers[$question->id] ?? null;
+            $correctAnswer = $question->right_answer;
 
-                    $responseData[] = [
-                        'question' => $question->title,
-                        'options' => collect($question->options)
-                            ->pluck('options')
-                            ->toArray(),
-                        'user_input' => $userAnswer,
-                        'correct_answer' => $correctAnswer,
-                    ];
+            $responseData[] = [
+                'question' => $question->title,
+                'options' => [
+                    'A' => $question->option_a,
+                    'B' => $question->option_b,
+                    'C' => $question->option_c,
+                    'D' => $question->option_d,
+                ],
+                'user_input' => $userAnswer,
+                'correct_answer' => $correctAnswer,
+            ];
 
-                    if ($userAnswer === null) {
-                        $unansweredCount++;
-                    } else {
-                        $totalAnswered++;
-                        if ($userAnswer === $correctAnswer) {
-                            $correctCount++;
-                            $this->totalScore += $this->exam->score;
-                        } else {
-                            $wrongCount++;
-                            $this->totalScore -= $this->exam->penalty;
-                        }
-                    }
+            if ($userAnswer === null) {
+                $unansweredCount++;
+            } else {
+                $totalAnswered++;
+                if ($userAnswer === $correctAnswer) {
+                    $correctCount++;
+                    $this->totalScore += $this->exam->score;
+                } else {
+                    $wrongCount++;
+                    $this->totalScore -= $this->exam->penalty;
                 }
             }
-
-            ExamResponse::create([
-                'user_id' => $user->id,
-                'exam_id' => $this->exam->id,
-                'response_data' => $responseData,
-                'total_score' => $this->totalScore,
-                'correct_count' => $correctCount,
-                'wrong_count' => $wrongCount,
-                'unanswered_count' => $unansweredCount,
-                'lost_points' => $wrongCount * $this->exam->penalty,
-                'total_answered' => $totalAnswered,
-            ]);
         }
 
-        $this->examSubmitted = true;
-        $this->reset(['answers']);
-
-        return redirect()->route('exam-results', ['examId' => $this->examId]);
+        ExamResponse::create([
+            'user_id' => $user->id,
+            'exam_id' => $this->exam->id,
+            'response_data' => $responseData,
+            'total_score' => $this->totalScore,
+            'correct_count' => $correctCount,
+            'wrong_count' => $wrongCount,
+            'unanswered_count' => $unansweredCount,
+            'lost_points' => $wrongCount * $this->exam->penalty,
+            'total_answered' => $totalAnswered,
+        ]);
     }
+
+    $this->examSubmitted = true;
+    $this->reset(['answers']);
+
+    return redirect()->route('exam-results', ['examId' => $this->examId]);
+}
+
 
     public function render()
     {
