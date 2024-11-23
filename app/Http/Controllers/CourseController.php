@@ -23,7 +23,7 @@ class CourseController extends Controller
 
         $currentDate = Carbon::now();
         $examInfo = [];
-        $delayDays = 3;
+        $delayDays = $course->gap ?? 3;
         foreach ($course->exams as $exam) {
             $examInfo[] = [
                 'examName' => $exam->name,
