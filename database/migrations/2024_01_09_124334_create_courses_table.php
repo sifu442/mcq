@@ -25,6 +25,7 @@ return new class extends Migration
             $table->boolean('hidden')->default(false);
             $table->decimal('total_exams');
             $table->string('resources')->nullable();
+            $table->string('routine_heading');
             $table->timestamps();
 
         });

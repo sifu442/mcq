@@ -4,10 +4,6 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\Course;
-use App\Models\Exam;
-use App\Models\Question;
-use App\Models\Subject;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -22,14 +18,9 @@ class DatabaseSeeder extends Seeder
 
          \App\Models\User::factory()->create([
              'name' => 'Sifat',
-             'email' => 'test@admin.com',
+             'mobile_phone' => '01989957085',
              'password' => Hash::make('password')
          ]);
-
-         Course::factory(5)->create();
-         Exam::factory(5)->create();
-         Question::factory(10)->create();
-         Subject::factory(5)->create();
 
     }
 }

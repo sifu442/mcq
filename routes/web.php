@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\DashboardController;
 
 /*
@@ -25,12 +26,7 @@ Route::get('/', HomeController::class)->name('home');
 
 Route::get('/course/{course:slug}', [CourseController::class, 'show'])->name('course.show');
 Route::get('/courses/{course}/download-routine', [CourseController::class, 'downloadRoutine'])->name('course.downloadRoutine');
-
-// Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-//          Route::get('/dashboard', function () {
-//              return view('dashboard');
-//          })->name('dashboard');
-//      });
+Route::get('/notices', [NoticeController::class, 'index'])->name('notices.index');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::middleware(['auth:sanctum', 'verified'])->get('/user/profile', function () {

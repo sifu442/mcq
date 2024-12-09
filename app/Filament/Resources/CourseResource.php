@@ -23,6 +23,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\ReplicateAction;
 use App\Filament\Resources\CourseResource\Pages;
 use App\Filament\Resources\CourseResource\RelationManagers\ExamsRelationManager;
+use Filament\Forms\Components\Section;
 
 class CourseResource extends Resource
 {
@@ -96,6 +97,7 @@ class CourseResource extends Resource
                 ->offIcon('heroicon-o-eye'),
             CKEditor::make('description')->required()->columnSpanFull(),
             FileUpload::make('attachment')->multiple(),
+            CKEditor::make('routine_heading')->required()
         ]);
     }
 
