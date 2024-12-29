@@ -78,6 +78,9 @@ class ExamResource extends Resource
                     '2.00' => '2.00',
 
                 ]),
+            TextInput::make('full_mark')
+                ->required()
+                ->numeric(),
             CKEditor::make('syllabus')
                 ->required()
                 ->translateLabel()

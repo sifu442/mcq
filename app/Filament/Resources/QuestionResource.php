@@ -43,7 +43,7 @@ class QuestionResource extends Resource
                 ->required()
                 ->native(false)
                 ->default($latestExam->subject_id ?? null),
-            TextInput::make('last_appeared')
+            TextInput::make('previous_exam')
                 ->label('Exam Name')
                 ->default($latestExam->previous_exam ?? ''),
             TextInput::make('post')
@@ -104,7 +104,10 @@ class QuestionResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([Tables\Actions\EditAction::make()])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                ])
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
 

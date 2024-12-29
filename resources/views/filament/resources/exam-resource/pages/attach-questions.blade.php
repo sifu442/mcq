@@ -8,15 +8,16 @@
         @if ($searchResults)
             <ul class="list-none pl-5">
                 @foreach ($searchResults as $result)
-                    <li>
+                    <li class="pb-4">
                         <button
                             class="text-primary bg-base border border-primary p-2 rounded-md hover:bg-primary hover:text-white transition-colors"
                             onclick="replaceContent(
                                     '{{ addslashes($result->title) }}',
                                     '{{ $result->id }}',
                                     '{{ $result->subject_id }}',
-                                    '{{ addslashes($result->last_appeared) }}',
+                                    '{{ addslashes($result->previous_exam) }}',
                                     '{{ addslashes($result->post) }}',
+                                    '{{ addslashes($result->topic) }}',
                                     '{{ \Carbon\Carbon::parse($result->date)->format('Y-m-d') }}',
                                     '{{ addslashes($result->option_a) }}',
                                     '{{ addslashes($result->option_b) }}',
@@ -55,8 +56,8 @@
 
         <!-- Text Field for Exam Name -->
         <div>
-            <label for="last_appeared" class="block mb-2 text-text">Exam Name</label>
-            <input type="text" id="last_appeared" wire:model.defer="last_appeared"
+            <label for="previous_exam" class="block mb-2 text-text">Exam Name</label>
+            <input type="text" id="previous_exam" wire:model.defer="previous_exam"
                 class="w-full border border-gray-300 rounded-md" />
         </div>
 
@@ -64,6 +65,12 @@
         <div>
             <label for="post" class="block mb-2 text-text">Post</label>
             <input type="text" id="post" wire:model="post"
+                class="w-full p-2 border border-gray-300 rounded-md" />
+        </div>
+
+        <div>
+            <label for="topic" class="block mb-2 text-text">Topic</label>
+            <input type="text" id="topic" wire:model="topictopic"
                 class="w-full p-2 border border-gray-300 rounded-md" />
         </div>
 
@@ -123,9 +130,14 @@
         <label for="explanation" class="block mb-2 text-text">Explanation</label>
         <textarea id="explanation" wire:model.defer="explanation" class="w-full p-2 border border-gray-300 rounded-xl"></textarea>
     </div>
-    <button type="button" id="submit-button" wire:click="submitForm" class="w-">
-        Submit
-    </button>
+    <div class="flex gap-4">
+        <button type="button" id="submit-button" wire:click="submitForm" style="background-color: #FDAE4B; padding:10px 25px; border-radius:5px; color:white;">
+            Submit
+        </button>
+        <button type="button" id="create-another-button" wire:click="createAnother" style="background-color: white; padding:10px 25px; border-radius:5px; color:black; border: 1px solid grey;">
+            Create another
+        </button>
+    </div>
 
 
     <!-- Include CKEditor script -->
@@ -190,11 +202,13 @@
                     console.error('Error initializing CKEditor for Explanation:', error);
                 });
             // Define the replaceContent function in the global scope
-            window.replaceContent = function(content, id, subjectId, lastAppeared, post, date, optionA, optionB, optionC,
+            window.replaceContent = function(content, id, subjectId, previousExam, post, topic, date, optionA, optionB, optionC,
                 optionD, explanation, rightAnswer) {
 
                 Livewire.dispatch('updatePost', {post});
                 Livewire.dispatch('updateId', {id});
+                Livewire.dispatch('updateTopic', {topic});
+                Livewire.dispatch('updateDate', {date});
 
                 if (editorInstances['editor']) {
                     editorInstances['editor'].setData(content);
@@ -206,12 +220,14 @@
                 if (subjectId) {
                     document.querySelector('#subject').value = subjectId;
                 }
-                if (lastAppeared) {
-                    document.querySelector('#last_appeared').value = lastAppeared;
+                if (previousExam) {
+                    document.querySelector('#previous_exam').value = previousExam;
                 }
                 if (post) {
                     document.querySelector('#post').value = post;
-                    Livewire.dispatch('updatePost', {post} );
+                }
+                if (topic) {
+                    document.querySelector('#topic').value = topic;
                 }
                 if (date) {
                     document.querySelector('#date').value = date;
@@ -253,9 +269,22 @@
                 Livewire.dispatch('subject_id', subjectId);
             };
 
+            window.syncRightAnswerBeforeSubmit = function() {
+            const rightAnswer = document.querySelector('#right_answer').value;
+            const answerDropdown = document.querySelector('#right_answer');
+            answerDropdown.dispatchEvent(new Event('change'));
+            Livewire.dispatch('right_answer', rightAnswer);
+        };
+
             // Attach click event listener to submit button
             document.querySelector('#submit-button').addEventListener('click', function() {
                 syncSubjectIdBeforeSubmit();
+                syncRightAnswerBeforeSubmit();
+                Livewire.dispatch('submitForm');
+            });
+            document.querySelector('#create-another-button').addEventListener('click', function() {
+                syncSubjectIdBeforeSubmit();
+                syncRightAnswerBeforeSubmit();
                 Livewire.dispatch('submitForm');
             });
         });

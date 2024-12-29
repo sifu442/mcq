@@ -13,7 +13,9 @@ use Filament\Resources\Resource;
 use App\Forms\Components\CKEditor;
 use Illuminate\Support\Facades\DB;
 use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Section;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
@@ -23,7 +25,6 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\ReplicateAction;
 use App\Filament\Resources\CourseResource\Pages;
 use App\Filament\Resources\CourseResource\RelationManagers\ExamsRelationManager;
-use Filament\Forms\Components\Section;
 
 class CourseResource extends Resource
 {
@@ -58,7 +59,6 @@ class CourseResource extends Resource
                 ->required()
                 ->numeric()
                 ->suffix('days'),
-            //Toggle::make('is_free')->label('Free')->reactive()->afterStateUpdated(fn(callable $set) => $set('price', 0)),
             TextInput::make('price')
                 ->translateLabel()
                 ->numeric()
@@ -91,13 +91,18 @@ class CourseResource extends Resource
             Toggle::make('featured')
                 ->onIcon('heroicon-m-bolt')
                 ->offIcon('heroicon-m-user'),
-            Toggle::make('hidden')
-                ->label('Hide Course')
-                ->onIcon('heroicon-o-eye-slash')
-                ->offIcon('heroicon-o-eye'),
             CKEditor::make('description')->required()->columnSpanFull(),
+            Select::make('category')
+                ->options([
+                    'job_solution' => 'Job Solution',
+                    'service_wise' => 'Service Wise',
+                    'subject_wise' => 'Subject Wise',
+                    'gap_wise' => 'Subject Wise',
+                    'free' => 'Free',
+                ])
+                ->native(false),
             FileUpload::make('attachment')->multiple(),
-            CKEditor::make('routine_heading')->required()
+            CKEditor::make('routine_heading')->required()->columnSpanFull(),
         ]);
     }
 

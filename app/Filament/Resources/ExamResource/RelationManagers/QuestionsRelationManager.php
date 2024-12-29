@@ -29,7 +29,7 @@ class QuestionsRelationManager extends RelationManager
                 ->preload()
                 ->required()
                 ->default($latestExam->subject_id ?? null),
-            TextInput::make('last_appeared')
+            TextInput::make('previous_exam')
                 ->label('Exam Name')
                 ->default($latestExam->previous_exam ?? ''),
             TextInput::make('post')
