@@ -56,8 +56,8 @@ class ExamPage extends Component
         $user = Auth::user();
 
         if ($this->exam) {
-            // Initialize counters
-            $this->totalScore = 0; // Reset total score
+
+            $this->totalScore = 0;
             $correctCount = 0;
             $wrongCount = 0;
             $unansweredCount = 0;
@@ -65,13 +65,13 @@ class ExamPage extends Component
             $responseData = [];
 
             foreach ($this->exam->questions as $question) {
-                $userAnswer = $this->answers[$question->id] ?? null; // Get user's answer for this question
+                $userAnswer = $this->answers[$question->id] ?? null;
 
-                // Determine the correct option dynamically
-                $correctOptionField = 'option_' . strtolower($question->right_answer); // e.g., option_c
-                $correctAnswer = $question->{$correctOptionField}; // Get the actual text (HTML) of the correct option
 
-                // Add question data to the response log
+                $correctOptionField = 'option_' . strtolower($question->right_answer);
+                $correctAnswer = $question->{$correctOptionField};
+
+
                 $responseData[] = [
                     'question' => $question->title,
                     'options' => [
@@ -85,25 +85,25 @@ class ExamPage extends Component
                 ];
 
                 if ($userAnswer === null) {
-                    // Count unanswered questions
+
                     $unansweredCount++;
-                    continue; // Skip further checks
+                    continue;
                 }
 
-                // Increment total answered
+
                 $totalAnswered++;
 
-                // Check if the user's answer matches the correct answer (compare HTML content)
+
                 if (trim($userAnswer) === trim($correctAnswer)) {
-                    $correctCount++; // Increment correct answers count
-                    $this->totalScore += $this->exam->score; // Add score for correct answer
+                    $correctCount++;
+                    $this->totalScore += $this->exam->score;
                 } else {
-                    $wrongCount++; // Increment wrong answers count
-                    $this->totalScore -= $this->exam->penalty; // Deduct penalty for wrong answer
+                    $wrongCount++;
+                    $this->totalScore -= $this->exam->penalty;
                 }
             }
 
-            // Save the results to the database
+
             ExamResponse::create([
                 'user_id' => $user->id,
                 'exam_id' => $this->exam->id,
@@ -117,13 +117,13 @@ class ExamPage extends Component
             ]);
         }
 
-        // Mark the exam as submitted
+
         $this->examSubmitted = true;
 
-        // Reset answers to prevent re-submission
+
         $this->reset(['answers']);
 
-        // Redirect to the results page
+
         return redirect()->route('exam-results', ['examId' => $this->examId]);
     }
 
