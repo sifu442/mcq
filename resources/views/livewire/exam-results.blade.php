@@ -2,6 +2,9 @@
     <h1 class="text-3xl font-bold text-center mb-6">Exam Results</h1>
     @foreach ($examResponses as $response)
         <div class="mb-8">
+            <li class="list-group-item">
+                User ID: {{ $response->user_id }} | Score: {{ $response->total_score }}
+            </li>
             <h2 class="text-2xl font-semibold text-center mb-4">{{ $response->user->name }}'s Response:</h2>
             <p class="text-lg text-center mb-4">Total Score: <span class="font-bold">{{ $response->total_score }}</span></p>
             <p class="text-lg text-center mb-4">Number of questions answered: <span class="font-bold">{{ $response->total_answered }}</span></p>

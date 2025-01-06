@@ -4,7 +4,6 @@ namespace App\Livewire;
 use App\Models\Exam;
 use Livewire\Component;
 use App\Models\ExamResponse;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class ExamPage extends Component
